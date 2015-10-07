@@ -1,0 +1,52 @@
+{
+  "author": {
+    "name": "Andrew Reddikh",
+    "email": "andrew@reddikh.com"
+  },
+  "name": "redparser-phantom",
+  "description": "PhantomJS application which allows to parse a webpage",
+  "keywords": [
+    "phantomjs",
+    "parser",
+    "crawler",
+    "site"
+  ],
+  "homepage": "http://redcode.im",
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Andrew Reddikh",
+      "email": "andrew@reddikh.com"
+    }
+  ],
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maZahaca/redparser-phantom.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maZahaca/redparser-phantom/issues"
+  },
+  "main": "./lib/phantom/PhantomParser.js",
+  "scripts": {
+  },
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "dependencies": {
+    "clone": "^1.0.2",
+    "debug": "^2.2.0",
+    "defaults": "^1.0.2",
+    "jsesc": "^0.5.0",
+    "mkdir-p": "0.0.7",
+    "phantom": "^0.7.2",
+    "phantomjs": "^1.9.18",
+    "vow": "^0.4.10",
+    "vow-node": "^0.3.0",
+    "redparser": "^0.1.0"
+  },
+  "devDependencies": {
+  },
+  "directories": {},
+  "readme": "ERROR: No README data found!"
+}
