@@ -28,8 +28,7 @@
     "url": "https://github.com/maZahaca/redparser-phantom/issues"
   },
   "main": "./lib/phantom/PhantomParser.js",
-  "scripts": {
-  },
+  "scripts": {},
   "engines": {
     "node": ">= 0.4.0"
   },
@@ -41,12 +40,10 @@
     "mkdir-p": "0.0.7",
     "phantom": "^0.7.2",
     "phantomjs": "^1.9.18",
+    "redparser": "^0.1.0",
     "vow": "^0.4.10",
-    "vow-node": "^0.3.0",
-    "redparser": "^0.1.0"
+    "vow-node": "^0.3.0"
   },
-  "devDependencies": {
-  },
-  "directories": {},
-  "readme": "ERROR: No README data found!"
+  "devDependencies": {},
+  "directories": {}
 }
