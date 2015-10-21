@@ -27,7 +27,6 @@
   "bugs": {
     "url": "https://github.com/maZahaca/redparser-phantom/issues"
   },
-  "main": "./lib/phantom/PhantomParser.js",
   "scripts": {},
   "engines": {
     "node": ">= 0.4.0"
