@@ -27,20 +27,17 @@
   "bugs": {
     "url": "https://github.com/maZahaca/redparser-phantom/issues"
   },
-  "main": "./lib/phantom/PhantomParser.js",
   "scripts": {},
   "engines": {
     "node": ">= 0.4.0"
   },
   "dependencies": {
-    "clone": "^1.0.2",
     "debug": "^2.2.0",
-    "defaults": "^1.0.2",
-    "jsesc": "^0.5.0",
+    "lodash": "^3.10.1",
     "mkdir-p": "0.0.7",
+    "moment": "^2.10.6",
     "phantom": "^0.7.2",
     "phantomjs": "^1.9.18",
-    "redparser": "^0.1.0",
     "vow": "^0.4.10",
     "vow-node": "^0.3.0"
   },
