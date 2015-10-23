@@ -3,13 +3,15 @@
     "name": "Andrew Reddikh",
     "email": "andrew@reddikh.com"
   },
-  "name": "redparser-phantom",
-  "description": "PhantomJS application which allows to parse a webpage",
+  "name": "goose-parser",
+  "description": "PhantomJS/Browser lib which allows to parse a webpage",
   "keywords": [
     "phantomjs",
+    "browser",
     "parser",
     "crawler",
-    "site"
+    "site",
+    "page"
   ],
   "homepage": "http://redcode.im",
   "license": "MIT",
@@ -22,10 +24,10 @@
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/maZahaca/redparser-phantom.git"
+    "url": "git+https://github.com/redco/goose-parser.git"
   },
   "bugs": {
-    "url": "https://github.com/maZahaca/redparser-phantom/issues"
+    "url": "https://github.com/redco/goose-parser/issues"
   },
   "scripts": {},
   "engines": {
