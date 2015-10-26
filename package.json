@@ -29,7 +29,9 @@
   "bugs": {
     "url": "https://github.com/redco/goose-parser/issues"
   },
-  "scripts": {},
+  "scripts": {
+    "test": "mocha tests/parser_test.js"
+  },
   "engines": {
     "node": ">= 0.4.0"
   },
@@ -43,6 +45,9 @@
     "vow": "^0.4.10",
     "vow-node": "^0.3.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^3.4.0",
+    "mocha": "^2.3.3"
+  },
   "directories": {}
 }
