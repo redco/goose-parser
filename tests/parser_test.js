@@ -17,15 +17,11 @@ var env = new PhantomEnvironment({
 
 describe('Parser', function () {
     this.timeout(30000);
-    var parser = new Parser({
-        environment: env,
-        pagination: {
-            type: 'scroll',
-            interval: 500
-        }
-    });
     describe('#parse', function () {
         it('parse single page', function () {
+            var parser = new Parser({
+                environment: env
+            });
             return parser.parse(
                 {
                     rules: {
@@ -58,6 +54,13 @@ describe('Parser', function () {
         });
 
         it('parse page with scroll pagination', function () {
+            var parser = new Parser({
+                environment: env,
+                pagination: {
+                    type: 'scroll',
+                    interval: 500
+                }
+            });
             return parser.parse(
                 {
                     rules: {

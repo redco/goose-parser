@@ -2,20 +2,25 @@
 <head>
     <meta charset="utf-8">
     <title>GooseParser Tests</title>
+    <style type="text/css">
+        div {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body data-value="1" data-str="str" data-obj="{}">
 <div id="mocha"></div>
 <script src="js/jquery-1.11.3.min.js"></script>
 
-<div class="get-scope-test" style="display: none;">simple</div>
-<div class="get-scope-test-2" style="display: none;">column</div>
-<div class="get-scope-test-2" style="display: none;">column</div>
-<div class="get-scope-test-3" style="display: none;">
+<div class="get-scope-test">simple</div>
+<div class="get-scope-test-2">column</div>
+<div class="get-scope-test-2">column</div>
+<div class="get-scope-test-3">
     <div class="get-scope-test-3-passed">column1</div>
     <div class="get-scope-test-3-passed">column2</div>
 </div>
 
-<div class="get-scope-test-4" style="display: none;">
+<div class="get-scope-test-4">
     <div class="get-scope-test-4-passed">
         <div class="get-scope-test-4-passed-row">row1</div>
         <div class="get-scope-test-4-passed-row">row2</div>
@@ -26,7 +31,7 @@
     </div>
 </div>
 
-<div class="get-scope-test-5" style="display: none;">
+<div class="get-scope-test-5">
     <div class="get-scope-test-5-passed">
         <div class="get-scope-test-5-passed-column1">column1</div>
         <div>
@@ -45,7 +50,7 @@
     </div>
 </div>
 
-<div class="get-scope-test-6" style="display: none;">
+<div class="get-scope-test-6">
     <div class="get-scope-test-6-passed">
         <div class="get-scope-test-6-passed-column1">column1</div>
         <div>
@@ -56,17 +61,15 @@
     </div>
 </div>
 
-<div style="height: 1000px">
-
-</div>
-
+Scrollable
 <div class="scrollable">
-    <div class="content" style="display: none;"></div>
+    <div class="content"></div>
 </div>
 
+Paginatable
 <div class="pageable">
-    <div class="content" style="display: none;"></div>
-    <div class="pagination" style="display: none;">
+    <div class="content"></div>
+    <div class="pagination">
 
     </div>
 </div>
