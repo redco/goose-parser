@@ -1,131 +1,207 @@
-# RedParser Phantom
+# goose-parser
 
-## Installing and run
+This library allows to parse grids, rows, and simple nodes from the page.
+Parser supports paginations via infinity scroll and pages.
+It offers such features as pre-parse [actions](#actions) and post-parse [transformations](#transformations).
+
+## Installation
 
 ```
-npm install
-npm start
+npm install goose-parser
 ```
 
 ## Documentation
+All css selectors can be set in a [sizzle](https://github.com/jquery/sizzle) format.
 
-### Parse Rules:
+### Actions
+Allow to execute actions on the page before parse process.
 
-#### Simple value
+#### Click
+Click by the element on the page.
+```
+{
+    type: 'click',
+    scope: '.open-button'
+}
+```
 
-The purpose of this rule - retrieving simple textual node value
+#### Wait
+Wait for the element on the page. For using only once you can add flag `once: true`. It cab be useful for wait some element before parsing process.
+```
+{
+    type: 'wait',
+    scope: '.open-button.done'
+}
+```
+
+### Transformations
+
+#### Date
+Format date to specific view.
+```
+{
+    type: 'date',
+    locale: 'ru',
+    from: 'HH:mm D MMM YYYY',
+    to: 'YYYY-MM-DD'
+}
+```
+
+#### Replace
+Replace value using Regex.
+```
+{
+    type: 'replace',
+    re: ['\\s', 'g'],
+    to: ''
+}
+```
+
+### Parse rules
+
+#### Simple rule
+
+The purpose of this rule - retrieving simple textual node value.
+
+**Example:**
+```
+{
+    name: 'node',
+    scope: 'div.simple-node'
+}
+```
 
 **Fields:**
 
-* *name* - name of the node which is presented in the result dataSet
-* *scope* - css selector of the node
+* *name* - name of the node which is presented in the result dataSet.
+* *scope* - css selector of the node.
+* *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
+* *actions* [optional]  - see [Actions](#actions).
+* *transform* [optional] - see [Transformations](#transformations).
 
-#### Collection value
+#### Collection rule
 
-The purpose of this rule - retrieving collection of nodes
+The purpose of this rule - retrieving collection of nodes.
+
+**Example:**
+```
+{
+    name: 'collection',
+    scope: 'div.collection-node',
+    collection: [
+        {
+            name: 'node',
+            scope: 'div.simple-node'
+        },
+        ...
+    ]
+}
+```
 
 **Fields:**
 
-* *name* - name of the node which is presented in the result dataSet
-* *scope* - css selector of the node
-* *extract* - if set and parent is object, result value will be extracted to the parent
-* *collection* - array of any rule types
+* *name* - name of the node which is presented in the result dataSet.
+* *scope* - css selector of the node.
+* *collection* - array of any rule types.
+* *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
+* *actions* [optional]  - see [Actions](#actions).
+* *transform* [optional] - see [Transformations](#transformations).
 
-#### DataSet value
+#### Grid rule
 
-The purpose of this rule - retrieving collection of collection
+The purpose of this rule - retrieving collection of collection.
+
+```
+{
+    name: 'collection',
+    scope: 'div.collection-node',
+    collection: [[
+        {
+            name: 'node',
+            scope: 'div.simple-node'
+        },
+        ...
+    ]]
+}
+```
 
 **Fields:**
 
-* *name* - name of the node which is presented in the result dataSet
-* *scope* - css selector of the node
-* *collection* - array of any rule types
+* *name* - name of the node which is presented in the result dataSet.
+* *scope* - css selector of the node.
+* *collection* - array of array of any rule types.
+* *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
+* *actions* [optional]  - see [Actions](#actions).
+* *transform* [optional] - see [Transformations](#transformations).
 
 ## Usage
 
-[Sync] This is a sync way of parsing simple page:
-
 ```
-var parser = new PhantomParser();
-parser.parse(
-    'http://some-page-url.com/page.html',
-    {
+var env = new PhantomEnvironment({
+    url: uri,
+    screen: {
+        width: 1080,
+        height: 200
+    }
+});
+
+var parser = new Parser({
+    environment: env,
+    pagination: {
+        type: 'scroll',
+        interval: 500
+    }
+});
+
+parser.parse({
+    rules: {
+        actions: [
+            {
+                type: 'wait',
+                timeout: 2 * 60 * 1000,
+                scope: '.expl-progress-bar-container.expl-hidden',
+                parentScope: 'body',
+                once: true
+            }
+        ],
         scope: 'div.get-scope-test-5-passed',
         collection: [[
+            actions: [
+                {
+                    type: 'click',
+                    scope: '.open-button'
+                },
+                {
+                    type: 'wait',
+                    scope: '.open-button.done'
+                }
+            ],
             {name: 'column1', scope: 'div.get-scope-test-5-passed-column1'},
             {
                 name: 'sub-column',
                 scope: 'div:last-child',
                 extract: true,
                 collection: [
-                    {name: 'column2', scope: 'div.get-scope-test-5-passed-column2'},
-                    {name: 'column3', scope: 'div.get-scope-test-5-passed-column3'},
-                    {name: 'column4', scope: 'div.get-scope-test-5-passed-column4'}
+                    {
+                        name: 'column2', 
+                        scope: 'div.get-scope-test-5-passed-column2'
+                    },
+                    {
+                        name: 'column3', 
+                        scope: 'div.get-scope-test-5-passed-column3',
+                        transform: [
+                            {
+                                type: 'replace',
+                                re: ['\\s', 'g'],
+                                to: ''
+                            }
+                        ]
+                    }
                 ]
             }
         ]]
     }
-).then(function(parsed) {
-
-});
-```
-
-[Async] That one will parse a page with infinity scroll pagination:
-
-```
-var parser = new PhantomParser();
-parser.parse(
-    'http://some-page-url.com/page.html',
-    {
-        scope: 'div.get-scope-test-5-passed',
-        collection: [[
-            {name: 'column1', scope: 'div.get-scope-test-5-passed-column1'},
-            {
-                name: 'sub-column',
-                scope: 'div:last-child',
-                extract: true,
-                collection: [
-                    {name: 'column2', scope: 'div.get-scope-test-5-passed-column2'},
-                    {name: 'column3', scope: 'div.get-scope-test-5-passed-column3'},
-                    {name: 'column4', scope: 'div.get-scope-test-5-passed-column4'}
-                ]
-            }
-        ]]
-    },
-    {
-        type: 'scroll',
-        interval: 50000
-    },
-).then(function(parsed) {
+}).then(function(parsed) {
     
 });
-```
-
-[Async] That one will parse a page with ajax pagination:
-
-```
-var parser = new PhantomParser();
-parser.parse(
-    'http://some-page-url.com/page.html',
-    {
-        scope: 'div.get-scope-test-5-passed',
-        collection: [[
-            {name: 'column1', scope: 'div.get-scope-test-5-passed-column1'},
-            {
-                name: 'sub-column',
-                scope: 'div:last-child',
-                extract: true,
-                collection: [
-                    {name: 'column2', scope: 'div.get-scope-test-5-passed-column2'},
-                    {name: 'column3', scope: 'div.get-scope-test-5-passed-column3'},
-                    {name: 'column4', scope: 'div.get-scope-test-5-passed-column4'}
-                ]
-            }
-        ]]
-    },
-    {
-        type: 'paginate',
-        scope: 'div.pageable > div.pagination > div'
-    }
-);
 ```
