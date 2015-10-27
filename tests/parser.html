@@ -12,51 +12,51 @@
 <div id="mocha"></div>
 <script src="js/jquery-1.11.3.min.js"></script>
 
-<div class="get-scope-test">simple</div>
-<div class="get-scope-test-2">column</div>
-<div class="get-scope-test-2">column</div>
-<div class="get-scope-test-3">
-    <div class="get-scope-test-3-passed">column1</div>
-    <div class="get-scope-test-3-passed">column2</div>
+<div class="scope-test">simple</div>
+<div class="scope-test-2">column</div>
+<div class="scope-test-2">column</div>
+<div class="scope-test-3">
+    <div class="scope-test-3-passed">column1</div>
+    <div class="scope-test-3-passed">column2</div>
 </div>
 
-<div class="get-scope-test-4">
-    <div class="get-scope-test-4-passed">
-        <div class="get-scope-test-4-passed-row">row1</div>
-        <div class="get-scope-test-4-passed-row">row2</div>
+<div class="scope-test-4">
+    <div class="scope-test-4-passed">
+        <div class="scope-test-4-passed-row">row1</div>
+        <div class="scope-test-4-passed-row">row2</div>
     </div>
-    <div class="get-scope-test-4-passed">
-        <div class="get-scope-test-4-passed-row">row1</div>
-        <div class="get-scope-test-4-passed-row">row2</div>
+    <div class="scope-test-4-passed">
+        <div class="scope-test-4-passed-row">row1</div>
+        <div class="scope-test-4-passed-row">row2</div>
     </div>
 </div>
 
-<div class="get-scope-test-5">
-    <div class="get-scope-test-5-passed">
-        <div class="get-scope-test-5-passed-column1">column1</div>
+<div class="scope-test-5">
+    <div class="scope-test-5-passed">
+        <div class="scope-test-5-passed-column1">column1</div>
         <div>
-            <div class="get-scope-test-5-passed-column2">column2</div>
-            <div class="get-scope-test-5-passed-column3">column3</div>
-            <div class="get-scope-test-5-passed-column3">column4</div>
+            <div class="scope-test-5-passed-column2">column2</div>
+            <div class="scope-test-5-passed-column3">column3</div>
+            <div class="scope-test-5-passed-column3">column4</div>
         </div>
     </div>
-    <div class="get-scope-test-5-passed">
-        <div class="get-scope-test-5-passed-column1">column1</div>
+    <div class="scope-test-5-passed">
+        <div class="scope-test-5-passed-column1">column1</div>
         <div>
-            <div class="get-scope-test-5-passed-column2">column2</div>
-            <div class="get-scope-test-5-passed-column3">column3</div>
-            <div class="get-scope-test-5-passed-column4">column4</div>
+            <div class="scope-test-5-passed-column2">column2</div>
+            <div class="scope-test-5-passed-column3">column3</div>
+            <div class="scope-test-5-passed-column4">column4</div>
         </div>
     </div>
 </div>
 
-<div class="get-scope-test-6">
-    <div class="get-scope-test-6-passed">
-        <div class="get-scope-test-6-passed-column1">column1</div>
+<div class="scope-test-6">
+    <div class="scope-test-6-passed">
+        <div class="scope-test-6-passed-column1">column1</div>
         <div>
-            <div class="get-scope-test-6-passed-column2">column2</div>
-            <div class="get-scope-test-6-passed-column3">column3</div>
-            <div class="get-scope-test-6-passed-column4">column4</div>
+            <div class="scope-test-6-passed-column2">column2</div>
+            <div class="scope-test-6-passed-column3">column3</div>
+            <div class="scope-test-6-passed-column4">column4</div>
         </div>
     </div>
 </div>
@@ -76,21 +76,22 @@ Paginatable
 
 <script>
     $(function () {
-        $('div.get-scope-test-5 > div > div.get-scope-test-5-passed-column1, div.get-scope-test-5 > div > div > div').on('click', function () {
+        $('div.scope-test-5 > div > div.scope-test-5-passed-column1, div.scope-test-5 > div > div > div').on('click', function () {
             var o = $(this);
             o.html(o.html() + 1);
         });
 
         function addPage(container, erase) {
-            var content = $('div.get-scope-test-6').html();
+            var content = $('div.scope-test-6').html();
+            container = $(document).find(container);
             if (erase) {
-                $(this).find(container).html('');
+                container.html('');
             }
-            $(this).find(container).append(content);
+            container.append(content);
         }
 
         function addExtraToPage(extra) {
-            var nodes = document.querySelectorAll('.pageable > .content > .get-scope-test-6-passed > .get-scope-test-6-passed-column1');
+            var nodes = document.querySelectorAll('.pageable .scope-test-6-passed-column1');
             for (var nodeIndex = 0; nodeIndex < nodes.length; nodeIndex++) {
                 var node = nodes[nodeIndex];
                 node.innerText = node.innerText + extra;
@@ -98,9 +99,9 @@ Paginatable
         }
 
         var scrollCounter = 10;
-        addPage.apply(document, ['div.scrollable > .content']);
+        addPage('div.scrollable > .content');
         $(document).on('scroll', function () {
-            addPage.apply(this, ['div.scrollable > .content']);
+            addPage('div.scrollable > .content');
             if (--scrollCounter <= 0) {
                 $(document).unbind('scroll');
                 return;
@@ -108,16 +109,23 @@ Paginatable
         });
 
         var pageCounter = 10;
-        addPage.apply(document, ['div.pageable > .content', true]);
+        addPage('div.pageable > .content', true);
         addExtraToPage(1);
         for (var i = 1; i <= pageCounter; i++) {
             var elem = $('<div>' + i + '</div>').on('click', function () {
-                addPage.apply(document, ['div.pageable > .content', true]);
+                addPage('div.pageable > .content', true);
                 var pageNumber = this.innerText;
                 addExtraToPage(pageNumber);
             });
             $('div.pageable > div.pagination').append(elem);
         }
+
+        $('div.scope-test').on('click', function () {
+            var elem = $(this);
+            elem.addClass('clicked');
+            elem.text(elem.text() + 1);
+            elem.unbind('click');
+        });
     });
 </script>
 </body>
