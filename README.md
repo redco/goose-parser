@@ -18,26 +18,52 @@ Allow to execute actions on the page before parse process.
 
 #### Click
 Click by the element on the page.
+
+**Example:**
 ```
 {
     type: 'click',
     scope: '.open-button'
+    parentScope: 'body',
+    once: true
 }
 ```
 
+**Fields:**
+
+* *type* - type of action
+* *scope* - css selector of the node.
+* *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
+* *once* [optional]  - to perform action only once (can be useful on pre-parse moment).
+
 #### Wait
-Wait for the element on the page. For using only once you can add flag `once: true`. It cab be useful for wait some element before parsing process.
+Wait for the element on the page.
+
+**Example:**
 ```
 {
     type: 'wait',
     scope: '.open-button.done'
+    timeout: 2 * 60 * 1000,
+    parentScope: 'body',
+    once: true
 }
 ```
 
+**Fields:**
+
+* *type* - type of action
+* *scope* - css selector of the node.
+* *timeout* [optional] - time to cancel wait in seconds.
+* *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
+* *once* [optional]  - to perform action only once (can be useful on pre-parse moment).
+
 ### Transformations
 
+Allow to transform parsed value to some specific form.
+
 #### Date
-Format date to specific view.
+Format date to specific view (using [momentjs](https://github.com/moment/moment/)).
 ```
 {
     type: 'date',
@@ -64,10 +90,24 @@ Replace value using Regex.
 The purpose of this rule - retrieving simple textual node value.
 
 **Example:**
-```
+
+*Parsing rule*
+```JS
 {
     name: 'node',
     scope: 'div.simple-node'
+}
+```
+
+*HTML*
+```HTML
+<div class='simple-node'>simple-value</div>
+```
+
+*Parsing result*
+```JS
+{
+    node: 'simple-value'
 }
 ```
 
@@ -84,17 +124,56 @@ The purpose of this rule - retrieving simple textual node value.
 The purpose of this rule - retrieving collection of nodes.
 
 **Example:**
-```
+
+*Parsing rule*
+```JS
 {
-    name: 'collection',
+    name: 'row',
     scope: 'div.collection-node',
     collection: [
         {
-            name: 'node',
-            scope: 'div.simple-node'
+            name: 'node1',
+            scope: 'div.simple-node1'
         },
-        ...
+        {
+            name: 'node2',
+            scope: 'div.simple-node2'
+        },
+        {
+            name: 'nested',
+            scope: 'div.nested-node',
+            collection: [
+                {
+                    name: 'node3',
+                    scope: 'div.simple-node3'
+                }
+            ]
+        }
     ]
+}
+```
+
+*HTML*
+```HTML
+<div class='collection-node'>
+    <div class='simple-node1'>simple-value1</div>
+    <div class='simple-node2'>simple-value2</div>
+    <div class='nested-node'>
+        <div class='simple-node3'>simple-value3</div>
+    </div>
+</div>
+```
+
+*Parsing result*
+```JS
+{
+    row: {
+        node1: 'simple-value1',
+        node2: 'simple-value2',
+        nested: {
+            node3: 'simple-value3'
+        }
+    }
 }
 ```
 
@@ -111,23 +190,55 @@ The purpose of this rule - retrieving collection of nodes.
 
 The purpose of this rule - retrieving collection of collection.
 
-```
+**Example:**
+
+*Parsing rule*
+```JS
 {
-    name: 'collection',
     scope: 'div.collection-node',
     collection: [[
         {
-            name: 'node',
-            scope: 'div.simple-node'
+            name: 'node1',
+            scope: 'div.simple-node1'
         },
-        ...
+        {
+            name: 'node2',
+            scope: 'div.simple-node2'
+        }
     ]]
 }
 ```
 
+*HTML*
+```HTML
+<div>
+    <div class='collection-node'>
+        <div class='simple-node1'>simple-value1</div>
+        <div class='simple-node2'>simple-value2</div>
+    </div>
+    <div class='collection-node'>
+        <div class='simple-node1'>simple-value3</div>
+        <div class='simple-node2'>simple-value4</div>
+    </div>
+</div>
+```
+
+*Parsing result*
+```JS
+[
+    {
+        node1: 'simple-value1',
+        node2: 'simple-value2'
+    },
+    {
+        node1: 'simple-value3',
+        node2: 'simple-value4'
+    }
+]
+```
+
 **Fields:**
 
-* *name* - name of the node which is presented in the result dataSet.
 * *scope* - css selector of the node.
 * *collection* - array of array of any rule types.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
@@ -204,4 +315,10 @@ parser.parse({
 }).then(function(parsed) {
     
 });
+```
+
+## Tests
+To run [tests](https://github.com/redco/goose-parser/blob/master/tests/parser_test.js) use command
+```
+npm test
 ```
