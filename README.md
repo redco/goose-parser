@@ -1,12 +1,15 @@
 # goose-parser
 
-This library allows to parse grids, rows, and simple nodes from the page.
-Parser supports paginations via infinity scroll and pages.
-It offers such features as pre-parse [actions](#actions) and post-parse [transformations](#transformations).
+This tool moves routine crawling process to the new simple way. 
+Now it's possible to parse a web page for a few moments. 
+All you need is to specify parsing rules based on css selectors. It's so simple as Goose can do it.
+This library allows to parse such data types as grids, collections, and simple objects.
+Parser supports pagination via infinite scroll and pages.
+It offers next features: pre-parse [actions](#actions) and post-parse [transformations](#transformations).
 
 ## Installation
 
-```
+```bash
 npm install goose-parser
 ```
 
@@ -20,7 +23,7 @@ Allow to execute actions on the page before parse process.
 Click by the element on the page.
 
 **Example:**
-```
+```JS
 {
     type: 'click',
     scope: '.open-button'
@@ -40,7 +43,7 @@ Click by the element on the page.
 Wait for the element on the page.
 
 **Example:**
-```
+```JS
 {
     type: 'wait',
     scope: '.open-button.done'
@@ -64,7 +67,7 @@ Allow to transform parsed value to some specific form.
 
 #### Date
 Format date to specific view (using [momentjs](https://github.com/moment/moment/)).
-```
+```JS
 {
     type: 'date',
     locale: 'ru',
@@ -75,7 +78,7 @@ Format date to specific view (using [momentjs](https://github.com/moment/moment/
 
 #### Replace
 Replace value using Regex.
-```
+```JS
 {
     type: 'replace',
     re: ['\\s', 'g'],
@@ -247,7 +250,7 @@ The purpose of this rule - retrieving collection of collection.
 
 ## Usage
 
-```
+```JS
 var env = new PhantomEnvironment({
     url: uri,
     screen: {
@@ -270,12 +273,12 @@ parser.parse({
             {
                 type: 'wait',
                 timeout: 2 * 60 * 1000,
-                scope: '.expl-progress-bar-container.expl-hidden',
+                scope: '.container',
                 parentScope: 'body',
                 once: true
             }
         ],
-        scope: 'div.get-scope-test-5-passed',
+        scope: 'div.scope-test',
         collection: [[
             actions: [
                 {
@@ -287,19 +290,30 @@ parser.parse({
                     scope: '.open-button.done'
                 }
             ],
-            {name: 'column1', scope: 'div.get-scope-test-5-passed-column1'},
+            {name: 'column1', scope: 'div.scope-test-column1'},
             {
                 name: 'sub-column',
                 scope: 'div:last-child',
-                extract: true,
                 collection: [
                     {
                         name: 'column2', 
-                        scope: 'div.get-scope-test-5-passed-column2'
+                        scope: 'div.scope-test-column2'
                     },
                     {
                         name: 'column3', 
-                        scope: 'div.get-scope-test-5-passed-column3',
+                        scope: 'div.scope-test-column3'
+                        transform: [
+                            {
+                                type: 'date',
+                                locale: 'ru',
+                                from: 'HH:mm D MMM YYYY',
+                                to: 'YYYY-MM-DD'
+                            }
+                        ]
+                    },
+                    {
+                        name: 'column4', 
+                        scope: 'div.scope-test-column4',
                         transform: [
                             {
                                 type: 'replace',
@@ -319,6 +333,6 @@ parser.parse({
 
 ## Tests
 To run [tests](https://github.com/redco/goose-parser/blob/master/tests/parser_test.js) use command
-```
+```bash
 npm test
 ```
