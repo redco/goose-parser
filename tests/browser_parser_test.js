@@ -6,6 +6,7 @@ var chai = require('chai');
 var expect = chai.expect;
 
 mocha.setup('bdd');
+mocha.timeout(5000);
 
 var env;
 
@@ -14,7 +15,6 @@ before(function () {
 });
 
 describe('Parser', function () {
-    this.timeout(5000);
     describe('#parse', function () {
         it('parse single page', function () {
             var parser = new Parser({
@@ -95,7 +95,6 @@ describe('Parser', function () {
 });
 
 describe('Actions', function () {
-    this.timeout(5000);
     describe('#performForRule', function () {
         it('perform actions from parsing rules', function () {
             return env
@@ -123,6 +122,38 @@ describe('Actions', function () {
                         'body'
                     );
                 });
+        });
+    });
+});
+
+describe('Transformations', function () {
+    var transformations = new Transformations();
+    describe('#produce', function () {
+        it('perform date transform', function () {
+            var transformedValue = transformations.produce([
+                    {
+                        type: 'date',
+                        locale: 'en',
+                        from: 'HH:mm D MMM YYYY',
+                        to: 'YYYY-MM-DD'
+                    }
+                ],
+                '21:10 30 Aug 2016'
+            );
+            expect(transformedValue).equal('2016-08-30');
+        });
+
+        it('perform replace transform', function () {
+            var transformedValue = transformations.produce([
+                    {
+                        type: 'replace',
+                        re: ['\\s', 'g'],
+                        to: ''
+                    }
+                ],
+                ' t e  s  t'
+            );
+            expect(transformedValue).equal('test');
         });
     });
 });

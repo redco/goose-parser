@@ -7,7 +7,7 @@ var expect = chai.expect;
 var path = require('path');
 
 var env;
-var uri = 'file://' + path.join(__dirname, '/parser.html');
+var uri = 'file://' + path.join(__dirname, '/phantom_parser.html');
 
 before(function () {
     env = new PhantomEnvironment({
