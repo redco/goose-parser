@@ -130,3 +130,35 @@ describe('Actions', function () {
         });
     });
 });
+
+describe('Transformations', function () {
+    var transformations = new Transformations();
+    describe('#produce', function () {
+        it('perform date transform', function () {
+            var transformedValue = transformations.produce([
+                    {
+                        type: 'date',
+                        locale: 'en',
+                        from: 'HH:mm D MMM YYYY',
+                        to: 'YYYY-MM-DD'
+                    }
+                ],
+                '21:10 30 Aug 2016'
+            );
+            expect(transformedValue).equal('2016-08-30');
+        });
+
+        it('perform replace transform', function () {
+            var transformedValue = transformations.produce([
+                    {
+                        type: 'replace',
+                        re: ['\\s', 'g'],
+                        to: ''
+                    }
+                ],
+                ' t e  s  t'
+            );
+            expect(transformedValue).equal('test');
+        });
+    });
+});
