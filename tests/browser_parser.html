@@ -1,0 +1,136 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>GooseParser Tests</title>
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css"/>
+    <style type="text/css">
+        div {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body data-value="1" data-str="str" data-obj="{}">
+<div id="mocha"></div>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="../vendor/sizzle.min.js"></script>
+<script src="../node_modules/mocha/mocha.js"></script>
+<script src="browser_parser_test.bundle.js"></script>
+
+<div class="scope-test">simple</div>
+<div class="scope-test-2">column</div>
+<div class="scope-test-2">column</div>
+<div class="scope-test-3">
+    <div class="scope-test-3-passed">column1</div>
+    <div class="scope-test-3-passed">column2</div>
+</div>
+
+<div class="scope-test-4">
+    <div class="scope-test-4-passed">
+        <div class="scope-test-4-passed-row">row1</div>
+        <div class="scope-test-4-passed-row">row2</div>
+    </div>
+    <div class="scope-test-4-passed">
+        <div class="scope-test-4-passed-row">row1</div>
+        <div class="scope-test-4-passed-row">row2</div>
+    </div>
+</div>
+
+<div class="scope-test-5">
+    <div class="scope-test-5-passed">
+        <div class="scope-test-5-passed-column1">column1</div>
+        <div>
+            <div class="scope-test-5-passed-column2">column2</div>
+            <div class="scope-test-5-passed-column3">column3</div>
+            <div class="scope-test-5-passed-column3">column4</div>
+        </div>
+    </div>
+    <div class="scope-test-5-passed">
+        <div class="scope-test-5-passed-column1">column1</div>
+        <div>
+            <div class="scope-test-5-passed-column2">column2</div>
+            <div class="scope-test-5-passed-column3">column3</div>
+            <div class="scope-test-5-passed-column4">column4</div>
+        </div>
+    </div>
+</div>
+
+<div class="scope-test-6">
+    <div class="scope-test-6-passed">
+        <div class="scope-test-6-passed-column1">column1</div>
+        <div>
+            <div class="scope-test-6-passed-column2">column2</div>
+            <div class="scope-test-6-passed-column3">column3</div>
+            <div class="scope-test-6-passed-column4">column4</div>
+        </div>
+    </div>
+</div>
+
+Scrollable
+<div class="scrollable">
+    <div class="content"></div>
+</div>
+
+Paginatable
+<div class="pageable">
+    <div class="content"></div>
+    <div class="pagination">
+
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('div.scope-test-5 > div > div.scope-test-5-passed-column1, div.scope-test-5 > div > div > div').on('click', function () {
+            var o = $(this);
+            o.html(o.html() + 1);
+        });
+
+        function addPage(container, erase) {
+            var content = $('div.scope-test-6').html();
+            container = $(document).find(container);
+            if (erase) {
+                container.html('');
+            }
+            container.append(content);
+        }
+
+        function addExtraToPage(extra) {
+            var nodes = document.querySelectorAll('.pageable .scope-test-6-passed-column1');
+            for (var nodeIndex = 0; nodeIndex < nodes.length; nodeIndex++) {
+                var node = nodes[nodeIndex];
+                node.innerText = node.innerText + extra;
+            }
+        }
+
+        var scrollCounter = 10;
+        addPage('div.scrollable > .content');
+        $(document).on('scroll', function () {
+            addPage('div.scrollable > .content');
+            if (--scrollCounter <= 0) {
+                $(document).unbind('scroll');
+                return;
+            }
+        });
+
+        var pageCounter = 10;
+        addPage('div.pageable > .content', true);
+        addExtraToPage(1);
+        for (var i = 1; i <= pageCounter; i++) {
+            var elem = $('<div>' + i + '</div>').on('click', function () {
+                addPage('div.pageable > .content', true);
+                var pageNumber = this.innerText;
+                addExtraToPage(pageNumber);
+            });
+            $('div.pageable > div.pagination').append(elem);
+        }
+
+        $('.scope-test').on('click', function () {
+            var elem = $(this);
+            elem.addClass('clicked');
+            elem.text(elem.text() + 1);
+            elem.unbind('click');
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,22 +1,17 @@
 var Parser = require('../lib/Parser');
 var Actions = require('../lib/Actions');
 var Transformations = require('../lib/Transformations');
-var PhantomEnvironment = require('../lib/PhantomEnvironment');
+var BrowserEnvironment = require('../lib/BrowserEnvironment');
 var chai = require('chai');
 var expect = chai.expect;
-var path = require('path');
+
+mocha.setup('bdd');
+mocha.timeout(5000);
 
 var env;
-var uri = 'file://' + path.join(__dirname, '/parser.html');
 
 before(function () {
-    env = new PhantomEnvironment({
-        url: uri,
-        screen: {
-            width: 1080,
-            height: 200
-        }
-    });
+    env = new BrowserEnvironment();
 });
 
 describe('Parser', function () {
@@ -162,3 +157,5 @@ describe('Transformations', function () {
         });
     });
 });
+
+mocha.run();
