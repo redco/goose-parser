@@ -30,7 +30,7 @@
     "url": "https://github.com/redco/goose-parser/issues"
   },
   "scripts": {
-    "test": "mocha tests/parser_test.js"
+    "test": "mocha --timeout=5000 tests/parser_test.js"
   },
   "engines": {
     "node": ">= 0.4.0"
@@ -41,7 +41,6 @@
     "mkdir-p": "0.0.7",
     "moment": "^2.10.6",
     "phantom": "^0.7.2",
-    "phantomjs": "^1.9.18",
     "vow": "^0.4.10",
     "vow-node": "^0.3.0"
   },

@@ -6,7 +6,7 @@ var chai = require('chai');
 var expect = chai.expect;
 var path = require('path');
 
-var env = null;
+var env;
 var uri = 'file://' + path.join(__dirname, '/parser.html');
 
 before(function () {
@@ -20,7 +20,6 @@ before(function () {
 });
 
 describe('Parser', function () {
-    this.timeout(5000);
     describe('#parse', function () {
         it('parse single page', function () {
             var parser = new Parser({
@@ -101,7 +100,6 @@ describe('Parser', function () {
 });
 
 describe('Actions', function () {
-    this.timeout(5000);
     describe('#performForRule', function () {
         it('perform actions from parsing rules', function () {
             return env
