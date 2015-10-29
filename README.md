@@ -1,4 +1,7 @@
-# goose-parser
+# goose-parser [![Latest Stable Version](https://img.shields.io/npm/v/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser) [![Total Downloads](https://img.shields.io/npm/dt/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser)
+
+[![Build Status](https://img.shields.io/travis/redco/goose-parser.svg?style=flat)](https://travis-ci.org/redco/goose-parser)
+[![Coverage Status](https://img.shields.io/coveralls/redco/goose-parser.svg?style=flat)](https://coveralls.io/github/redco/goose-parser)
 
 This tool moves routine crawling process to the new simple way. 
 Now it's possible to parse a web page for a few moments. 
