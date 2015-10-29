@@ -3,7 +3,7 @@
 [![Build Status](https://img.shields.io/travis/redco/goose-parser.svg?style=flat)](https://travis-ci.org/redco/goose-parser)
 [![Coverage Status](https://img.shields.io/coveralls/redco/goose-parser.svg?style=flat)](https://coveralls.io/github/redco/goose-parser)
 
-This tool moves routine crawling process to the new simple way. 
+This tool moves routine crawling process to the new level. 
 Now it's possible to parse a web page for a few moments. 
 All you need is to specify parsing rules based on css selectors. It's so simple as Goose can do it.
 This library allows to parse such data types as grids, collections, and simple objects.
@@ -22,74 +22,28 @@ Follow instructions provided by the link or build it [manually](http://phantomjs
 ## Documentation
 All css selectors can be set in a [sizzle](https://github.com/jquery/sizzle) format.
 
-### Actions
-Allow to execute actions on the page before parse process.
+### Environments
+This is a special atmosphere where Parser has to be executed. The main purpose of the [environment](https://github.com/redco/goose-parser/blob/master/lib/Environment.js) is to provide a method for evaluating JS on the page.
 
-#### Click
-Click by the element on the page.
-
-**Example:**
+#### PhantomEnvironment
+That environment is used for running Parser on node.
 ```JS
-{
-    type: 'click',
-    scope: '.open-button'
-    parentScope: 'body',
-    once: true
-}
+var env = new PhantomEnvironment({
+    url: 'http://google.com',
+});
 ```
+The main and only required parameter is `url`. It contains an url address of the site, where Parser will start.
 
-**Fields:**
+More detailed information about default options you can find [here](https://github.com/redco/goose-parser/blob/master/lib/PhantomEnvironment.js#L17).
 
-* *type* - type of action
-* *scope* - css selector of the node.
-* *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
-* *once* [optional]  - to perform action only once (can be useful on pre-parse moment).
-
-#### Wait
-Wait for the element on the page.
-
-**Example:**
+#### BrowserEnvironment
+That environment is used for running Parser in the browser.
 ```JS
-{
-    type: 'wait',
-    scope: '.open-button.done'
-    timeout: 2 * 60 * 1000,
-    parentScope: 'body',
-    once: true
-}
+var env = new BrowserEnvironment();
 ```
-
-**Fields:**
-
-* *type* - type of action
-* *scope* - css selector of the node.
-* *timeout* [optional] - time to cancel wait in seconds.
-* *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
-* *once* [optional]  - to perform action only once (can be useful on pre-parse moment).
-
-### Transformations
-
-Allow to transform parsed value to some specific form.
-
-#### Date
-Format date to specific view (using [momentjs](https://github.com/moment/moment/)).
-```JS
-{
-    type: 'date',
-    locale: 'ru',
-    from: 'HH:mm D MMM YYYY',
-    to: 'YYYY-MM-DD'
-}
-```
-
-#### Replace
-Replace value using Regex.
-```JS
-{
-    type: 'replace',
-    re: ['\\s', 'g'],
-    to: ''
-}
+To created packed js-file with Parser execute following command:
+```bash
+npm run build
 ```
 
 ### Parse rules
@@ -254,6 +208,76 @@ The purpose of this rule - retrieving collection of collection.
 * *actions* [optional]  - see [Actions](#actions).
 * *transform* [optional] - see [Transformations](#transformations).
 
+### Actions
+Allow to execute actions on the page before parse process.
+
+#### Click
+Click by the element on the page.
+
+**Example:**
+```JS
+{
+    type: 'click',
+    scope: '.open-button'
+    parentScope: 'body',
+    once: true
+}
+```
+
+**Fields:**
+
+* *type* - type of action
+* *scope* - css selector of the node.
+* *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
+* *once* [optional]  - to perform action only once (can be useful on pre-parse moment).
+
+#### Wait
+Wait for the element on the page.
+
+**Example:**
+```JS
+{
+    type: 'wait',
+    scope: '.open-button.done'
+    timeout: 2 * 60 * 1000,
+    parentScope: 'body',
+    once: true
+}
+```
+
+**Fields:**
+
+* *type* - type of action
+* *scope* - css selector of the node.
+* *timeout* [optional] - time to cancel wait in seconds.
+* *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
+* *once* [optional]  - to perform action only once (can be useful on pre-parse moment).
+
+### Transformations
+
+Allow to transform parsed value to some specific form.
+
+#### Date
+Format date to specific view (using [momentjs](https://github.com/moment/moment/)).
+```JS
+{
+    type: 'date',
+    locale: 'ru',
+    from: 'HH:mm D MMM YYYY',
+    to: 'YYYY-MM-DD'
+}
+```
+
+#### Replace
+Replace value using Regex.
+```JS
+{
+    type: 'replace',
+    re: ['\\s', 'g'],
+    to: ''
+}
+```
+
 ## Usage
 
 ```JS
@@ -338,7 +362,17 @@ parser.parse({
 ```
 
 ## Tests
-To run [tests](https://github.com/redco/goose-parser/blob/master/tests/parser_test.js) use command
+
+### With PhantomEnvironment
+To run [tests](https://github.com/redco/goose-parser/blob/master/tests/phantom_parser_test.js) use command:
 ```bash
 npm test
 ```
+
+### With BrowserEnvironment
+To run [tests](https://github.com/redco/goose-parser/blob/master/tests/browser_parser_test.js) build them with command:
+```bash
+npm run build-test
+```
+And then run [file](https://github.com/redco/goose-parser/blob/master/tests/browser_parser.html) in the browser.
+
