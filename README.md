@@ -16,6 +16,9 @@ It offers next features: pre-parse [actions](#actions) and post-parse [transform
 npm install goose-parser
 ```
 
+This library has dependency on [PhantomJS 2.0](https://github.com/eugene1g/phantomjs/releases). 
+Follow instructions provided by the link or build it [manually](http://phantomjs.org/build.html). 
+
 ## Documentation
 All css selectors can be set in a [sizzle](https://github.com/jquery/sizzle) format.
 
