@@ -1,7 +1,7 @@
 # goose-parser [![Latest Stable Version](https://img.shields.io/npm/v/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser) [![Total Downloads](https://img.shields.io/npm/dt/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser)
 
-[![Build Status](https://img.shields.io/travis/redco/goose-parser.svg?style=flat)](https://travis-ci.org/redco/goose-parser)
-[![Coverage Status](https://img.shields.io/coveralls/redco/goose-parser.svg?style=flat)](https://coveralls.io/github/redco/goose-parser)
+[![Build Status](https://img.shields.io/travis/redco/goose-parser/master.svg?style=flat)](https://travis-ci.org/redco/goose-parser)
+[![Coverage Status](https://img.shields.io/coveralls/redco/goose-parser/master.svg?style=flat)](https://coveralls.io/github/redco/goose-parser)
 
 This tool moves routine crawling process to the new level. 
 Now it's possible to parse a web page for a few moments. 
@@ -292,6 +292,13 @@ To run [tests](https://github.com/redco/goose-parser/blob/master/tests/browser_p
 npm run build-test
 ```
 And then run [file](https://github.com/redco/goose-parser/blob/master/tests/browser_parser.html) in the browser.
+
+## Debug
+All parser components are covered by [debug](https://github.com/visionmedia/debug) library, which give an ability to debug application in easy way.
+Set `DEBUG` variable with name of js file to show debug information.
+```bash
+DEBUG=Parser,Actions app.js
+```
 
 ## Usage
 
