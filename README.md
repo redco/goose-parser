@@ -278,6 +278,21 @@ Replace value using Regex.
 }
 ```
 
+## Tests
+
+### With PhantomEnvironment
+To run [tests](https://github.com/redco/goose-parser/blob/master/tests/phantom_parser_test.js) use command:
+```bash
+npm test
+```
+
+### With BrowserEnvironment
+To run [tests](https://github.com/redco/goose-parser/blob/master/tests/browser_parser_test.js) build them with command:
+```bash
+npm run build-test
+```
+And then run [file](https://github.com/redco/goose-parser/blob/master/tests/browser_parser.html) in the browser.
+
 ## Usage
 
 ```JS
@@ -360,19 +375,4 @@ parser.parse({
     
 });
 ```
-
-## Tests
-
-### With PhantomEnvironment
-To run [tests](https://github.com/redco/goose-parser/blob/master/tests/phantom_parser_test.js) use command:
-```bash
-npm test
-```
-
-### With BrowserEnvironment
-To run [tests](https://github.com/redco/goose-parser/blob/master/tests/browser_parser_test.js) build them with command:
-```bash
-npm run build-test
-```
-And then run [file](https://github.com/redco/goose-parser/blob/master/tests/browser_parser.html) in the browser.
 
