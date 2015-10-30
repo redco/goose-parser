@@ -68,7 +68,6 @@ describe('Parser', function () {
                             {
                                 name: 'sub-column',
                                 scope: 'div:last-child',
-                                extract: true,
                                 collection: [
                                     {name: 'column2', scope: 'div.scope-test-6-passed-column2'},
                                     {name: 'column3', scope: 'div.scope-test-6-passed-column3'},
@@ -79,6 +78,48 @@ describe('Parser', function () {
                     }
                 }
             ).then(function (found) {
+                    expect(found).to.be.instanceOf(Array);
+                    expect(found.length).equal(11);
+
+                    found.forEach(function (item, i) {
+                        expect(item.column1, 'row' + i).equal('column1');
+                        for (var i = 2; i <= 4; i++) {
+                            var val = 'column' + i;
+                            expect(item['sub-column'][val], 'row' + i).equal(val);
+                        }
+                    }, this);
+                });
+        });
+
+        it('parse page with page pagination', function () {
+            var parser = new Parser({
+                environment: env,
+                pagination: {
+                    type: 'page',
+                    scope: '.pageable .pagination div',
+                    pageScope: '.pageable .content .scope-test-6-passed'
+                }
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: '.scrollable > .content > div.scope-test-6-passed',
+                        collection: [[
+                            {name: 'column1', scope: 'div.scope-test-6-passed-column1'},
+                            {
+                                name: 'sub-column',
+                                scope: 'div:last-child',
+                                collection: [
+                                    {name: 'column2', scope: 'div.scope-test-6-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-test-6-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-test-6-passed-column4'}
+                                ]
+                            }
+                        ]]
+                    }
+                }
+            ).then(function (found) {
+                    console.log(found);
                     expect(found).to.be.instanceOf(Array);
                     expect(found.length).equal(11);
 
