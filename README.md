@@ -47,6 +47,19 @@ npm run build
 ```
 
 ### Parser
+[Parser.js](https://github.com/redco/goose-parser/blob/master/lib/Parser.js) is the main component of the package which performs page parsing. 
+
+```JS
+var parser = new Parser({
+    environment: env,
+    pagination: pagination
+});
+```
+
+**Fields:**
+
+* *environment* - one of the allowed [environments](#environments).
+* *pagination* [optional] - [pagination](#pagination) definition.
 
 ### Parse rules
 
@@ -214,7 +227,7 @@ The purpose of this rule - retrieving collection of collection.
 This is a way to parse collection-based data. See more info in [Paginator.js](https://github.com/redco/goose-parser/blob/master/lib/Paginator.js)
 
 #### Scroll pagination
-This type of pagination allows to parse collections with infinity scroll.
+This type of pagination allows to parse collections with infinite scroll.
 ```JS
 {
     type: 'scroll',
@@ -225,26 +238,49 @@ This type of pagination allows to parse collections with infinity scroll.
 
 **Fields:**
 
-* *type* - scroll for that type of pagination.
+* *type* - "scroll" for that type of pagination.
 * *interval* - interval in pixels to scroll.
 * *maxPagesCount* [optional] - max pages to parse.
 
-
 #### Page pagination
 This type of pagination allows to parse collections with ajax-page pagination.
+
+*JS definition*
 ```JS
 {
     type: 'page',
-    scope: '.pages',
+    scope: '.page',
     pageScope: '.pageContainer',
-    maxPagesCount: 2,
+    maxPagesCount: 2
 }
+```
+
+*HTML*
+```HTML
+<div>
+    <div class='pageContainer'>
+        <div class='collection-node'>
+            <div class='simple-node1'>simple-value1</div>
+            <div class='simple-node2'>simple-value2</div>
+        </div>
+        <div class='collection-node'>
+            <div class='simple-node1'>simple-value3</div>
+            <div class='simple-node2'>simple-value4</div>
+        </div>
+    </div>
+    <div class='pagination'>
+        <div class='page'>1</div>
+        <div class='page'>2</div>
+        <div class='page'>3</div>
+    </div>
+</div>
 ```
 
 **Fields:**
 
-* *type* - scroll for that type of pagination.
-* *scope* - interval in pixels to scroll.
+* *type* - "page" for that type of pagination.
+* *scope* - css selector for paginator block (page label).
+* *pageScope* - css selector for page scope (container for page-data).
 * *maxPagesCount* [optional] - max pages to parse.
 
 ### Actions
