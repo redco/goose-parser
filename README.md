@@ -227,7 +227,7 @@ The purpose of this rule - retrieving collection of collection.
 This is a way to parse collection-based data. See more info in [Paginator.js](https://github.com/redco/goose-parser/blob/master/lib/Paginator.js)
 
 #### Scroll pagination
-This type of pagination allows to parse collections with infinity scroll.
+This type of pagination allows to parse collections with infinite scroll.
 ```JS
 {
     type: 'scroll',
