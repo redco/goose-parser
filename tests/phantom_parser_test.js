@@ -108,7 +108,7 @@ describe('Parser', function () {
             return parser.parse(
                 {
                     rules: {
-                        scope: '.scrollable > .content > div.scope-test-6-passed',
+                        scope: '.pageable > .content > div.scope-test-6-passed',
                         collection: [[
                             {name: 'column1', scope: 'div.scope-test-6-passed-column1'},
                             {
@@ -124,12 +124,11 @@ describe('Parser', function () {
                     }
                 }
             ).then(function (found) {
-                    console.log(found);
                     expect(found).to.be.instanceOf(Array);
-                    expect(found.length).equal(11);
+                    expect(found.length).equal(10);
 
                     found.forEach(function (item, i) {
-                        expect(item.column1, 'row' + i).equal('column1');
+                        expect(item.column1, 'row' + i).equal('column1' + (i + 1));
                         for (var i = 2; i <= 4; i++) {
                             var val = 'column' + i;
                             expect(item['sub-column'][val], 'row' + i).equal(val);
