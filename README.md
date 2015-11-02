@@ -46,6 +46,8 @@ To created packed js-file with Parser execute following command:
 npm run build
 ```
 
+### Parser
+
 ### Parse rules
 
 #### Simple rule
@@ -207,6 +209,43 @@ The purpose of this rule - retrieving collection of collection.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
 * *actions* [optional]  - see [Actions](#actions).
 * *transform* [optional] - see [Transformations](#transformations).
+
+### Pagination
+This is a way to parse collection-based data. See more info in [Paginator.js](https://github.com/redco/goose-parser/blob/master/lib/Paginator.js)
+
+#### Scroll pagination
+This type of pagination allows to parse collections with infinity scroll.
+```JS
+{
+    type: 'scroll',
+    interval: 500,
+    maxPagesCount: 2
+}
+```
+
+**Fields:**
+
+* *type* - scroll for that type of pagination.
+* *interval* - interval in pixels to scroll.
+* *maxPagesCount* [optional] - max pages to parse.
+
+
+#### Page pagination
+This type of pagination allows to parse collections with ajax-page pagination.
+```JS
+{
+    type: 'page',
+    scope: '.pages',
+    pageScope: '.pageContainer',
+    maxPagesCount: 2,
+}
+```
+
+**Fields:**
+
+* *type* - scroll for that type of pagination.
+* *scope* - interval in pixels to scroll.
+* *maxPagesCount* [optional] - max pages to parse.
 
 ### Actions
 Allow to execute actions on the page before parse process.
