@@ -280,7 +280,7 @@ This type of pagination allows to parse collections with ajax-page pagination.
 
 * *type* - "page" for that type of pagination.
 * *scope* - css selector for paginator block (page label).
-* *pageScope* - css selector for pege scope (container for page-data).
+* *pageScope* - css selector for page scope (container for page-data).
 * *maxPagesCount* [optional] - max pages to parse.
 
 ### Actions
