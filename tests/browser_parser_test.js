@@ -16,6 +16,78 @@ before(function () {
 
 describe('Parser', function () {
     describe('#parse', function () {
+        it('parse simple node', function () {
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: 'div.scope-simple'
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).equal('simple');
+                });
+        });
+
+        it('parse collection node', function () {
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: 'div.scope-collection',
+                        collection: [
+                            {
+                                name: 'column1',
+                                scope: 'div.scope-collection-column1'
+                            },
+                            {
+                                name: 'column2',
+                                scope: 'div.scope-collection-column2'
+                            }
+                        ]
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).to.be.instanceOf(Object);
+                    expect(found.column1).equal('column1');
+                    expect(found.column2).equal('column2');
+                });
+        });
+
+        it('parse simple node with preActions', function () {
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    preActions: [
+                        {
+                            type: 'wait',
+                            scope: 'div.scope-simple-pre-actions'
+                        },
+                        {
+                            type: 'click',
+                            scope: 'div.scope-simple-pre-actions'
+                        },
+                        {
+                            type: 'wait',
+                            scope: 'div.scope-simple-pre-actions.clicked'
+                        }
+                    ],
+                    rules: {
+                        name: 'node',
+                        scope: 'div.scope-simple-pre-actions.clicked'
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).equal('simple1');
+                });
+        });
+
         it('parse single page', function () {
             var parser = new Parser({
                 environment: env
@@ -23,16 +95,16 @@ describe('Parser', function () {
             return parser.parse(
                 {
                     rules: {
-                        scope: '.scrollable > .content > div.scope-test-6-passed',
+                        scope: '.scrollable > .content > div.scope-pagination-passed',
                         collection: [[
-                            {name: 'column1', scope: 'div.scope-test-6-passed-column1'},
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
                             {
                                 name: 'sub-column',
                                 scope: 'div:last-child',
                                 collection: [
-                                    {name: 'column2', scope: 'div.scope-test-6-passed-column2'},
-                                    {name: 'column3', scope: 'div.scope-test-6-passed-column3'},
-                                    {name: 'column4', scope: 'div.scope-test-6-passed-column4'}
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
                                 ]
                             }
                         ]]
@@ -62,16 +134,16 @@ describe('Parser', function () {
             return parser.parse(
                 {
                     rules: {
-                        scope: '.scrollable > .content > div.scope-test-6-passed',
+                        scope: '.scrollable > .content > div.scope-pagination-passed',
                         collection: [[
-                            {name: 'column1', scope: 'div.scope-test-6-passed-column1'},
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
                             {
                                 name: 'sub-column',
                                 scope: 'div:last-child',
                                 collection: [
-                                    {name: 'column2', scope: 'div.scope-test-6-passed-column2'},
-                                    {name: 'column3', scope: 'div.scope-test-6-passed-column3'},
-                                    {name: 'column4', scope: 'div.scope-test-6-passed-column4'}
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
                                 ]
                             }
                         ]]
@@ -97,22 +169,22 @@ describe('Parser', function () {
                 pagination: {
                     type: 'page',
                     scope: '.pageable .pagination div',
-                    pageScope: '.pageable .content .scope-test-6-passed'
+                    pageScope: '.pageable .content .scope-pagination-passed'
                 }
             });
             return parser.parse(
                 {
                     rules: {
-                        scope: '.pageable > .content > div.scope-test-6-passed',
+                        scope: '.pageable > .content > div.scope-pagination-passed',
                         collection: [[
-                            {name: 'column1', scope: 'div.scope-test-6-passed-column1'},
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
                             {
                                 name: 'sub-column',
                                 scope: 'div:last-child',
                                 collection: [
-                                    {name: 'column2', scope: 'div.scope-test-6-passed-column2'},
-                                    {name: 'column3', scope: 'div.scope-test-6-passed-column3'},
-                                    {name: 'column4', scope: 'div.scope-test-6-passed-column4'}
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
                                 ]
                             }
                         ]]
@@ -147,15 +219,15 @@ describe('Actions', function () {
                             actions: [
                                 {
                                     type: 'wait',
-                                    scope: 'div.scope-test'
+                                    scope: 'div.scope-simple-actions'
                                 },
                                 {
                                     type: 'click',
-                                    scope: 'div.scope-test'
+                                    scope: 'div.scope-simple-actions'
                                 },
                                 {
                                     type: 'wait',
-                                    scope: 'div.scope-test.clicked'
+                                    scope: 'div.scope-simple-actions.clicked'
                                 }
                             ]
                         },
