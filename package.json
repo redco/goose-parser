@@ -19,6 +19,10 @@
     {
       "name": "Andrew Reddikh",
       "email": "andrew@reddikh.com"
+    },
+    {
+      "name": "Andrew Balakirev",
+      "email": "balakirev.andrey@gmail.com"
     }
   ],
   "version": "0.1.3",
@@ -30,7 +34,7 @@
     "url": "https://github.com/redco/goose-parser/issues"
   },
   "scripts": {
-    "test": "mocha --timeout=5000 tests/phantom_parser_test.js",
+    "test": "_mocha --timeout=5000 tests/phantom_parser_test.js",
     "build": "webpack webpack.js parser.bundle.js",
     "build-test": "webpack tests/browser_parser_test.js tests/browser_parser_test.bundle.js"
   },
