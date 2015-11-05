@@ -396,6 +396,7 @@ var parser = new Parser({
 
 parser.parse({
     rules: {
+        scope: '.outer-wrap',
         actions: [
             {
                 type: 'wait',
@@ -405,56 +406,53 @@ parser.parse({
                 once: true
             }
         ],
-        scope: 'div.scope-test',
         collection: [[
-            actions: [
-                {
-                    type: 'click',
-                    scope: '.open-button'
-                },
-                {
-                    type: 'wait',
-                    scope: '.open-button.done'
-                }
-            ],
-            {name: 'column1', scope: 'div.scope-test-column1'},
             {
-                name: 'sub-column',
-                scope: 'div:last-child',
+                name: 'node1',
+                scope: '.node1',
+                actions: [
+                    {
+                        type: 'click',
+                        scope: '.prepare-node1'
+                    },
+                    {
+                        type: 'wait',
+                        scope: '.prepare-node1.clicked'
+                    }
+                ],
                 collection: [
                     {
-                        name: 'column2', 
-                        scope: 'div.scope-test-column2'
-                    },
-                    {
-                        name: 'column3', 
-                        scope: 'div.scope-test-column3'
-                        transform: [
+                        name: 'subNode',
+                        scope: '.sub-node',
+                        collection: [[
                             {
-                                type: 'date',
-                                locale: 'ru',
-                                from: 'HH:mm D MMM YYYY',
-                                to: 'YYYY-MM-DD'
-                            }
-                        ]
-                    },
-                    {
-                        name: 'column4', 
-                        scope: 'div.scope-test-column4',
-                        transform: [
+                                name: 'date',
+                                scope: '.date-node',
+                                transform: [
+                                    {
+                                        type: 'date',
+                                        locale: 'ru',
+                                        from: 'HH:mm D MMM YYYY',
+                                        to: 'YYYY-MM-DD'
+                                    }
+                                ]
+                            },
                             {
-                                type: 'replace',
-                                re: ['\\s', 'g'],
-                                to: ''
+                                name: 'number',
+                                scope: '.number-node'
                             }
-                        ]
+                        ]]
                     }
                 ]
+            },
+            {
+                name: 'prices',
+                scope: '.price'
             }
         ]]
     }
-}).then(function(parsed) {
-    
+}).done(function (results) {
+    // do whatever with results
 });
 ```
 
