@@ -61,6 +61,19 @@ var parser = new Parser({
 * *environment* - one of the allowed [environments](#environments).
 * *pagination* [optional] - [pagination](#pagination) definition.
 
+#### #parse method
+```JS
+parser.parse({
+    preActions: preActions,
+    rules: parsingRules
+});
+```
+
+**Fields:**
+
+* *preActions* [optional] - Array of [actions](#actions) to execute before parsing process.
+* *rules* - [parsing rules](#parserules) which define scopes on the page.
+
 ### Parse rules
 
 #### Simple rule
@@ -395,17 +408,16 @@ var parser = new Parser({
 });
 
 parser.parse({
+    preActions: [
+        {
+            type: 'wait',
+            timeout: 2 * 60 * 1000,
+            scope: '.container',
+            parentScope: 'body'
+        }
+    ],
     rules: {
         scope: '.outer-wrap',
-        actions: [
-            {
-                type: 'wait',
-                timeout: 2 * 60 * 1000,
-                scope: '.container',
-                parentScope: 'body',
-                once: true
-            }
-        ],
         collection: [[
             {
                 name: 'node1',
