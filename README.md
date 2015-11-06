@@ -64,14 +64,14 @@ var parser = new Parser({
 #### #parse method
 ```JS
 parser.parse({
-    preActions: preActions,
+    actions: actions,
     rules: parsingRules
 });
 ```
 
 **Fields:**
 
-* *preActions* [optional] - Array of [actions](#actions) to execute before parsing process.
+* *actions* [optional] - Array of [actions](#actions) to execute before parsing process.
 * *rules* - [parsing rules](#parserules) which define scopes on the page.
 
 ### Parse rules
@@ -408,7 +408,7 @@ var parser = new Parser({
 });
 
 parser.parse({
-    preActions: [
+    actions: [
         {
             type: 'wait',
             timeout: 2 * 60 * 1000,

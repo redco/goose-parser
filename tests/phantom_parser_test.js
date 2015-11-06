@@ -63,13 +63,13 @@ describe('Parser', function () {
                 });
         });
 
-        it('parse simple node with preActions', function () {
+        it('parse simple node with pre-actions', function () {
             var parser = new Parser({
                 environment: env
             });
             return parser.parse(
                 {
-                    preActions: [
+                    actions: [
                         {
                             type: 'wait',
                             scope: 'div.scope-simple-pre-actions'
