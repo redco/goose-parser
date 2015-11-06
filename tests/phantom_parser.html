@@ -12,54 +12,28 @@
 <div id="mocha"></div>
 <script src="js/jquery-1.11.3.min.js"></script>
 
-<div class="scope-test">simple</div>
-<div class="scope-test-2">column</div>
-<div class="scope-test-2">column</div>
-<div class="scope-test-3">
-    <div class="scope-test-3-passed">column1</div>
-    <div class="scope-test-3-passed">column2</div>
+<div class="scope-simple">simple</div>
+
+<div class="scope-collection">
+    <div class="scope-collection-column1">column1</div>
+    <div class="scope-collection-column2">column2</div>
 </div>
 
-<div class="scope-test-4">
-    <div class="scope-test-4-passed">
-        <div class="scope-test-4-passed-row">row1</div>
-        <div class="scope-test-4-passed-row">row2</div>
-    </div>
-    <div class="scope-test-4-passed">
-        <div class="scope-test-4-passed-row">row1</div>
-        <div class="scope-test-4-passed-row">row2</div>
-    </div>
-</div>
+<div class="scope-simple-actions">simple</div>
+<div class="scope-simple-pre-actions">simple</div>
 
-<div class="scope-test-5">
-    <div class="scope-test-5-passed">
-        <div class="scope-test-5-passed-column1">column1</div>
+<div class="scope-pagination">
+    <div class="scope-pagination-passed">
+        <div class="scope-pagination-passed-column1">column1</div>
         <div>
-            <div class="scope-test-5-passed-column2">column2</div>
-            <div class="scope-test-5-passed-column3">column3</div>
-            <div class="scope-test-5-passed-column3">column4</div>
-        </div>
-    </div>
-    <div class="scope-test-5-passed">
-        <div class="scope-test-5-passed-column1">column1</div>
-        <div>
-            <div class="scope-test-5-passed-column2">column2</div>
-            <div class="scope-test-5-passed-column3">column3</div>
-            <div class="scope-test-5-passed-column4">column4</div>
+            <div class="scope-pagination-passed-column2">column2</div>
+            <div class="scope-pagination-passed-column3">column3</div>
+            <div class="scope-pagination-passed-column4">column4</div>
         </div>
     </div>
 </div>
 
-<div class="scope-test-6">
-    <div class="scope-test-6-passed">
-        <div class="scope-test-6-passed-column1">column1</div>
-        <div>
-            <div class="scope-test-6-passed-column2">column2</div>
-            <div class="scope-test-6-passed-column3">column3</div>
-            <div class="scope-test-6-passed-column4">column4</div>
-        </div>
-    </div>
-</div>
+<div style="height: 1000px;">Block for adding native scroll</div>
 
 Scrollable
 <div class="scrollable">
@@ -76,13 +50,8 @@ Paginatable
 
 <script>
     $(function () {
-        $('div.scope-test-5 > div > div.scope-test-5-passed-column1, div.scope-test-5 > div > div > div').on('click', function () {
-            var o = $(this);
-            o.html(o.html() + 1);
-        });
-
         function addPage(container, erase) {
-            var content = $('div.scope-test-6').html();
+            var content = $('div.scope-pagination').html();
             container = $(document).find(container);
             if (erase) {
                 container.html('');
@@ -91,7 +60,7 @@ Paginatable
         }
 
         function addExtraToPage(extra) {
-            var nodes = document.querySelectorAll('.pageable .scope-test-6-passed-column1');
+            var nodes = document.querySelectorAll('.pageable .scope-pagination-passed-column1');
             for (var nodeIndex = 0; nodeIndex < nodes.length; nodeIndex++) {
                 var node = nodes[nodeIndex];
                 node.innerText = node.innerText + extra;
@@ -120,7 +89,13 @@ Paginatable
             $('div.pageable > div.pagination').append(elem);
         }
 
-        $('.scope-test').on('click', function () {
+        $('.scope-simple-actions').on('click', function () {
+            var elem = $(this);
+            elem.addClass('clicked');
+            elem.text(elem.text() + 1);
+            elem.unbind('click');
+        });
+        $('.scope-simple-pre-actions').on('click', function () {
             var elem = $(this);
             elem.addClass('clicked');
             elem.text(elem.text() + 1);
