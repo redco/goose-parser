@@ -78,7 +78,7 @@ parser.parse({
 
 #### Simple rule
 
-The purpose of this rule - retrieving simple textual node value.
+The purpose of this rule - retrieving simple textual node value(s).
 
 **Example:**
 
@@ -106,6 +106,8 @@ The purpose of this rule - retrieving simple textual node value.
 
 * *name* - name of the node which is presented in the result dataSet.
 * *scope* - css selector of the node.
+* *separator* [optional]  - separator applies to glue the nodes after parse, if nodes more than one.
+* *type* [optional]  - (array|string[default]). Allows to specify result data type.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
 * *actions* [optional]  - see [Actions](#actions).
 * *transform* [optional] - see [Transformations](#transformations).
