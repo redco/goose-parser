@@ -278,7 +278,7 @@ describe('Actions', function () {
                 });
         });
 
-        it('perform click and wait actions', function () {
+        it('perform type, click+waitForPage, conditionalActions, exist  actions', function () {
             return env
                 .prepare()
                 .then(function () {
@@ -295,7 +295,7 @@ describe('Actions', function () {
                                 {
                                     scope: '.form input[type=submit]',
                                     type: 'click',
-                                    then: ['waitForPage']
+                                    waitForPage: true
                                 },
                                 {
                                     type: 'conditionalActions',
@@ -308,7 +308,7 @@ describe('Actions', function () {
                                     actions: [
                                         {
                                             type: 'wait',
-                                            scope: '.submitted-value'
+                                            scope: '.submitted-value.done'
                                         }
                                     ]
                                 }

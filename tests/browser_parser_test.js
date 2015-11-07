@@ -31,6 +31,43 @@ describe('Parser', function () {
                 });
         });
 
+        it('parse simple node with separator', function () {
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: 'div.scope-simple-multiple',
+                        separator: ','
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).equal('simple,simple');
+                });
+        });
+
+        it('parse simple node and get result as array', function () {
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: 'div.scope-simple-multiple',
+                        type: 'array'
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).to.be.instanceOf(Array);
+                    expect(found.length).equal(2);
+
+                    found.forEach(function (row, i) {
+                        expect(row, 'row' + i).equal('simple');
+                    });
+                });
+        });
+
         it('parse collection node', function () {
             var parser = new Parser({
                 environment: env
@@ -208,7 +245,7 @@ describe('Parser', function () {
 
 describe('Actions', function () {
     describe('#performForRule', function () {
-        it('perform actions from parsing rules', function () {
+        it('perform click and wait actions', function () {
             return env
                 .prepare()
                 .then(function () {
