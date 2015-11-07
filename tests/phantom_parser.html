@@ -14,6 +14,9 @@
 
 <div class="scope-simple">simple</div>
 
+<div class="scope-simple-multiple">simple</div>
+<div class="scope-simple-multiple">simple</div>
+
 <div class="scope-collection">
     <div class="scope-collection-column1">column1</div>
     <div class="scope-collection-column2">column2</div>
@@ -33,6 +36,14 @@
     </div>
 </div>
 
+<div class="form">
+    <div class="submitted-value"></div>
+    <form action="" method="get">
+        <input type="text" class="value" name="submitted-value">
+        <input type="submit">
+    </form>
+</div>
+
 <div style="height: 1000px;">Block for adding native scroll</div>
 
 Scrollable
@@ -50,6 +61,17 @@ Paginatable
 
 <script>
     $(function () {
+        function getQueryParam(param) {
+            var values = location.search.substr(1).split("&");
+            for (var i = 0; i < values.length; i++) {
+                var value = values[i].split('=');
+                if (value[0] === param) {
+                    return value[1];
+                }
+            }
+            return null;
+        }
+
         function addPage(container, erase) {
             var content = $('div.scope-pagination').html();
             container = $(document).find(container);
@@ -101,6 +123,11 @@ Paginatable
             elem.text(elem.text() + 1);
             elem.unbind('click');
         });
+
+        var submittedValue = getQueryParam('submitted-value');
+        if (submittedValue) {
+            $('.submitted-value').val(submittedValue);
+        }
     });
 </script>
 </body>
