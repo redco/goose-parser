@@ -405,6 +405,15 @@ In this particular action parser checks if element `.element-to-check` presents 
 * *conditions* - Actions to check condition.
 * *actions* - Actions which will be executed if conditions are true.
 
+#### Custom actions
+Add custom action by using method `addAction`. Custom function is aware about context of Actions.
+
+**Example**
+```JS
+actions.addAction('custom-click', function(options) {
+    // do some action
+});
+```
 
 ### Transformations
 
@@ -429,6 +438,16 @@ Replace value using Regex.
     re: ['\\s', 'g'],
     to: ''
 }
+```
+
+#### Custom transformations
+Add custom trasformation by using method `addTransformation`.
+
+**Example**
+```JS
+transformations.addTransformation('custom-transform', function (options, result) {
+    return result + options.increment;
+});
 ```
 
 ## Tests
