@@ -78,7 +78,7 @@ parser.parse({
 
 #### Simple rule
 
-The purpose of this rule - retrieving simple textual node value.
+The purpose of this rule - retrieving simple textual node value(s).
 
 **Example:**
 
@@ -106,6 +106,8 @@ The purpose of this rule - retrieving simple textual node value.
 
 * *name* - name of the node which is presented in the result dataSet.
 * *scope* - css selector of the node.
+* *separator* [optional]  - separator applies to glue the nodes after parse, if nodes more than one.
+* *type* [optional]  - (array|string[default]). Allows to specify result data type.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
 * *actions* [optional]  - see [Actions](#actions).
 * *transform* [optional] - see [Transformations](#transformations).
@@ -297,7 +299,7 @@ This type of pagination allows to parse collections with ajax-page pagination.
 * *maxPagesCount* [optional] - max pages to parse.
 
 ### Actions
-Allow to execute actions on the page before parse process.
+Allow to execute actions on the page before parse process. All actions could return a result of the execution.
 
 #### Click
 Click by the element on the page.
@@ -307,15 +309,14 @@ Click by the element on the page.
 {
     type: 'click',
     scope: '.open-button'
-    parentScope: 'body',
-    once: true
 }
 ```
 
 **Fields:**
 
-* *type* - type of action
+* *type* - `click` for that action.
 * *scope* - css selector of the node.
+* *waitForPage* [optional] - true|false. Wait for the page reload, could be useful when click handles page refresh.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
 * *once* [optional]  - to perform action only once (can be useful on pre-parse moment).
 
@@ -327,19 +328,92 @@ Wait for the element on the page.
 {
     type: 'wait',
     scope: '.open-button.done'
-    timeout: 2 * 60 * 1000,
-    parentScope: 'body',
-    once: true
 }
 ```
 
 **Fields:**
 
-* *type* - type of action
+* *type* - `wait` for that action.
 * *scope* - css selector of the node.
 * *timeout* [optional] - time to cancel wait in seconds.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
 * *once* [optional]  - to perform action only once (can be useful on pre-parse moment).
+
+#### Type
+Type text to the element.
+
+**Example:**
+```JS
+{
+    type: 'type',
+    scope: 'input'
+    text: 'Some text to enter'
+}
+```
+
+**Fields:**
+
+* *type* - `type` for that action.
+* *scope* - css selector of the node.
+* *text* - text to enter to the element.
+* *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
+
+#### Exist
+Check if element exist on the page.
+
+**Example:**
+```JS
+{
+    type: 'exist',
+    scope: '.some-element'
+}
+```
+
+**Fields:**
+
+* *type* - `exist` for that action.
+* *scope* - css selector of the node.
+* *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
+
+#### ConditionalActions
+Action which helps to create `if` statement based on another action.
+
+**Example:**
+```JS
+{
+    type: 'conditionalActions',
+    conditions: [
+        {
+            type: 'exist',
+            scope: '.element-to-check'
+        }
+    ],
+    actions: [
+        {
+            type: 'click',
+            scope: '.element-to-check',
+            waitForPage: true
+        }
+    ]
+}
+```
+In this particular action parser checks if element `.element-to-check` presents on the page, do action click on it.
+
+**Fields:**
+
+* *type* - `conditionalActions` for that action.
+* *conditions* - Actions to check condition.
+* *actions* - Actions which will be executed if conditions are true.
+
+#### Custom actions
+Add custom action by using method `addAction`. Custom function is aware about context of Actions.
+
+**Example**
+```JS
+actions.addAction('custom-click', function(options) {
+    // do some action
+});
+```
 
 ### Transformations
 
@@ -364,6 +438,16 @@ Replace value using Regex.
     re: ['\\s', 'g'],
     to: ''
 }
+```
+
+#### Custom transformations
+Add custom trasformation by using method `addTransformation`.
+
+**Example**
+```JS
+transformations.addTransformation('custom-transform', function (options, result) {
+    return result + options.increment;
+});
 ```
 
 ## Tests
@@ -467,4 +551,3 @@ parser.parse({
     // do whatever with results
 });
 ```
-

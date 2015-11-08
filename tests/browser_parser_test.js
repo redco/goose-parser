@@ -31,6 +31,43 @@ describe('Parser', function () {
                 });
         });
 
+        it('parse simple node with separator', function () {
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: 'div.scope-simple-multiple',
+                        separator: ','
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).equal('simple,simple');
+                });
+        });
+
+        it('parse simple node and get result as array', function () {
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: 'div.scope-simple-multiple',
+                        type: 'array'
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).to.be.instanceOf(Array);
+                    expect(found.length).equal(2);
+
+                    found.forEach(function (row, i) {
+                        expect(row, 'row' + i).equal('simple');
+                    });
+                });
+        });
+
         it('parse collection node', function () {
             var parser = new Parser({
                 environment: env
@@ -208,7 +245,7 @@ describe('Parser', function () {
 
 describe('Actions', function () {
     describe('#performForRule', function () {
-        it('perform actions from parsing rules', function () {
+        it('perform click and wait actions', function () {
             return env
                 .prepare()
                 .then(function () {
@@ -228,6 +265,45 @@ describe('Actions', function () {
                                 {
                                     type: 'wait',
                                     scope: 'div.scope-simple-actions.clicked'
+                                }
+                            ]
+                        },
+                        'body'
+                    );
+                });
+        });
+
+        it('perform custom action', function () {
+            return env
+                .prepare()
+                .then(function () {
+                    var actions = new Actions({
+                        environment: env
+                    });
+
+                    actions.addAction('custom-click', function(options) {
+                        return this._env.evaluateJs(options.scope, function (selector) {
+                            var nodes = Sizzle(selector);
+                            for (var i = 0, l = nodes.length; i < l; i++) {
+                                nodes[i].click();
+                            }
+
+                            return nodes.length;
+                        })
+                    });
+                    return actions.performForRule({
+                            actions: [
+                                {
+                                    type: 'wait',
+                                    scope: 'div.scope-simple-custom-actions'
+                                },
+                                {
+                                    type: 'custom-click',
+                                    scope: 'div.scope-simple-custom-actions'
+                                },
+                                {
+                                    type: 'wait',
+                                    scope: 'div.scope-simple-custom-actions.clicked'
                                 }
                             ]
                         },
@@ -266,6 +342,21 @@ describe('Transformations', function () {
                 ' t e  s  t'
             );
             expect(transformedValue).equal('test');
+        });
+
+        it('perform custom transform', function () {
+            transformations.addTransformation('custom-transform', function (options, result) {
+                return result + options.increment;
+            });
+            var transformedValue = transformations.produce([
+                    {
+                        type: 'custom-transform',
+                        increment: 3
+                    }
+                ],
+                'value'
+            );
+            expect(transformedValue).equal('value3');
         });
     });
 });

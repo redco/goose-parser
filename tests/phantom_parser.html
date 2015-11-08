@@ -14,12 +14,16 @@
 
 <div class="scope-simple">simple</div>
 
+<div class="scope-simple-multiple">simple</div>
+<div class="scope-simple-multiple">simple</div>
+
 <div class="scope-collection">
     <div class="scope-collection-column1">column1</div>
     <div class="scope-collection-column2">column2</div>
 </div>
 
 <div class="scope-simple-actions">simple</div>
+<div class="scope-simple-custom-actions">simple</div>
 <div class="scope-simple-pre-actions">simple</div>
 
 <div class="scope-pagination">
@@ -31,6 +35,14 @@
             <div class="scope-pagination-passed-column4">column4</div>
         </div>
     </div>
+</div>
+
+<div class="form">
+    <div class="submitted-value"></div>
+    <form action="" method="get">
+        <input type="text" class="value" name="submitted-value">
+        <input type="submit">
+    </form>
 </div>
 
 <div style="height: 1000px;">Block for adding native scroll</div>
@@ -50,6 +62,17 @@ Paginatable
 
 <script>
     $(function () {
+        function getQueryParam(param) {
+            var values = location.search.substr(1).split("&");
+            for (var i = 0; i < values.length; i++) {
+                var value = values[i].split('=');
+                if (value[0] === param) {
+                    return value[1];
+                }
+            }
+            return null;
+        }
+
         function addPage(container, erase) {
             var content = $('div.scope-pagination').html();
             container = $(document).find(container);
@@ -89,18 +112,17 @@ Paginatable
             $('div.pageable > div.pagination').append(elem);
         }
 
-        $('.scope-simple-actions').on('click', function () {
+        $('.scope-simple-actions, .scope-simple-custom-actions, .scope-simple-pre-actions').on('click', function () {
             var elem = $(this);
             elem.addClass('clicked');
             elem.text(elem.text() + 1);
             elem.unbind('click');
         });
-        $('.scope-simple-pre-actions').on('click', function () {
-            var elem = $(this);
-            elem.addClass('clicked');
-            elem.text(elem.text() + 1);
-            elem.unbind('click');
-        });
+
+        var submittedValue = getQueryParam('submitted-value');
+        if (submittedValue) {
+            $('.submitted-value').addClass('done').val(submittedValue);
+        }
     });
 </script>
 </body>
