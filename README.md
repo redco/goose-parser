@@ -74,6 +74,36 @@ parser.parse({
 * *actions* [optional] - Array of [actions](#actions) to execute before parsing process.
 * *rules* - [parsing rules](#parserules) which define scopes on the page.
 
+#### #addAction method
+Add custom action by using method `addAction`. Custom function is aware about context of Actions.
+
+**Example**
+```JS
+parser.addAction('custom-click', function(options) {
+    // do some action
+});
+```
+
+**Params:**
+
+* *type* - name of the action.
+* *action* - function to execute when action is called.
+
+#### #addTransformation method
+Add custom trasformation by using method `addTransformation`.
+
+**Example**
+```JS
+parser.addTransformation('custom-transform', function (options, result) {
+    return result + options.increment;
+});
+```
+
+**Params:**
+
+* *type* - name of the transformation.
+* *transformation* - function to execute when transformation is called.
+
 ### Parse rules
 
 #### Simple rule
