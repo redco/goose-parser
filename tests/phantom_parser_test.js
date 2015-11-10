@@ -245,6 +245,47 @@ describe('Parser', function () {
                     }, this);
                 });
         });
+
+        it('parse page with page href pagination', function () {
+            var parser = new Parser({
+                environment: env,
+                pagination: {
+                    type: 'pageHref',
+                    scope: '.pageable-simple .pagination div',
+                    pageScope: '.pageable-simple .content .scope-pagination-passed'
+                }
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: '.pageable-simple > .content > div.scope-pagination-passed',
+                        collection: [[
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
+                            {
+                                name: 'sub-column',
+                                scope: 'div:last-child',
+                                collection: [
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
+                                ]
+                            }
+                        ]]
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).to.be.instanceOf(Array);
+                    expect(found.length).equal(10);
+
+                    found.forEach(function (item, i) {
+                        expect(item.column1, 'row' + i).equal('column1' + (i + 1));
+                        for (var i = 2; i <= 4; i++) {
+                            var val = 'column' + i;
+                            expect(item['sub-column'][val], 'row' + i).equal(val);
+                        }
+                    }, this);
+                });
+        });
     });
 });
 

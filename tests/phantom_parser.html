@@ -52,8 +52,16 @@ Scrollable
     <div class="content"></div>
 </div>
 
-Paginatable
+Paginatable Ajax
 <div class="pageable">
+    <div class="content"></div>
+    <div class="pagination">
+
+    </div>
+</div>
+
+Paginatable New Page
+<div class="pageable-simple">
     <div class="content"></div>
     <div class="pagination">
 
@@ -82,8 +90,8 @@ Paginatable
             container.append(content);
         }
 
-        function addExtraToPage(extra) {
-            var nodes = document.querySelectorAll('.pageable .scope-pagination-passed-column1');
+        function addExtraToPage(container, extra) {
+            var nodes = document.querySelectorAll(container + ' .scope-pagination-passed-column1');
             for (var nodeIndex = 0; nodeIndex < nodes.length; nodeIndex++) {
                 var node = nodes[nodeIndex];
                 node.innerText = node.innerText + extra;
@@ -91,9 +99,9 @@ Paginatable
         }
 
         var scrollCounter = 10;
-        addPage('div.scrollable > .content');
+        addPage('.scrollable > .content');
         $(document).on('scroll', function () {
-            addPage('div.scrollable > .content');
+            addPage('.scrollable > .content');
             if (--scrollCounter <= 0) {
                 $(document).unbind('scroll');
                 return;
@@ -101,15 +109,31 @@ Paginatable
         });
 
         var pageCounter = 10;
-        addPage('div.pageable > .content', true);
-        addExtraToPage(1);
-        for (var i = 1; i <= pageCounter; i++) {
+        addPage('.pageable > .content', true);
+        addExtraToPage('.pageable', 1);
+        for (i = 1; i <= pageCounter; i++) {
             var elem = $('<div>' + i + '</div>').on('click', function () {
-                addPage('div.pageable > .content', true);
+                addPage('.pageable > .content', true);
                 var pageNumber = this.innerText;
-                addExtraToPage(pageNumber);
+                addExtraToPage('.pageable', pageNumber);
             });
-            $('div.pageable > div.pagination').append(elem);
+            $('.pageable > .pagination').append(elem);
+        }
+
+        pageCounter = 10;
+        var pageValue = getQueryParam('page');
+        if (pageValue) {
+            addPage('.pageable-simple > .content', true);
+            addExtraToPage('.pageable-simple', pageValue);
+        } else {
+            addPage('.pageable-simple > .content', true);
+            addExtraToPage('.pageable-simple', 1);
+        }
+        for (var i = 1; i <= pageCounter; i++) {
+            $('<div>' + i + '</div>').on('click', function () {
+                var pageNumber = this.innerText;
+                window.location.href = window.location.origin + window.location.pathname + '?page=' + pageNumber;
+            }).appendTo($('.pageable-simple > .pagination'));
         }
 
         $('.scope-simple-actions, .scope-simple-custom-actions, .scope-simple-pre-actions').on('click', function () {
