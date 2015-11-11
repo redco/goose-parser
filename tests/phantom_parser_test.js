@@ -334,7 +334,7 @@ describe('Parser', function () {
             var parser = new Parser({
                 environment: env,
                 pagination: {
-                    type: 'pageHref',
+                    type: 'page',
                     scope: '.pageable-simple .pagination div',
                     pageScope: '.pageable-simple .content .scope-pagination-passed'
                 }
