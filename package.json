@@ -38,7 +38,7 @@
     "build": "webpack webpack.js parser.bundle.js",
     "build-test": "webpack tests/browser_parser_test.js tests/browser_parser_test.bundle.js",
     "coverage": "./node_modules/.bin/_mocha --timeout=5000 -r ./node_modules/.bin/jscoverage tests/phantom_parser_test.js",
-    "coveralls": ""
+    "coveralls": "./node_modules/.bin/jscoverage lib && ./node_modules/.bin/_mocha --timeout=5000 tests/phantom_parser_test.js -R lcov | ./node_modules/.bin/coveralls && rm -rf lib-cov"
   },
   "engines": {
     "node": ">= 0.4.0"
@@ -57,6 +57,7 @@
     "coveralls": "^2.11.4",
     "jscoverage": "^0.6.0",
     "mocha": "^2.3.3",
+    "mocha-lcov-reporter": "^1.0.0",
     "webpack": "^1.12.2"
   },
   "directories": {}
