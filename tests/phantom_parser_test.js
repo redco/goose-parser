@@ -1,7 +1,8 @@
-var Parser = require('../lib/Parser');
-var Actions = require('../lib/Actions');
-var Transformations = require('../lib/Transformations');
-var PhantomEnvironment = require('../lib/PhantomEnvironment');
+var libFolder = process.env.JSCOV ? '../lib-cov/' : '../lib/';
+var Parser = require(libFolder + 'Parser');
+var Actions = require(libFolder + 'Actions');
+var Transformations = require(libFolder + 'Transformations');
+var PhantomEnvironment = require(libFolder + 'PhantomEnvironment');
 var chai = require('chai');
 var expect = chai.expect;
 var path = require('path');
