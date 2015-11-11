@@ -246,6 +246,90 @@ describe('Parser', function () {
                 });
         });
 
+        it('parse page with page pagination and maxPagesCount', function () {
+            var parser = new Parser({
+                environment: env,
+                pagination: {
+                    type: 'page',
+                    scope: '.pageable .pagination div',
+                    pageScope: '.pageable .content .scope-pagination-passed',
+                    maxPagesCount: 3
+                }
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: '.pageable > .content > div.scope-pagination-passed',
+                        collection: [[
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
+                            {
+                                name: 'sub-column',
+                                scope: 'div:last-child',
+                                collection: [
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
+                                ]
+                            }
+                        ]]
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).to.be.instanceOf(Array);
+                    expect(found.length).equal(3);
+
+                    found.forEach(function (item, i) {
+                        expect(item.column1, 'row' + i).equal('column1' + (i + 1));
+                        for (var i = 2; i <= 4; i++) {
+                            var val = 'column' + i;
+                            expect(item['sub-column'][val], 'row' + i).equal(val);
+                        }
+                    }, this);
+                });
+        });
+
+        it('parse page with page pagination and maxResultsCount', function () {
+            var parser = new Parser({
+                environment: env,
+                pagination: {
+                    type: 'page',
+                    scope: '.pageable .pagination div',
+                    pageScope: '.pageable .content .scope-pagination-passed',
+                    maxResultsCount: 3
+                }
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: '.pageable > .content > div.scope-pagination-passed',
+                        collection: [[
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
+                            {
+                                name: 'sub-column',
+                                scope: 'div:last-child',
+                                collection: [
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
+                                ]
+                            }
+                        ]]
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).to.be.instanceOf(Array);
+                    expect(found.length).equal(3);
+
+                    found.forEach(function (item, i) {
+                        expect(item.column1, 'row' + i).equal('column1' + (i + 1));
+                        for (var i = 2; i <= 4; i++) {
+                            var val = 'column' + i;
+                            expect(item['sub-column'][val], 'row' + i).equal(val);
+                        }
+                    }, this);
+                });
+        });
+
         it('parse page with page href pagination', function () {
             var parser = new Parser({
                 environment: env,
