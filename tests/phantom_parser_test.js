@@ -453,7 +453,7 @@ describe('Actions', function () {
                     });
 
                     actions.addAction('custom-click', function(options) {
-                        return this._env.evaluateJs(options.scope, function (selector) {
+                        return this._env.evaluateJs(options.scope, /* @covignore */ function (selector) {
                             var nodes = Sizzle(selector);
                             for (var i = 0, l = nodes.length; i < l; i++) {
                                 nodes[i].click();
