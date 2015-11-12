@@ -276,8 +276,7 @@ This type of pagination allows to parse collections with infinite scroll.
 ```JS
 {
     type: 'scroll',
-    interval: 500,
-    maxPagesCount: 2
+    interval: 500
 }
 ```
 
@@ -286,6 +285,8 @@ This type of pagination allows to parse collections with infinite scroll.
 * *type* - "scroll" for that type of pagination.
 * *interval* - interval in pixels to scroll.
 * *maxPagesCount* [optional] - max pages to parse.
+* *maxResultsCount* [optional] - max results count.
+* *timeout* [optional] - timeout for paginate action.
 
 #### Page pagination
 This type of pagination allows to parse collections with ajax-page pagination.
@@ -296,7 +297,6 @@ This type of pagination allows to parse collections with ajax-page pagination.
     type: 'page',
     scope: '.page',
     pageScope: '.pageContainer',
-    maxPagesCount: 2
 }
 ```
 
@@ -327,6 +327,8 @@ This type of pagination allows to parse collections with ajax-page pagination.
 * *scope* - css selector for paginator block (page label).
 * *pageScope* - css selector for page scope (container for page-data).
 * *maxPagesCount* [optional] - max pages to parse.
+* *maxResultsCount* [optional] - max results count.
+* *timeout* [optional] - timeout for paginate action.
 
 ### Actions
 Allow to execute actions on the page before parse process. All actions could return a result of the execution.
@@ -347,6 +349,7 @@ Click by the element on the page.
 * *type* - `click` for that action.
 * *scope* - css selector of the node.
 * *waitForPage* [optional] - true|false. Wait for the page reload, could be useful when click handles page refresh.
+* *waitForPageTimeout* [optional] - timeout for waitForPage action.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
 * *once* [optional]  - to perform action only once (can be useful on pre-parse moment).
 
