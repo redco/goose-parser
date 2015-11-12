@@ -1,7 +1,10 @@
-var Parser = require('../lib/Parser');
-var Actions = require('../lib/Actions');
-var Transformations = require('../lib/Transformations');
-var PhantomEnvironment = require('../lib/PhantomEnvironment');
+var libFolder = process.env.JSCOV ? '../lib-cov/' : '../lib/';
+var Parser = require(libFolder + 'Parser');
+var Actions = require(libFolder + 'Actions');
+var Paginator = require(libFolder + 'Paginator');
+var Transformations = require(libFolder + 'Transformations');
+var PhantomEnvironment = require(libFolder + 'PhantomEnvironment');
+var Environment = require(libFolder + 'Environment');
 var chai = require('chai');
 var expect = chai.expect;
 var path = require('path');
@@ -330,6 +333,40 @@ describe('Parser', function () {
                 });
         });
 
+        it('parse page with wrong type of pagination', function () {
+            var parser = new Parser({
+                environment: env,
+                pagination: {
+                    type: 'unknownType',
+                    scope: '.pageable .pagination div',
+                    pageScope: '.pageable .content .scope-pagination-passed',
+                }
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: '.pageable > .content > div.scope-pagination-passed',
+                        collection: [[
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
+                            {
+                                name: 'sub-column',
+                                scope: 'div:last-child',
+                                collection: [
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
+                                ]
+                            }
+                        ]]
+                    }
+                }
+            ).then(function () {
+                }, function (err) {
+                    expect(err).to.be.instanceOf(Error);
+                    expect(err.message).equal('Unknown pagination type: unknownType');
+                });
+        });
+
         it('parse page with page href pagination', function () {
             var parser = new Parser({
                 environment: env,
@@ -452,8 +489,8 @@ describe('Actions', function () {
                         environment: env
                     });
 
-                    actions.addAction('custom-click', function(options) {
-                        return this._env.evaluateJs(options.scope, function (selector) {
+                    actions.addAction('custom-click', function (options) {
+                        return this._env.evaluateJs(options.scope, /* @covignore */ function (selector) {
                             var nodes = Sizzle(selector);
                             for (var i = 0, l = nodes.length; i < l; i++) {
                                 nodes[i].click();
@@ -480,6 +517,100 @@ describe('Actions', function () {
                         },
                         'body'
                     );
+                });
+        });
+
+        it('perform action once', function () {
+            return env
+                .prepare()
+                .then(function () {
+                    var actions = new Actions({
+                        environment: env
+                    });
+
+                    actions.performForRule({
+                            actions: [
+                                {
+                                    type: 'wait',
+                                    scope: 'div.scope-simple-actions',
+                                    once: true,
+                                    __done: true
+                                }
+                            ]
+                        },
+                        'body'
+                    );
+                });
+        });
+
+        it('perform performActions with missed params', function () {
+            return env
+                .prepare()
+                .then(function () {
+                    var actions = new Actions({
+                        environment: env
+                    });
+                    var fn = actions.performActions.bind(actions);
+                    expect(fn).to.throw(Error, /actions must be an Array/);
+                });
+        });
+
+        it('perform addAction with missed params', function () {
+            return env
+                .prepare()
+                .then(function () {
+                    var actions = new Actions({
+                        environment: env
+                    });
+                    var fn = actions.addAction.bind(actions);
+                    expect(fn).to.throw(Error, /addAction accept type as string and action if function which must return a promise/);
+                });
+        });
+
+        it('perform performActions with missed params', function () {
+            return env
+                .prepare()
+                .then(function () {
+                    var actions = new Actions({
+                        environment: env
+                    });
+                    actions.performActions([
+                        {type: 'unknownAction'}
+                    ], 'body').done(
+                        function () {
+                        }, function (err) {
+                            expect(err).to.be.instanceOf(Error);
+                            expect(err.message).equal('Unknown action type: unknownAction');
+                        }
+                    );
+                });
+        });
+
+        it('perform conditionalActions with false condition', function () {
+            return env
+                .prepare()
+                .then(function () {
+                    var actions = new Actions({
+                        environment: env
+                    });
+                    return actions.performForRule({
+                            actions: [
+                                {
+                                    type: 'conditionalActions',
+                                    conditions: [
+                                        {
+                                            type: 'exist',
+                                            scope: '.unknown-element'
+                                        }
+                                    ],
+                                    actions: []
+                                }
+                            ]
+                        },
+                        'body'
+                    ).then(function (res) {
+                            expect(res).to.be.undefined;
+                        });
                 });
         });
     });
@@ -529,5 +660,46 @@ describe('Transformations', function () {
             );
             expect(transformedValue).equal('value3');
         });
+
+        it('perform unsupported transformation type', function () {
+            var fn = transformations.produce.bind(transformations, [{
+                    type: 'unknownType'
+                }],
+                ' t e  s  t'
+            );
+            expect(fn).to.throw(Error, /Unsupported transformation type: unknownType/);
+        });
+    });
+
+    it('perform addTransformation with wrong data', function () {
+        var fn = transformations.addTransformation;
+        expect(fn).to.throw(Error, /addTransformation accept type as string and transformation as function which must return a transformed value/);
+    });
+});
+
+describe('Environment', function () {
+    var environment = new Environment();
+
+    it('perform evaluateJs', function () {
+        var fn = environment.evaluateJs.bind(environment, function () {
+        });
+        expect(fn).to.throw(Error, /You must redefine evaluateJs method in child environment/);
+    });
+
+    it('perform waitForPage', function () {
+        var fn = environment.waitForPage.bind(environment);
+        expect(fn).to.throw(Error, /You must redefine waitForPage method in child environment/);
+    });
+
+    it('perform prepare, snapshot, tearDown', function () {
+        environment
+            .prepare()
+            .then(environment.snapshot)
+            .then(environment.tearDown)
+            .then(function () {
+                expect(true).equal(true);
+            }, function () {
+                expect(true).equal(false);
+            })
     });
 });

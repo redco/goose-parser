@@ -36,7 +36,9 @@
   "scripts": {
     "test": "_mocha --timeout=5000 tests/phantom_parser_test.js",
     "build": "webpack webpack.js parser.bundle.js",
-    "build-test": "webpack tests/browser_parser_test.js tests/browser_parser_test.bundle.js"
+    "build-test": "webpack tests/browser_parser_test.js tests/browser_parser_test.bundle.js",
+    "coverage": "jscoverage lib && JSCOV=1 _mocha --timeout=5000 tests/phantom_parser_test.js -R html-cov > coverage.html",
+    "coveralls": "jscoverage lib && JSCOV=1 _mocha --timeout=5000 tests/phantom_parser_test.js -R mocha-lcov-reporter | coveralls && rm -rf lib-cov"
   },
   "engines": {
     "node": ">= 0.4.0"
@@ -52,7 +54,10 @@
   },
   "devDependencies": {
     "chai": "^3.4.0",
+    "coveralls": "^2.11.4",
+    "jscoverage": "^0.6.0",
     "mocha": "^2.3.3",
+    "mocha-lcov-reporter": "^1.0.0",
     "webpack": "^1.12.2"
   },
   "directories": {}
