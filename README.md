@@ -326,6 +326,7 @@ This type of pagination allows to parse collections with ajax-page pagination.
 * *type* - "page" for that type of pagination.
 * *scope* - css selector for paginator block (page label).
 * *pageScope* - css selector for page scope (container for page-data).
+* *strategy* - [optional] ajax|newPage - pagination strategy, if empty will be detected automatically.
 * *maxPagesCount* [optional] - max pages to parse.
 * *maxResultsCount* [optional] - max results count.
 * *timeout* [optional] - timeout for paginate action.
