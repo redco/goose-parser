@@ -39,6 +39,53 @@ describe('Parser', function () {
                 });
         });
 
+        it('parse simple with unknown scope', function () {
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: 'div.scope-unknown'
+                    }
+                }
+            ).then(function (found) {
+                }, function (err) {
+                    expect(err).to.be.instanceOf(Error);
+                    expect(err.message).equal('Error during querying selector: div.scope-unknown');
+                });
+        });
+
+        it('parse simple node with parentScope', function () {
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: 'div.scope-simple',
+                        parentScope: 'body'
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).equal('simple');
+                });
+        });
+
+        it('parse without scope', function () {
+            var parser = new Parser({
+                environment: env
+            });
+            parser.parse({
+                rules: {
+                }
+            }).then(function (found) {
+            }, function (err) {
+                expect(err).to.be.instanceOf(Error);
+                expect(err.message).equal('Scope cannot be blank');
+            });
+        });
+
         it('parse simple node with separator', function () {
             var parser = new Parser({
                 environment: env
@@ -407,6 +454,94 @@ describe('Parser', function () {
                     }, this);
                 });
         });
+
+        it('parse page with page href pagination with predefined strategy', function () {
+            var parser = new Parser({
+                environment: env,
+                pagination: {
+                    type: 'page',
+                    scope: '.pageable-simple .pagination div',
+                    pageScope: '.pageable-simple .content .scope-pagination-passed',
+                    strategy: 'newPage'
+                }
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: '.pageable-simple > .content > div.scope-pagination-passed',
+                        collection: [[
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
+                            {
+                                name: 'sub-column',
+                                scope: 'div:last-child',
+                                collection: [
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
+                                ]
+                            }
+                        ]]
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).to.be.instanceOf(Array);
+                    expect(found.length).equal(10);
+
+                    found.forEach(function (item, i) {
+                        expect(item.column1, 'row' + i).equal('column1' + (i + 1));
+                        for (var i = 2; i <= 4; i++) {
+                            var val = 'column' + i;
+                            expect(item['sub-column'][val], 'row' + i).equal(val);
+                        }
+                    }, this);
+                });
+        });
+    });
+
+    it('addAction', function () {
+        var parser = new Parser({
+            environment: env
+        });
+        parser.addAction('custom-wait', function (options) {
+            return this.waitElement(options.scope, options.timeout || 2000);
+        });
+        return parser.parse(
+            {
+                actions: [{
+                    type: 'custom-wait',
+                    scope: 'div.scope-simple'
+                }],
+                rules: {
+                    scope: 'div.scope-simple'
+                }
+            }
+        ).then(function (found) {
+                expect(found).equal('simple');
+            });
+    });
+
+    it('addTransformation', function () {
+        var parser = new Parser({
+            environment: env
+        });
+        parser.addTransformation('custom-transform', function (options, result) {
+            return result + options.increment;
+        });
+        return parser.parse(
+            {
+                rules: {
+                    scope: 'div.scope-simple',
+                    transform: [
+                        {
+                            type: 'custom-transform',
+                            increment: 1
+                        }
+                    ]
+                }
+            }
+        ).then(function (found) {
+                expect(found).equal('simple1');
+            });
     });
 });
 
