@@ -331,6 +331,25 @@ This type of pagination allows to parse collections with ajax-page pagination.
 * *maxResultsCount* [optional] - max results count.
 * *timeout* [optional] - timeout for paginate action.
 
+#### Custom pagination
+Add custom pagination by using method `addPagination`. Custom pagination is aware about context of Paginator.
+
+**Example**
+```JS
+parser.addPagination('custom-pagination', function (options) {
+    // Paginate function
+    // return vow.resolve();
+}, function (options, timeout) {
+    // Check pagination function
+    // return vow.resolve();
+});
+```
+
+*Params:*
+* *type* - name of new pagination method.
+* *paginateFn* - Function performs pagination, should return `Promise`.
+* *checkPaginationFn* - Function checks pagination complete, should return `Promise`.
+
 ### Actions
 Allow to execute actions on the page before parse process. All actions could return a result of the execution.
 

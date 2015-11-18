@@ -77,8 +77,7 @@ describe('Parser', function () {
                 environment: env
             });
             parser.parse({
-                rules: {
-                }
+                rules: {}
             }).then(function (found) {
             }, function (err) {
                 expect(err).to.be.instanceOf(Error);
@@ -264,6 +263,65 @@ describe('Parser', function () {
                     pageScope: '.pageable .content .scope-pagination-passed'
                 }
             });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: '.pageable > .content > div.scope-pagination-passed',
+                        collection: [[
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
+                            {
+                                name: 'sub-column',
+                                scope: 'div:last-child',
+                                collection: [
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
+                                ]
+                            }
+                        ]]
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).to.be.instanceOf(Array);
+                    expect(found.length).equal(10);
+
+                    found.forEach(function (item, i) {
+                        expect(item.column1, 'row' + i).equal('column1' + (i + 1));
+                        for (var i = 2; i <= 4; i++) {
+                            var val = 'column' + i;
+                            expect(item['sub-column'][val], 'row' + i).equal(val);
+                        }
+                    }, this);
+                });
+        });
+
+        it('parse page with custom pagination', function () {
+            var parser = new Parser({
+                environment: env,
+                pagination: {
+                    type: 'custom-pagination',
+                    scope: '.pageable .pagination div',
+                    pageScope: '.pageable .content .scope-pagination-passed'
+                }
+            });
+
+            var previousPageHtml;
+            parser.addPagination('custom-pagination', function (options) {
+                var selector = options.scope + ':eq(' + this._currentPage + ')';
+                return this._env
+                    .evaluateJs(options.pageScope, this._getPaginatePageHtml)
+                    .then(function (html) {
+                        previousPageHtml = html;
+                    })
+                    .then(function () {
+                        return this._actions.click(selector);
+                    }, this);
+            }, function (options, timeout) {
+                return this._actions.wait(this._getPaginatePageHtml, function (html) {
+                    return html !== null && html !== previousPageHtml;
+                }, [options.pageScope], timeout)
+            });
+
             return parser.parse(
                 {
                     rules: {
