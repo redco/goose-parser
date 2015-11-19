@@ -361,8 +361,6 @@ parser.addPagination('clickPerPage', function (options) {
         .evaluateJs(options.pageScope, this._getPaginatePageHtml)
         .then(function (html) {
             previousPageHtml = html;
-        })
-        .then(function () {
             return this._actions.click(selector);
         }, this);
 }, function (options, timeout) {
