@@ -347,7 +347,7 @@ parser.addPagination('custom-pagination', function (options) {
 
 *Params:*
 * *type* - name of new pagination method.
-* *paginateFn* - Function performs pagination, should return `Promise`. It runs in browser
+* *paginateFn* - Function performs pagination, should return `Promise`.
 * *checkPaginationFn* - Function checks pagination complete, should return `Promise`.
 
 **Example**
