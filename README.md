@@ -378,7 +378,9 @@ var pagination = {
   scope: '.page__pagination'
 };
 
-var parser = new Parser({
+var parser = new Parser(...);
+
+parser.parse({
     rules: {},
     pagination: pagination
 });
