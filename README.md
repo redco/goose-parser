@@ -10,6 +10,41 @@ This library allows to parse such data types as grids, collections, and simple o
 Parser supports pagination via infinite scroll and pages.
 It offers next features: pre-parse [actions](#actions) and post-parse [transformations](#transformations).
 
+## Table of contents:
+* [Installation](#installation)
+* [Documentation](#documentation)
+    * [Environments](#environments)
+        * [PhantomEnvironment](#phantomenvironment)
+        * [BrowserEnvironment](#browserenvironment)
+    * [Parser](#parser)
+        * [#parse method](#parse-method)
+        * [#addAction method](#addaction-method)
+        * [#addTransformation method](#addtransformation-method)
+    * [Parse rules](#parse-rules)
+        * [Simple rule](#simple-rule)
+        * [Collection rule](#collection-rule)
+        * [Grid rule](#grid-rule)
+    * [Pagination](#pagination)
+        * [Scroll pagination](#scroll-pagination)
+        * [Page pagination](#page-pagination)
+        * [Custom pagination](#custom-pagination)
+    * [Actions](#actions)
+        * [Click](#click)
+        * [Wait](#wait)
+        * [Type](#type)
+        * [Exist](#exist)
+        * [ConditionalActions](#conditionalactions)
+        * [Custom actions](#custom-actions)
+    * [Transformations](#transformations)
+        * [Date](#date)
+        * [Replace](#replace)
+        * [Custom transformations](#custom-transformations)
+* [Tests](#tests)
+    * [With PhantomEnvironment](#with-phantomenvironment)
+    * [With BrowserEnvironment](#with-phantomenvironment)
+* [Debug](#debug)
+* [Usage](#usage)
+
 ## Installation
 
 ```bash
