@@ -10,6 +10,14 @@ This library allows to parse such data types as grids, collections, and simple o
 Parser supports pagination via infinite scroll and pages.
 It offers next features: pre-parse [actions](#actions) and post-parse [transformations](#transformations).
 
+## Key features
+* Declarative approach for definition of parsing rules, actions and transformations.
+* Multi environments to run parser on the browser and server sides.
+* Clear and consistent API with promises all the way.
+* Improved Sizzle format of selectors.
+* Ajax and multi-pages parsing modes.
+* Easy extendable.
+
 ## Table of contents:
 * [Installation](#installation)
 * [Documentation](#documentation)
