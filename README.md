@@ -377,7 +377,7 @@ This type of pagination allows to parse collections with ajax-page pagination.
 #### Custom pagination
 Add custom pagination by using method `addPagination`. Custom pagination is aware about context of Paginator.
 
-**Example**
+**Usage**
 ```JS
 parser.addPagination('custom-pagination', function (options) {
     // Paginate function
@@ -392,6 +392,44 @@ parser.addPagination('custom-pagination', function (options) {
 * *type* - name of new pagination method.
 * *paginateFn* - Function performs pagination, should return `Promise`.
 * *checkPaginationFn* - Function checks pagination complete, should return `Promise`.
+
+**Example**
+
+Describe new pagination type
+```js
+var previousPageHtml;
+parser.addPagination('clickPerPage', function (options) {
+    var selector = options.scope + ':eq(' + this._currentPage + ')';
+    return this._env
+        .evaluateJs(options.pageScope, this._getPaginatePageHtml)
+        .then(function (html) {
+            previousPageHtml = html;
+            return this._actions.click(selector);
+        }, this);
+}, function (options, timeout) {
+    return this._actions.wait(this._getPaginatePageHtml, function (html) {
+        return html !== null && html !== previousPageHtml;
+    }, [options.pageScope], timeout)
+});
+```
+
+Use it
+```js
+var pagination = {
+    type: 'clickPerPage', // your custom type
+    pageScope: '.page__content',
+    scope: '.page__pagination'
+};
+
+var parser = new Parser({
+    environment: env,
+    pagination: pagination
+});
+
+parser.parse({
+    rules: {}
+});
+```
 
 ### Actions
 Allow to execute actions on the page before parse process. All actions could return a result of the execution.
