@@ -373,16 +373,18 @@ parser.addPagination('clickPerPage', function (options) {
 Use it
 ```js
 var pagination = {
-  type: 'clickPerPage', // your custom type
-  pageScope: '.page__content',
-  scope: '.page__pagination'
+    type: 'clickPerPage', // your custom type
+    pageScope: '.page__content',
+    scope: '.page__pagination'
 };
 
-var parser = new Parser(...);
+var parser = new Parser({
+    environment: env,
+    pagination: pagination
+});
 
 parser.parse({
-    rules: {},
-    pagination: pagination
+    rules: {}
 });
 ```
 
