@@ -26,8 +26,9 @@ It offers next features: pre-parse [actions](#actions) and post-parse [transform
         * [BrowserEnvironment](#browserenvironment)
     * [Parser](#parser)
         * [#parse method](#parse-method)
-        * [#addAction method](#addaction-method)
-        * [#addTransformation method](#addtransformation-method)
+        * [#addAction Custom action](#addaction-custom-action)
+        * [#addTransformation Custom transformation](#addtransformation-custom-transformation)
+        * [#addPagination Custom pagination](#addpagination-custom-pagination)
     * [Parse rules](#parse-rules)
         * [Simple rule](#simple-rule)
         * [Collection rule](#collection-rule)
@@ -35,7 +36,6 @@ It offers next features: pre-parse [actions](#actions) and post-parse [transform
     * [Pagination](#pagination)
         * [Scroll pagination](#scroll-pagination)
         * [Page pagination](#page-pagination)
-        * [Custom pagination](#custom-pagination)
     * [Actions](#actions)
         * [Click](#click)
         * [Wait](#wait)
@@ -117,7 +117,7 @@ parser.parse({
 * *actions* [optional] - Array of [actions](#actions) to execute before parsing process.
 * *rules* - [parsing rules](#parserules) which define scopes on the page.
 
-#### #addAction method
+#### #addAction Custom action
 Add custom action by using method `addAction`. Custom function is aware about context of Actions.
 
 **Example**
@@ -132,7 +132,7 @@ parser.addAction('custom-click', function(options) {
 * *type* - name of the action.
 * *action* - function to execute when action is called.
 
-#### #addTransformation method
+#### #addTransformation Custom transformation
 Add custom trasformation by using method `addTransformation`.
 
 **Example**
@@ -146,6 +146,63 @@ parser.addTransformation('custom-transform', function (options, result) {
 
 * *type* - name of the transformation.
 * *transformation* - function to execute when transformation is called.
+
+#### #addPagination Custom pagination
+Add custom pagination by using method `addPagination`. Custom pagination is aware about context of Paginator.
+
+**Usage**
+```JS
+parser.addPagination('custom-pagination', function (options) {
+    // Paginate function
+    // return vow.resolve();
+}, function (options, timeout) {
+    // Check pagination function
+    // return vow.resolve();
+});
+```
+
+*Params:*
+* *type* - name of new pagination method.
+* *paginateFn* - Function performs pagination, should return `Promise`.
+* *checkPaginationFn* - Function checks pagination complete, should return `Promise`.
+
+**Example**
+
+Describe new pagination type
+```js
+var previousPageHtml;
+parser.addPagination('clickPerPage', function (options) {
+    var selector = options.scope + ':eq(' + this._currentPage + ')';
+    return this._env
+        .evaluateJs(options.pageScope, this._getPaginatePageHtml)
+        .then(function (html) {
+            previousPageHtml = html;
+            return this._actions.click(selector);
+        }, this);
+}, function (options, timeout) {
+    return this._actions.wait(this._getPaginatePageHtml, function (html) {
+        return html !== null && html !== previousPageHtml;
+    }, [options.pageScope], timeout)
+});
+```
+
+Use it
+```js
+var pagination = {
+    type: 'clickPerPage', // your custom type
+    pageScope: '.page__content',
+    scope: '.page__pagination'
+};
+
+var parser = new Parser({
+    environment: env,
+    pagination: pagination
+});
+
+parser.parse({
+    rules: {}
+});
+```
 
 ### Parse rules
 
@@ -373,63 +430,6 @@ This type of pagination allows to parse collections with ajax-page pagination.
 * *maxPagesCount* [optional] - max pages to parse.
 * *maxResultsCount* [optional] - max results count.
 * *timeout* [optional] - timeout for paginate action.
-
-#### Custom pagination
-Add custom pagination by using method `addPagination`. Custom pagination is aware about context of Paginator.
-
-**Usage**
-```JS
-parser.addPagination('custom-pagination', function (options) {
-    // Paginate function
-    // return vow.resolve();
-}, function (options, timeout) {
-    // Check pagination function
-    // return vow.resolve();
-});
-```
-
-*Params:*
-* *type* - name of new pagination method.
-* *paginateFn* - Function performs pagination, should return `Promise`.
-* *checkPaginationFn* - Function checks pagination complete, should return `Promise`.
-
-**Example**
-
-Describe new pagination type
-```js
-var previousPageHtml;
-parser.addPagination('clickPerPage', function (options) {
-    var selector = options.scope + ':eq(' + this._currentPage + ')';
-    return this._env
-        .evaluateJs(options.pageScope, this._getPaginatePageHtml)
-        .then(function (html) {
-            previousPageHtml = html;
-            return this._actions.click(selector);
-        }, this);
-}, function (options, timeout) {
-    return this._actions.wait(this._getPaginatePageHtml, function (html) {
-        return html !== null && html !== previousPageHtml;
-    }, [options.pageScope], timeout)
-});
-```
-
-Use it
-```js
-var pagination = {
-    type: 'clickPerPage', // your custom type
-    pageScope: '.page__content',
-    scope: '.page__pagination'
-};
-
-var parser = new Parser({
-    environment: env,
-    pagination: pagination
-});
-
-parser.parse({
-    rules: {}
-});
-```
 
 ### Actions
 Allow to execute actions on the page before parse process. All actions could return a result of the execution.
