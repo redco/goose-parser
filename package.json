@@ -10,8 +10,14 @@
     "browser",
     "parser",
     "crawler",
+    "crawling",
+    "spider",
+    "scraper",
+    "scraping",
     "site",
-    "page"
+    "page",
+    "dom",
+    "javascript"
   ],
   "homepage": "http://redcode.im",
   "license": "MIT",

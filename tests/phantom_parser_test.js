@@ -39,6 +39,22 @@ describe('Parser', function () {
                 });
         });
 
+        it('parse attr of simple node', function () {
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: 'div.scope-simple',
+                        attr: 'data-attr'
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).equal('simple-attr');
+                });
+        });
+
         it('parse simple with unknown scope', function () {
             var parser = new Parser({
                 environment: env
