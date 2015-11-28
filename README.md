@@ -236,6 +236,8 @@ The purpose of this rule - retrieving simple textual node value(s).
 
 * *name* - name of the node which is presented in the result dataSet.
 * *scope* - css selector of the node.
+* *id* [optional] - true|Function. Will mark a row as identifier, the result will be set to node with `_id` name. If function specified, parser will call it for each row.
+* *attr* [optional] - name of attribute to parse. If specified, parser will parse `node.getAttribute(attr)`
 * *separator* [optional]  - separator applies to glue the nodes after parse, if nodes more than one.
 * *type* [optional]  - (array|string[default]). Allows to specify result data type.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
