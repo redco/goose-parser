@@ -230,6 +230,41 @@ describe('Parser', function () {
                 });
         });
 
+        it('parse single page with multiple rows', function () {
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: '.scope-multiple-pagination > div.scope-pagination-passed',
+                        collection: [[
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
+                            {
+                                name: 'sub-column',
+                                scope: 'div:last-child',
+                                collection: [
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
+                                ]
+                            }
+                        ]]
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).to.be.instanceOf(Array);
+                    expect(found.length).equal(2);
+                    found.forEach(function (item) {
+                        expect(item.column1).equal('column1');
+                        for (var i = 2; i <= 4; i++) {
+                            var val = 'column' + i;
+                            expect(item['sub-column'][val]).equal(val);
+                        }
+                    });
+                });
+        });
+
         it('parse single page with id=true', function () {
             var parser = new Parser({
                 environment: env
@@ -446,6 +481,20 @@ describe('Parser', function () {
                         }
                     }, this);
                 });
+        });
+
+        it('parse page with missed params for custom pagination', function () {
+            var parser = new Parser({
+                environment: env,
+                pagination: {
+                    type: 'custom-pagination',
+                    scope: '.pageable .pagination div',
+                    pageScope: '.pageable .content .scope-pagination-passed'
+                }
+            });
+
+            var fn = parser.addPagination.bind(parser, 'custom-pagination');
+            expect(fn).to.throw(Error, /paginateFn and checkPaginateFn should be functions which return Promise/);
         });
 
         it('parse page with page pagination and maxPagesCount', function () {
