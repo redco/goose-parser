@@ -230,6 +230,84 @@ describe('Parser', function () {
                 });
         });
 
+        it('parse single page with id=true', function () {
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: '.scrollable > .content > div.scope-pagination-passed',
+                        collection: [[
+                            {id: true, scope: 'div.scope-pagination-passed-column1', attr: 'data-ref'},
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
+                            {
+                                name: 'sub-column',
+                                scope: 'div:last-child',
+                                collection: [
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
+                                ]
+                            }
+                        ]]
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).to.be.instanceOf(Array);
+                    expect(found.length).equal(1);
+
+                    var item = found[0];
+                    expect(item._id).equal('ref1');
+                    expect(item.column1).equal('column1');
+                    for (var i = 2; i <= 4; i++) {
+                        var val = 'column' + i;
+                        expect(item['sub-column'][val]).equal(val);
+                    }
+                });
+        });
+
+        it('parse single page with id=function', function () {
+            var id = 0;
+            var idGenerator = function (rule, result) {
+                return result + ++id;
+            };
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: '.scrollable > .content > div.scope-pagination-passed',
+                        collection: [[
+                            {id: idGenerator, scope: 'div.scope-pagination-passed-column1', attr: 'data-ref'},
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
+                            {
+                                name: 'sub-column',
+                                scope: 'div:last-child',
+                                collection: [
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
+                                ]
+                            }
+                        ]]
+                    }
+                }
+            ).then(function (found) {
+                    expect(found).to.be.instanceOf(Array);
+                    expect(found.length).equal(1);
+
+                    var item = found[0];
+                    expect(item._id).equal('ref11');
+                    expect(item.column1).equal('column1');
+                    for (var i = 2; i <= 4; i++) {
+                        var val = 'column' + i;
+                        expect(item['sub-column'][val]).equal(val);
+                    }
+                });
+        });
+
         it('parse page with scroll pagination', function () {
             var parser = new Parser({
                 environment: env,
