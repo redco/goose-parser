@@ -12,7 +12,7 @@
 <div id="mocha"></div>
 <script src="js/jquery-1.11.3.min.js"></script>
 
-<div class="scope-simple">simple</div>
+<div class="scope-simple" data-attr="simple-attr">simple</div>
 
 <div class="scope-simple-multiple">simple</div>
 <div class="scope-simple-multiple">simple</div>
@@ -26,9 +26,28 @@
 <div class="scope-simple-custom-actions">simple</div>
 <div class="scope-simple-pre-actions">simple</div>
 
+<div class="scope-multiple-pagination">
+    <div class="scope-pagination-passed">
+        <div class="scope-pagination-passed-column1" data-ref="ref1">column1</div>
+        <div>
+            <div class="scope-pagination-passed-column2">column2</div>
+            <div class="scope-pagination-passed-column3">column3</div>
+            <div class="scope-pagination-passed-column4">column4</div>
+        </div>
+    </div>
+    <div class="scope-pagination-passed">
+        <div class="scope-pagination-passed-column1" data-ref="ref1">column1</div>
+        <div>
+            <div class="scope-pagination-passed-column2">column2</div>
+            <div class="scope-pagination-passed-column3">column3</div>
+            <div class="scope-pagination-passed-column4">column4</div>
+        </div>
+    </div>
+</div>
+
 <div class="scope-pagination">
     <div class="scope-pagination-passed">
-        <div class="scope-pagination-passed-column1">column1</div>
+        <div class="scope-pagination-passed-column1" data-ref="ref1">column1</div>
         <div>
             <div class="scope-pagination-passed-column2">column2</div>
             <div class="scope-pagination-passed-column3">column3</div>

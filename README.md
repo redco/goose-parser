@@ -236,6 +236,8 @@ The purpose of this rule - retrieving simple textual node value(s).
 
 * *name* - name of the node which is presented in the result dataSet.
 * *scope* - css selector of the node.
+* *id* [optional] - true|Function. Will mark a row as identifier, the result will be set to node with `_id` name. If function specified, parser will call it for each row. See more info in [example](#examples-with-predefined-row-id).
+* *attr* [optional] - name of attribute to parse. If specified, parser will parse `node.getAttribute(attr)`
 * *separator* [optional]  - separator applies to glue the nodes after parse, if nodes more than one.
 * *type* [optional]  - (array|string[default]). Allows to specify result data type.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
@@ -367,6 +369,72 @@ The purpose of this rule - retrieving collection of collection.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
 * *actions* [optional]  - see [Actions](#actions).
 * *transform* [optional] - see [Transformations](#transformations).
+ 
+#### Examples with predefined row id
+*Parsing rule with id = function*
+```JS
+var id = 0;
+{
+    scope: 'div.collection-node',
+    collection: [[
+        {
+            id: function (rule, result) {
+               return ++id;
+            },
+            scope: 'simple-reference'
+        },
+        {
+            name: 'node',
+            scope: 'div.simple-node'
+        }
+    ]]
+}
+```
+
+*Parsing rule with id from scope*
+```JS
+{
+    scope: 'div.collection-node',
+    collection: [[
+        {
+            id: true,
+            scope: 'simple-reference'
+        },
+        {
+            name: 'node',
+            scope: 'div.simple-node'
+        }
+    ]]
+}
+```
+
+*HTML*
+```HTML
+<div>
+    <div class='collection-node'>
+        <div class='simple-reference'>1</div>
+        <div class='simple-node'>simple-value1</div>
+    </div>
+    <div class='collection-node'>
+        <div class='simple-reference'>2</div>
+        <div class='simple-node'>simple-value2</div>
+    </div>
+</div>
+```
+
+*Parsing result*
+```JS
+[
+    {
+        _id: 1,
+        node2: 'simple-value1'
+    },
+    {
+        _id: 2,
+        node2: 'simple-value2'
+    }
+]
+```
 
 ### Pagination
 This is a way to parse collection-based data. See more info in [Paginator.js](https://github.com/redco/goose-parser/blob/master/lib/Paginator.js)
