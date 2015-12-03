@@ -47,7 +47,7 @@
     "coveralls": "jscoverage lib && JSCOV=1 _mocha --timeout=20000 tests/phantom_parser_test.js -R mocha-lcov-reporter | coveralls && rm -rf lib-cov"
   },
   "engines": {
-    "node": ">= 0.4.0"
+    "node": ">= 4.0.0"
   },
   "dependencies": {
     "debug": "^2.2.0",
