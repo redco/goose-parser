@@ -77,7 +77,7 @@ var env = new PhantomEnvironment({
 ```
 The main and only required parameter is `url`. It contains an url address of the site, where Parser will start.
 
-More detailed information about default options you can find [here](https://github.com/redco/goose-parser/blob/master/lib/PhantomEnvironment.js#L17).
+This environment allows to perform snapshots, use proxy lists, custom proxy rotator, white and black lists for loading resources and more sweet features. Find more info about options in [here](https://github.com/redco/goose-parser/blob/master/lib/PhantomEnvironment.js#L35).
 
 #### BrowserEnvironment
 That environment is used for running Parser in the browser.
