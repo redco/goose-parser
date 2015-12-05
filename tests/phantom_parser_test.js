@@ -343,6 +343,101 @@ describe('Parser', function () {
                 });
         });
 
+        it('parse single page with duplicateChecker which returns true', function () {
+            var idGenerator = function (rule, result) {
+                return 1;
+            };
+            var duplicateChecker = function (_id, rows) {
+                rows = rows || [];
+                return rows.findIndex(function (row) {
+                        return row._id === _id;
+                    }) !== -1;
+            };
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: '.scope-multiple-pagination > div.scope-pagination-passed',
+                        duplicateChecker: duplicateChecker,
+                        collection: [[
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
+                            {id: idGenerator, scope: 'div.scope-pagination-passed-column1'},
+                            {
+                                name: 'sub-column',
+                                scope: 'div:last-child',
+                                collection: [
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
+                                ]
+                            }
+                        ]]
+                    }
+                }
+            ).then(function (found) {
+                    console.log(found);
+                    expect(found).to.be.instanceOf(Array);
+                    expect(found.length).equal(1);
+                    found.forEach(function (item) {
+                        expect(item.column1).equal('column1');
+                        for (var i = 2; i <= 4; i++) {
+                            var val = 'column' + i;
+                            expect(item['sub-column'][val]).equal(val);
+                        }
+                    });
+                });
+        });
+
+        it('parse single page with duplicateChecker which returns false', function () {
+            var id = 0;
+            var idGenerator = function (rule, result) {
+                return result + ++id;
+            };
+            var duplicateChecker = function (_id, rows) {
+                rows = rows || [];
+                return rows.findIndex(function (row) {
+                        return row._id === _id;
+                    }) !== -1;
+            };
+            var parser = new Parser({
+                environment: env
+            });
+            return parser.parse(
+                {
+                    rules: {
+                        scope: '.scope-multiple-pagination > div.scope-pagination-passed',
+                        duplicateChecker: duplicateChecker,
+                        collection: [[
+                            {name: 'column1', scope: 'div.scope-pagination-passed-column1'},
+                            {id: idGenerator, scope: 'div.scope-pagination-passed-column1'},
+                            {
+                                name: 'sub-column',
+                                scope: 'div:last-child',
+                                collection: [
+                                    {name: 'column2', scope: 'div.scope-pagination-passed-column2'},
+                                    {name: 'column3', scope: 'div.scope-pagination-passed-column3'},
+                                    {name: 'column4', scope: 'div.scope-pagination-passed-column4'}
+                                ]
+                            }
+                        ]]
+                    }
+                }
+            ).then(function (found) {
+                    console.log(found);
+                    expect(found).to.be.instanceOf(Array);
+                    expect(found.length).equal(2);
+                    found.forEach(function (item) {
+                        expect(item.column1).equal('column1');
+                        for (var i = 2; i <= 4; i++) {
+                            var val = 'column' + i;
+                            expect(item['sub-column'][val]).equal(val);
+                        }
+                    });
+                });
+        });
+
         it('parse page with scroll pagination', function () {
             var parser = new Parser({
                 environment: env,
