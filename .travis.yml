@@ -1,12 +1,14 @@
 language: node_js
 node_js:
   - "4"
-before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get update -qq
-  - if [ "$CXX" = "clang++" ]; then sudo apt-get install -qq libstdc++-5.1-dev; fi
-  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-5.1; fi
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-5.1" CC="gcc-5.1"; fi
+env:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
 before_script:
   - mkdir travis-phantomjs
   - wget https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -O $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2
