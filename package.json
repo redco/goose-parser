@@ -40,21 +40,21 @@
     "url": "https://github.com/redco/goose-parser/issues"
   },
   "scripts": {
-    "test": "_mocha --timeout=20000 tests/phantom_parser_test.js",
+    "test": "_mocha --timeout=30000 tests/phantom_parser_test.js",
     "build": "webpack webpack.js parser.bundle.js",
     "build-test": "webpack tests/browser_parser_test.js tests/browser_parser_test.bundle.js",
-    "coverage": "jscoverage lib && JSCOV=1 _mocha --timeout=20000 tests/phantom_parser_test.js -R html-cov > coverage.html",
-    "coveralls": "jscoverage lib && JSCOV=1 _mocha --timeout=20000 tests/phantom_parser_test.js -R mocha-lcov-reporter | coveralls && rm -rf lib-cov"
+    "coverage": "jscoverage lib && JSCOV=1 _mocha --timeout=30000 tests/phantom_parser_test.js -R html-cov > coverage.html && rm -rf lib-cov",
+    "coveralls": "jscoverage lib && JSCOV=1 _mocha --timeout=30000 tests/phantom_parser_test.js -R mocha-lcov-reporter | coveralls && rm -rf lib-cov"
   },
   "engines": {
-    "node": ">= 0.4.0"
+    "node": ">= 4.0.0"
   },
   "dependencies": {
     "debug": "^2.2.0",
     "lodash": "^3.10.1",
     "mkdir-p": "0.0.7",
     "moment": "^2.10.6",
-    "phantom": "^0.7.2",
+    "phantom": "^0.8.4",
     "vow": "^0.4.10",
     "vow-node": "^0.3.0"
   },

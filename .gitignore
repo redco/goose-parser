@@ -29,3 +29,6 @@ node_modules
 .idea
 tests/browser_parser_test.bundle.js
 parser.bundle.js
+
+# Default snapshot directory
+snapshots

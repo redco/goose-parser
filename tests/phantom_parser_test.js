@@ -8,21 +8,21 @@ var Environment = require(libFolder + 'Environment');
 var chai = require('chai');
 var expect = chai.expect;
 var path = require('path');
+var fs = require('fs');
 
 var env;
 var uri = 'file://' + path.join(__dirname, '/phantom_parser.html');
 
-before(function () {
-    env = new PhantomEnvironment({
-        url: uri,
-        screen: {
-            width: 1080,
-            height: 200
-        }
-    });
-});
-
 describe('Parser', function () {
+    before(function () {
+        env = new PhantomEnvironment({
+            url: uri,
+            screen: {
+                width: 1080,
+                height: 200
+            }
+        });
+    });
     describe('#parse', function () {
         it('parse simple node', function () {
             var parser = new Parser({
@@ -982,6 +982,32 @@ describe('Transformations', function () {
             expect(transformedValue).equal('test');
         });
 
+        it('perform match transform', function () {
+            var transformedValue = transformations.produce([
+                    {
+                        type: 'match',
+                        re: ['(\\d+)\\-(\\d+)\\-(\\d+)'],
+                        index: 2
+                    }
+                ],
+                '12-13-14'
+            );
+            expect(transformedValue).equal('13');
+        });
+
+        it('perform split transform', function () {
+            var transformedValue = transformations.produce([
+                    {
+                        type: 'split',
+                        separator: ',',
+                        index: 1
+                    }
+                ],
+                'test1, test2'
+            );
+            expect(transformedValue).equal('test2');
+        });
+
         it('perform custom transform', function () {
             transformations.addTransformation('custom-transform', function (options, result) {
                 return result + options.increment;
@@ -1037,5 +1063,65 @@ describe('Environment', function () {
             }, function () {
                 expect(true).equal(false);
             })
+    });
+});
+
+describe('PhantomEnvironment', function () {
+    it('._snapshot()', function () {
+        var env = new PhantomEnvironment({
+            url: uri,
+            screen: {
+                width: 1080,
+                height: 200
+            },
+            snapshot: true
+        });
+        return env
+            .prepare()
+            .then(env.snapshot.bind(env, 'test'))
+            .then(function () {
+                expect(true).equal(true);
+            });
+    });
+
+    it('.constructor()', function () {
+        var env = new PhantomEnvironment({
+            url: uri,
+            weak: false,
+            screen: [
+                {
+                    width: 1080,
+                    height: 200
+                },
+                {
+                    width: 1081,
+                    height: 201
+                }
+            ],
+            userAgent: [
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/600.7.12 (KHTML, like Gecko) Version/8.0.7 Safari/600.7.12',
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/600.7.12 (KHTML, like Gecko) Version/8.0.7 Safari/600.7.12'
+            ],
+            proxy: [
+                {host: '127.0.0.1', port: 80},
+                {host: '127.0.0.1', port: 81}
+            ],
+            resources: {
+                allowed: [
+                    'phantom_parser.html'
+                ]
+            }
+        });
+        return env
+            .prepare()
+            .then(function () {
+                var fn = env.evaluateJs;
+                expect(fn).to.throw(Error, /You must pass function as last argument to PhantomEnvironment.evaluateJs/);
+            });
+    });
+
+    it('.constructor() without url', function () {
+        var fn = PhantomEnvironment.bind(null, {});
+        expect(fn).to.throw(Error, /You must pass `url` to PhantomEnvironment/);
     });
 });
