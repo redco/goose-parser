@@ -367,6 +367,7 @@ The purpose of this rule - retrieving collection of collection.
 * *scope* - css selector of the node.
 * *collection* - array of array of any rule types.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
+* *duplicateChecker* [optional] - is a function with params (_id, parsedRows). It prevents future parsing if result of execution is `true` that means duplicate was detected. See example [below](#examples-with-duplicatechecker).
 * *actions* [optional]  - see [Actions](#actions).
 * *transform* [optional] - see [Transformations](#transformations).
  
@@ -395,6 +396,30 @@ var id = 0;
 ```JS
 {
     scope: 'div.collection-node',
+    collection: [[
+        {
+            id: true,
+            scope: 'simple-reference'
+        },
+        {
+            name: 'node',
+            scope: 'div.simple-node'
+        }
+    ]]
+}
+```
+
+#### Examples with duplicateChecker
+*Parsing rule*
+```JS
+{
+    scope: 'div.collection-node',
+    duplicateChecker: function (_id, rows) {
+       rows = rows || [];
+       return rows.findIndex(function (row) {
+               return row._id === _id;
+           }) !== -1;
+    },
     collection: [[
         {
             id: true,
