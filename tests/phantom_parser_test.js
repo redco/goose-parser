@@ -377,7 +377,6 @@ describe('Parser', function () {
                     }
                 }
             ).then(function (found) {
-                    console.log(found);
                     expect(found).to.be.instanceOf(Array);
                     expect(found.length).equal(1);
                     found.forEach(function (item) {
@@ -425,7 +424,6 @@ describe('Parser', function () {
                     }
                 }
             ).then(function (found) {
-                    console.log(found);
                     expect(found).to.be.instanceOf(Array);
                     expect(found.length).equal(2);
                     found.forEach(function (item) {
