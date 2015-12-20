@@ -31,7 +31,7 @@
       "email": "balakirev.andrey@gmail.com"
     }
   ],
-  "version": "0.1.6",
+  "version": "0.2.0-alpha",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redco/goose-parser.git"
