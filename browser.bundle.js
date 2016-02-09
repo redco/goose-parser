@@ -2242,7 +2242,7 @@
 	 * @property {?Array.<Action>} postActions
 	 * @property {?(Grid|Collection)} collection
 	 * @property {?Array.<Transform>} transform
-	 * @property {?boolean} collectionFromActions
+	 * @property {?boolean} rulesFromActions
 	 * @property {?string} separator
 	 * @property {?string} type
 	 * @property {?string} attr
@@ -2378,12 +2378,16 @@
 	        .then(this._parseRootRule, this).then(function (parsedResults) {
 	            results = parsedResults;
 	            return results;
-	        }).then(this._paginate, this).then(this._env.tearDown, function (e) {
+	        }).then(this._paginate, this).then(function () {
+	            if (options.transform) {
+	                results = _this._transforms.produce(options.transform, results);
+	            }
+	        }).then(this._env.tearDown, function (e) {
 	            return _this._env.snapshot('error').always(_this._env.tearDown, _this._env).then(function () {
 	                throw e;
 	            });
 	        }, this._env).then(function () {
-	            debug('Parsed %s rows', results.length);
+	            debug('Parsed %s rows', Array.isArray(results) ? results.length : 1);
 	            return results;
 	        }, function (e) {
 	            debug('Saving partial results because of error %o', e);
@@ -2426,16 +2430,7 @@
 	        offset = offset || 0;
 	        debug('Parsing root rule with offset: %s', offset);
 	        var rule = this._rules;
-	        this._pushScope(rule.scope, rule.parentScope);
-	        var selector = this._getSelector();
-	        var parseResults;
-	        return this._actions.performForRule(rule, selector).then(function (actionsResults) {
-	            return this._parseScope(rule, offset, actionsResults);
-	        }, this).then(function (results) {
-	            parseResults = results;
-	        }).then(this._actions.performPostActionsForRule.bind(this._actions, rule, selector)).then(this._popScope, this).then(function () {
-	            return parseResults;
-	        });
+	        return this._processRule(rule, offset);
 	    },
 
 	    /**
@@ -2459,16 +2454,28 @@
 
 	    /**
 	     * @param {Rule} rule
+	     * @param {?number} offset
 	     * @returns {Promise}
 	     */
-	    _processRule: function _processRule(rule) {
+	    _processRule: function _processRule(rule, offset) {
 	        debug('Process rule %o', rule);
 	        this._pushScope(rule.scope, rule.parentScope);
 	        var selector = this._getSelector();
 	        var parseResults;
 
 	        return this._actions.performForRule(rule, selector).then(function (actionsResults) {
-	            return this._parseScope(rule, null, actionsResults);
+	            if (rule.rulesFromActions) {
+	                if (!actionsResults) {
+	                    throw new Error('Rule node marked with "rulesFromActions" flag should return rules from action. Got nothing.');
+	                }
+	                debug('Rules extracted from action %o', rule);
+	                // use child transform or parent transform or nothing
+	                var transform = actionsResults.transform || rule.transform || false;
+	                rule = actionsResults;
+	                rule.transform = transform;
+	                return this._processRule(rule);
+	            }
+	            return this._parseScope(rule, offset, actionsResults);
 	        }, this).then(function (results) {
 	            parseResults = results;
 	        }).then(this._actions.performPostActionsForRule.bind(this._actions, rule, selector)).then(this._popScope, this).then(function () {
@@ -2508,10 +2515,6 @@
 	    _parseScope: function _parseScope(rule, offset, actionsResults) {
 	        var _this2 = this;
 
-	        if (rule.collectionFromActions) {
-	            rule.collection = actionsResults;
-	        }
-
 	        var resultsPromise = undefined;
 	        var ruleType = this._getRuleType(rule);
 	        debug('Parse %s rule', ruleType);
@@ -2546,8 +2549,13 @@
 	        }
 
 	        var format = function format(results) {
-	            if (ruleType === _this2.TYPES.SIMPLE && rule.type !== 'array') {
-	                return results.join(rule.separator || ' ');
+	            if (_.contains([_this2.TYPES.SIMPLE, _this2.TYPES.GET, _this2.TYPES.VALUE], ruleType)) {
+	                if (Array.isArray(results) && rule.type !== 'array') {
+	                    return results.join(rule.separator || ' ');
+	                }
+	                if (!Array.isArray(results) && rule.type === 'array') {
+	                    return [results];
+	                }
 	            }
 
 	            return results;
@@ -2569,7 +2577,7 @@
 	                return format(results);
 	            }
 
-	            return _this2._transforms.produce(rule.transform, results);
+	            return format(_this2._transforms.produce(rule.transform, results));
 	        });
 	    },
 
@@ -2668,7 +2676,7 @@
 	            return options.results;
 	        }, this).then(function (results) {
 	            if (this.clearDom) {
-	                debug('clear parsed dom');
+	                debug('clear parsed dom for %s', selector);
 	                return this._env.evaluateJs(selector, /* @covignore */function (selector) {
 	                    var parsedElement = Sizzle(selector)[0];
 	                    if (!parsedElement) {
@@ -2676,6 +2684,7 @@
 	                    }
 	                    var boundingRect = parsedElement.getBoundingClientRect();
 	                    parsedElement.innerHTML = '';
+	                    //parsedElement.setAttribute('class', '');
 	                    parsedElement.style.height = boundingRect.height + 'px';
 	                    parsedElement.style.width = boundingRect.width + 'px';
 	                }).then(function () {
@@ -15582,7 +15591,7 @@
 	        CONDITION: 'conditionalActions',
 	        EXIST: 'exist',
 	        BACK: 'back',
-	        PROVIDE_COLLECTION: 'provideCollection',
+	        PROVIDE_RULES: 'provideRules',
 	        SNAPSHOT: 'snapshot',
 	        OPEN: 'open'
 	    },
@@ -15780,9 +15789,9 @@
 	                actionPromise = this.back();
 	                break;
 
-	            case this.TYPES.PROVIDE_COLLECTION:
-	                debug('Providing collection %o', action.collection);
-	                actionPromise = vow.resolve(action.collection);
+	            case this.TYPES.PROVIDE_RULES:
+	                debug('Providing rules %o', action.rules);
+	                actionPromise = vow.resolve(action.rules);
 	                break;
 
 	            case this.TYPES.SNAPSHOT:
@@ -16156,7 +16165,8 @@
 	        TRIM: 'trim',
 	        PLUCK: 'pluck',
 	        PICK: 'pick',
-	        GET: 'get'
+	        GET: 'get',
+	        DECODE_URL: 'decodeURI'
 	    },
 
 	    /**
@@ -16210,6 +16220,8 @@
 
 	                case this.TYPES.GET:
 	                    return _.get(result, step.path, step['default']);
+	                case this.TYPES.DECODE_URL:
+	                    return decodeURI(result);
 
 	                default:
 	                    var customTransformation = this._customTransformations[step.type];
