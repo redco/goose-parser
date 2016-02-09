@@ -2748,7 +2748,12 @@
 	                    default:
 	                        name = rule.name;
 	                }
-	                results[name] = result;
+	                if (!rule.virtual) {
+	                    results[name] = result;
+	                }
+	                if (rule.set) {
+	                    this._actions.set(rule.set, result);
+	                }
 	            }, self);
 	        }, vow.resolve()).then(function () {
 	            debug('._parseCollectionRule() result %o', results);
@@ -16199,6 +16204,9 @@
 	                    re = step.re;
 	                    index = step.index || 0;
 	                    matches = result.match(RegExp.apply(null, re));
+	                    if (step.index === 'any') {
+	                        return Array.isArray(matches) && matches.length > 0;
+	                    }
 	                    return Array.isArray(matches) && matches[index] !== undefined ? matches[index] : null;
 
 	                case this.TYPES.SPLIT:
