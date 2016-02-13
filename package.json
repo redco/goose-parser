@@ -1,10 +1,11 @@
 {
+  "name": "goose-parser",
+  "version": "0.2.0-alpha.19",
+  "description": "PhantomJS/Browser lib which allows to parse a webpage",
   "author": {
     "name": "Andrew Reddikh",
     "email": "andrew@reddikh.com"
   },
-  "name": "goose-parser",
-  "description": "PhantomJS/Browser lib which allows to parse a webpage",
   "keywords": [
     "phantomjs",
     "browser",
@@ -31,7 +32,6 @@
       "email": "balakirev.andrey@gmail.com"
     }
   ],
-  "version": "0.2.0-alpha.18",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redco/goose-parser.git"
