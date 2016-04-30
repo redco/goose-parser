@@ -51,6 +51,7 @@ It offers next features: pre-parse [actions](#actions) and post-parse [transform
     * [With PhantomEnvironment](#with-phantomenvironment)
     * [With BrowserEnvironment](#with-phantomenvironment)
 * [Debug](#debug)
+* [Docker usage](#docker-usage)
 * [Usage](#usage)
 
 ## Installation
@@ -672,6 +673,36 @@ All parser components are covered by [debug](https://github.com/visionmedia/debu
 Set `DEBUG` variable with name of js file to show debug information.
 ```bash
 DEBUG=Parser,Actions app.js
+```
+
+## Docker usage
+
+For now it's available to run goose-parser as a docker service.
+
+**Params:**
+
+* *url* - first param is an url to parser
+* *Parsing rules* [optional] - Rules to parse. It's optional, if *--rules-file* specified.
+
+**Options:**
+
+* *--debug*="*" - to enable debug mode and see all what happens inside the goose-parser. Reed more about debug [here](https://www.npmjs.com/package/debug).
+* *--rules-file* - to specify rules file. Be aware that you need to mount a folder with rules as a volume to the docker container.
+
+There are two options to run it:
+
+### Parsing rules from the input
+
+```bash
+docker run -it --rm redcode/goose-parser:0.2-alpha node index.js --debug="*" 'https://www.google.ru/#newwindow=1&q=php+vs+nodejs' '{"actions": [{"type": "wait", "scope": ".g"}], "rules": {"scope": ".g", "collection": [[{"scope": ".r>a", "name": "name"}]]}}'
+```
+
+### Parsing rules from the file
+
+Create a file `rules/rules.json` which contains parser rules and run following command:
+
+```bash
+docker run -it --rm --volume="`pwd`/rules:/app/rules:ro" redcode/goose-parser:0.2-alpha node index.js --debug="*" --rules-file="/app/rules/rules.json" 'https://www.google.ru/#newwindow=1&q=php+vs+nodejs'
 ```
 
 ## Usage
