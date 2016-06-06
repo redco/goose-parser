@@ -41,7 +41,7 @@
   },
   "scripts": {
     "test": "_mocha --timeout=20000 tests/phantom_parser_test.js",
-    "build": "webpack browser.js browser.bundle.js",
+    "build": "webpack browser.js",
     "build-test": "webpack tests/browser_parser_test.js tests/browser_parser_test.bundle.js",
     "coverage": "jscoverage lib && JSCOV=1 _mocha --timeout=20000 tests/phantom_parser_test.js -R html-cov > coverage.html",
     "coveralls": "jscoverage lib && JSCOV=1 _mocha --timeout=20000 tests/phantom_parser_test.js -R mocha-lcov-reporter | coveralls && rm -rf lib-cov"
