@@ -16,6 +16,7 @@ It offers next features: pre-parse [actions](#actions) and post-parse [transform
 * Clear and consistent API with promises all the way.
 * Improved Sizzle format of selectors.
 * Ajax and multi-pages parsing modes.
+* Docker support
 * Easy extendable.
 
 ## Table of contents:
