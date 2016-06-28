@@ -10,6 +10,9 @@ This library allows to parse such data types as grids, collections, and simple o
 Parser supports pagination via infinite scroll and pages.
 It offers next features: pre-parse [actions](#actions) and post-parse [transformations](#transformations).
 
+## Starter kit
+Now it's easy to start with Goose, try to use [goose-starter-kit](https://github.com/redco/goose-starter-kit) for it.
+
 ## Key features
 * Declarative approach for definition of parsing rules, actions and transformations.
 * Multi environments to run parser on the browser and server sides.
