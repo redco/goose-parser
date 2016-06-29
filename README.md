@@ -687,7 +687,7 @@ For now it's available to run goose-parser as a docker service.
 
 **Options:**
 
-* *--debug*="*" - to enable debug mode and see all what happens inside the goose-parser. Reed more about debug [here](https://www.npmjs.com/package/debug).
+* -e "DEBUG=*" - to enable debug mode and see all what happens inside the goose-parser. Reed more about debug [here](https://www.npmjs.com/package/debug).
 * *--rules-file* - to specify rules file. Be aware that you need to mount a folder with rules as a volume to the docker container.
 
 There are two options to run it:
@@ -695,7 +695,7 @@ There are two options to run it:
 ### Parsing rules from the input
 
 ```bash
-docker run -it --rm redcode/goose-parser:0.2-alpha node index.js --debug="*" 'https://www.google.ru/#newwindow=1&q=php+vs+nodejs' '{"actions": [{"type": "wait", "scope": ".g"}], "rules": {"scope": ".g", "collection": [[{"scope": ".r>a", "name": "name"}]]}}'
+docker run -it --rm -e "DEBUG=*" redcode/goose-parser:0.2-alpha node index.js --debug="*" 'https://www.google.ru/#newwindow=1&q=php+vs+nodejs' '{"actions": [{"type": "wait", "scope": ".g"}], "rules": {"scope": ".g", "collection": [[{"scope": ".r>a", "name": "name"}]]}}'
 ```
 
 ### Parsing rules from the file
@@ -703,7 +703,7 @@ docker run -it --rm redcode/goose-parser:0.2-alpha node index.js --debug="*" 'ht
 Create a file `rules/rules.json` which contains parser rules and run following command:
 
 ```bash
-docker run -it --rm --volume="`pwd`/rules:/app/rules:ro" redcode/goose-parser:0.2-alpha node index.js --debug="*" --rules-file="/app/rules/rules.json" 'https://www.google.ru/#newwindow=1&q=php+vs+nodejs'
+docker run -it --rm --volume="`pwd`/rules:/app/rules:ro" -e "DEBUG=*" redcode/goose-parser:0.2-alpha node index.js --debug="*" --rules-file="/app/rules/rules.json" 'https://www.google.ru/#newwindow=1&q=php+vs+nodejs'
 ```
 
 ## Usage
