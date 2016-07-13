@@ -1,29 +1,26 @@
-#!/usr/bin/env node
 "use strict";
 
 const argv = require('minimist')(process.argv.slice(2));
-if (argv.debug !== undefined) {
-    process.env['DEBUG'] = argv.debug === '' ? '*' : argv.debug;
-}
-
-const isDebugMode = process.env['DEBUG'] !== undefined;
+const isDebugMode = process.env.DEBUG !== undefined;
 const Goose = require('goose-parser');
 
 const url = argv._[0];
 
-let rules = {rules: {}};
-if (argv['rules-file'] !== undefined) {
-    rules = require(argv['rules-file']);
-}
-else {
+let rules;
+const rulesFile = argv['rules-file'];
+if (rulesFile) {
+    rules = require(rulesFile);
+} else {
     try {
         rules = JSON.parse(argv._[1]);
     } catch (e) {
-        console.log(e);
+        console.error('Error occured while paring rules');
+        throw e;
     }
 }
 
-var env = new Goose.PhantomEnvironment({
+let envOptionsStr = argv['env-options'];
+let envOptions = {
     url: url,
     snapshot: false,
     loadImages: true,
@@ -32,10 +29,19 @@ var env = new Goose.PhantomEnvironment({
         height: 768
     },
     webSecurity: false
-});
+};
 
-var parser = new Goose.Parser({
-    environment: env
+if (envOptionsStr) {
+    try {
+        envOptions = Object.assign(envOptions, JSON.parse(envOptionsStr));
+    } catch (e) {
+        console.error('Error occured while parsing environment options');
+        throw e;
+    }
+}
+
+const parser = new Goose.Parser({
+    environment: new Goose.PhantomEnvironment(envOptions)
 });
 
 const time = (new Date).getTime();
