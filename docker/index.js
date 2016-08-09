@@ -14,7 +14,7 @@ if (rulesFile) {
     try {
         rules = JSON.parse(argv._[1]);
     } catch (e) {
-        console.error('Error occured while paring rules');
+        console.error('Error occurred while paring rules');
         throw e;
     }
 }
@@ -35,7 +35,7 @@ if (envOptionsStr) {
     try {
         envOptions = Object.assign(envOptions, JSON.parse(envOptionsStr));
     } catch (e) {
-        console.error('Error occured while parsing environment options');
+        console.error('Error occurred while parsing environment options');
         throw e;
     }
 }
@@ -53,7 +53,7 @@ parser
             console.log('Execution time: ' + ((new Date).getTime() - time));
             console.log('Results:');
         }
-        console.log(results);
+        console.log(require('util').inspect(results, {showHidden: false, depth: null}));
     }, function(e) {
         if (isDebugMode) {
             console.log('Error occurred');
