@@ -53,11 +53,11 @@ parser
             console.log('Execution time: ' + ((new Date).getTime() - time));
             console.log('Results:');
         }
-        console.log(require('util').inspect(results, {showHidden: false, depth: null}));
+        console.log(JSON.stringify(results, null, '  '));
     }, function(e) {
         if (isDebugMode) {
             console.log('Error occurred');
             console.log(e.message, e.stack);
         }
-        console.log({"goose-error": e.message});
+        console.log(JSON.stringify({'goose-error': e.message}));
     });
