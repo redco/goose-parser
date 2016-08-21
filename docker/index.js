@@ -1,7 +1,7 @@
 "use strict";
 
 const argv = require('minimist')(process.argv.slice(2));
-const isDebugMode = process.env.DEBUG !== undefined;
+const cleanStdout = process.env.CLEAN_STDOUT !== undefined;
 const Goose = require('goose-parser');
 
 const url = argv._[0];
@@ -48,14 +48,14 @@ const time = (new Date).getTime();
 parser
     .parse(rules)
     .done(function(results) {
-        if (isDebugMode) {
+        if (!cleanStdout) {
             console.log('Work is done');
             console.log('Execution time: ' + ((new Date).getTime() - time));
             console.log('Results:');
         }
         console.log(JSON.stringify(results, null, '  '));
     }, function(e) {
-        if (isDebugMode) {
+        if (!cleanStdout) {
             console.log('Error occurred');
             console.log(e.message, e.stack);
         }
