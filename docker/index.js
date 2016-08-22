@@ -52,8 +52,10 @@ parser
             console.log('Work is done');
             console.log('Execution time: ' + ((new Date).getTime() - time));
             console.log('Results:');
+            console.log(require('util').inspect(results, {showHidden: false, depth: null}));
+        } else {
+            console.log(JSON.stringify(results, null, '  '));
         }
-        console.log(JSON.stringify(results, null, '  '));
     }, function(e) {
         if (!cleanStdout) {
             console.log('Error occurred');
