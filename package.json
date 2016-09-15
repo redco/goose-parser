@@ -8,6 +8,7 @@
   },
   "keywords": [
     "phantomjs",
+    "jsdom",
     "browser",
     "parser",
     "crawler",
@@ -51,6 +52,7 @@
   },
   "dependencies": {
     "debug": "^2.2.0",
+    "jsdom": "^9.4.2",
     "lodash": "^3.10.1",
     "minimist": "^1.2.0",
     "mkdir-p": "0.0.7",
