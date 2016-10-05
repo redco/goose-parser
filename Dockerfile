@@ -1,4 +1,4 @@
-FROM node:5
+FROM node:6
 
 MAINTAINER Andrew Reddikh <andrew@reddikh.com>
 
