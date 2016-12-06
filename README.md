@@ -28,7 +28,7 @@ It offers next features: pre-parse [actions](#actions) and post-parse [transform
     * [Parser](#parser)
         * [#parse method](#parse-method)
         * [#addAction Custom action](#addaction-custom-action)
-        * [#addTransformation Custom transformation](#addtransformation-custom-transformation)
+        * [#addTransform Custom transformation](#addtransformation-custom-transformation)
         * [#addPagination Custom pagination](#addpagination-custom-pagination)
     * [Parse rules](#parse-rules)
         * [Simple rule](#simple-rule)
@@ -44,10 +44,10 @@ It offers next features: pre-parse [actions](#actions) and post-parse [transform
         * [Exist](#exist)
         * [ConditionalActions](#conditionalactions)
         * [Custom actions](#custom-actions)
-    * [Transformations](#transformations)
+    * [Transforms](#transforms)
         * [Date](#date)
         * [Replace](#replace)
-        * [Custom transformations](#custom-transformations)
+        * [Custom transforms](#custom-transforms)
 * [Tests](#tests)
     * [With PhantomEnvironment](#with-phantomenvironment)
     * [With BrowserEnvironment](#with-phantomenvironment)
@@ -134,12 +134,12 @@ parser.addAction('custom-click', function(options) {
 * *type* - name of the action.
 * *action* - function to execute when action is called.
 
-#### #addTransformation Custom transformation
-Add custom trasformation by using method `addTransformation`.
+#### #addTransform Custom transformation
+Add custom trasformation by using method `addTransform`.
 
 **Example**
 ```JS
-parser.addTransformation('custom-transform', function (options, result) {
+parser.addTransform('custom-transform', function (options, result) {
     return result + options.increment;
 });
 ```
@@ -244,7 +244,7 @@ The purpose of this rule - retrieving simple textual node value(s).
 * *type* [optional]  - (array|string[default]). Allows to specify result data type.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
 * *actions* [optional]  - see [Actions](#actions).
-* *transform* [optional] - see [Transformations](#transformations).
+* *transform* [optional] - see [Transforms](#transforms).
 
 #### Collection rule
 
@@ -311,7 +311,7 @@ The purpose of this rule - retrieving collection of nodes.
 * *collection* - array of any rule types.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
 * *actions* [optional]  - see [Actions](#actions).
-* *transform* [optional] - see [Transformations](#transformations).
+* *transform* [optional] - see [Transforms](#transforms).
 
 #### Grid rule
 
@@ -370,7 +370,7 @@ The purpose of this rule - retrieving collection of collection.
 * *collection* - array of array of any rule types.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
 * *actions* [optional]  - see [Actions](#actions).
-* *transform* [optional] - see [Transformations](#transformations).
+* *transform* [optional] - see [Transforms](#transforms).
  
 #### Examples with predefined row id
 *Parsing rule with id = function*
@@ -619,7 +619,7 @@ actions.addAction('custom-click', function(options) {
 });
 ```
 
-### Transformations
+### Transforms
 
 Allow to transform parsed value to some specific form.
 
@@ -644,12 +644,12 @@ Replace value using Regex.
 }
 ```
 
-#### Custom transformations
-Add custom trasformation by using method `addTransformation`.
+#### Custom transforms
+Add custom transform by using method `addTransform`.
 
 **Example**
 ```JS
-transformations.addTransformation('custom-transform', function (options, result) {
+transforms.addTransform('custom-transform', function (options, result) {
     return result + options.increment;
 });
 ```

@@ -1,6 +1,6 @@
 {
   "name": "goose-parser",
-  "version": "0.2.0-alpha.46",
+  "version": "0.2.0-alpha.50",
   "description": "PhantomJS/Browser lib which allows to parse a webpage",
   "author": {
     "name": "Andrew Reddikh",

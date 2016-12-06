@@ -1,6 +1,6 @@
 var Parser = require('../lib/Parser');
 var Actions = require('../lib/Actions');
-var Transformations = require('../lib/Transformations');
+var Transforms = require('../lib/Transforms');
 var BrowserEnvironment = require('../lib/BrowserEnvironment');
 var chai = require('chai');
 var expect = chai.expect;
@@ -314,11 +314,11 @@ describe('Actions', function () {
     });
 });
 
-describe('Transformations', function () {
-    var transformations = new Transformations();
+describe('Transforms', function () {
+    var transforms = new Transforms();
     describe('#produce', function () {
         it('perform date transform', function () {
-            var transformedValue = transformations.produce([
+            var transformedValue = transforms.produce([
                     {
                         type: 'date',
                         locale: 'en',
@@ -332,7 +332,7 @@ describe('Transformations', function () {
         });
 
         it('perform replace transform', function () {
-            var transformedValue = transformations.produce([
+            var transformedValue = transforms.produce([
                     {
                         type: 'replace',
                         re: ['\\s', 'g'],
@@ -345,10 +345,10 @@ describe('Transformations', function () {
         });
 
         it('perform custom transform', function () {
-            transformations.addTransformation('custom-transform', function (options, result) {
+            transforms.addTransform('custom-transform', function (options, result) {
                 return result + options.increment;
             });
-            var transformedValue = transformations.produce([
+            var transformedValue = transforms.produce([
                     {
                         type: 'custom-transform',
                         increment: 3

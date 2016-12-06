@@ -2,7 +2,7 @@ var libFolder = process.env.JSCOV ? '../lib-cov/' : '../lib/';
 var Parser = require(libFolder + 'Parser');
 var Actions = require(libFolder + 'Actions');
 var Paginator = require(libFolder + 'Paginator');
-var Transformations = require(libFolder + 'Transformations');
+var Transforms = require(libFolder + 'Transforms');
 var PhantomEnvironment = require(libFolder + 'PhantomEnvironment');
 var Environment = require(libFolder + 'Environment');
 var chai = require('chai');
@@ -404,11 +404,11 @@ describe('Parser', function () {
             });
     });
 
-    it('addTransformation', function () {
+    it('addTransform', function () {
         var parser = new Parser({
             environment: env
         });
-        parser.addTransformation('custom-transform', function (options, result) {
+        parser.addTransform('custom-transform', function (options, result) {
             return result + options.increment;
         });
         return parser.parse(
@@ -635,11 +635,11 @@ describe('Actions', function () {
     });
 });
 
-describe('Transformations', function () {
-    var transformations = new Transformations();
+describe('Transforms', function () {
+    var transforms = new Transforms();
     describe('#produce', function () {
         it('perform date transform', function () {
-            var transformedValue = transformations.produce([
+            var transformedValue = transforms.produce([
                     {
                         type: 'date',
                         locale: 'en',
@@ -653,7 +653,7 @@ describe('Transformations', function () {
         });
 
         it('perform replace transform', function () {
-            var transformedValue = transformations.produce([
+            var transformedValue = transforms.produce([
                     {
                         type: 'replace',
                         re: ['\\s', 'g'],
@@ -666,10 +666,10 @@ describe('Transformations', function () {
         });
 
         it('perform custom transform', function () {
-            transformations.addTransformation('custom-transform', function (options, result) {
+            transforms.addTransform('custom-transform', function (options, result) {
                 return result + options.increment;
             });
-            var transformedValue = transformations.produce([
+            var transformedValue = transforms.produce([
                     {
                         type: 'custom-transform',
                         increment: 3
@@ -681,7 +681,7 @@ describe('Transformations', function () {
         });
 
         it('perform unsupported transformation type', function () {
-            var fn = transformations.produce.bind(transformations, [{
+            var fn = transforms.produce.bind(transforms, [{
                     type: 'unknownType'
                 }],
                 ' t e  s  t'
@@ -690,8 +690,8 @@ describe('Transformations', function () {
         });
     });
 
-    it('perform addTransformation with wrong data', function () {
-        var fn = transformations.addTransformation;
+    it('perform addTransform with wrong data', function () {
+        var fn = transforms.addTransform;
         expect(fn).to.throw(Error, /addTransformation accept type as string and transformation as function which must return a transformed value/);
     });
 });
