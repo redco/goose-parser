@@ -82,7 +82,7 @@ describe('Using collection rule, the parser', () => {
         ]);
     });
 
-    it.only('should parse a collection inside a grid node', async () => {
+    it('should parse a collection inside a grid node', async () => {
         setServerResponse(`
             <ul>
                 <li>
