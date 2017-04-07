@@ -8,6 +8,34 @@ describe('Using actions, the parser', () => {
         parser = createParser();
     });
 
+    // it('blur', async () => {
+    //     setServerResponse(
+    //         `
+    //             <input type="text" value="" />
+    //         `,
+    //         function run () {
+    //             console.log(document.getElementsByTagName('INPUT')[0]);
+    //             document.getElementsByTagName('INPUT')[0].addEventListener('blur', function(e) {
+    //                 console.log('Blur event');
+    //                 e.target.value = 'blurred';
+    //             });
+    //         }
+    //     );
+    //     const result = await parser.parse({
+    //         actions: [
+    //             {
+    //                 type: 'blur',
+    //                 scope: 'input'
+    //             }
+    //         ],
+    //         rules: {
+    //             scope: 'input',
+    //             attr: 'value'
+    //         }
+    //     });
+    //     expect(result).to.equal('blurred');
+    // });
+
     it('condition.then', async () => {
         setServerResponse(
             `
@@ -166,7 +194,6 @@ describe('Using actions, the parser', () => {
                 scope: '.page'
             }
         });
-        console.log(result);
         expect(result).to.equal('834775566654');
     });
 

@@ -638,33 +638,6 @@ describe('Actions', function () {
 describe('Transforms', function () {
     var transforms = new Transforms();
     describe('#produce', function () {
-        it('perform date transform', function () {
-            var transformedValue = transforms.produce([
-                    {
-                        type: 'date',
-                        locale: 'en',
-                        from: 'HH:mm D MMM YYYY',
-                        to: 'YYYY-MM-DD'
-                    }
-                ],
-                '21:10 30 Aug 2016'
-            );
-            expect(transformedValue).equal('2016-08-30');
-        });
-
-        it('perform replace transform', function () {
-            var transformedValue = transforms.produce([
-                    {
-                        type: 'replace',
-                        re: ['\\s', 'g'],
-                        to: ''
-                    }
-                ],
-                ' t e  s  t'
-            );
-            expect(transformedValue).equal('test');
-        });
-
         it('perform custom transform', function () {
             transforms.addTransform('custom-transform', function (options, result) {
                 return result + options.increment;

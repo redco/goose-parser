@@ -21,7 +21,7 @@
     "dom",
     "javascript"
   ],
-  "homepage": "http://redcode.im",
+  "homepage": "http://goose.show",
   "license": "MIT",
   "contributors": [
     {
@@ -48,20 +48,21 @@
     "coveralls": "jscoverage lib && JSCOV=1 _mocha --timeout=20000 tests/phantom_parser_test.js -R mocha-lcov-reporter | coveralls && rm -rf lib-cov"
   },
   "engines": {
-    "node": ">= 4.0.0"
+    "node": ">= 6.4.0"
   },
   "dependencies": {
+    "chai-as-promised": "^6.0.0",
     "debug": "^2.2.0",
+    "html-entities": "^1.2.0",
     "jsdom": "^9.4.2",
-    "lodash": "^3.10.1",
+    "lodash": "^4.17.4",
     "minimist": "^1.2.0",
     "mkdir-p": "0.0.7",
     "moment": "^2.10.6",
     "phantom": "^0.8.4",
     "phantomjs-prebuilt": "^2.1.7",
     "vow": "^0.4.10",
-    "vow-node": "^0.3.0",
-    "html-entities": "^1.2.0"
+    "vow-node": "^0.3.0"
   },
   "devDependencies": {
     "babel-core": "6.17.0",
