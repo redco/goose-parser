@@ -42,6 +42,7 @@
   },
   "scripts": {
     "test": "mocha --timeout=20000 --recursive --compilers js:babel-register --require babel-polyfill tests/phantom/lib",
+    "test-puppeteer": "DEBUG=${DEBUG:-*,-puppeteer:*,-mocha:*,-babel} mocha --timeout=20000 --recursive --compilers js:babel-register --require babel-polyfill tests/puppeteer/lib",
     "build": "webpack browser.js",
     "build-test": "webpack tests/browser_parser_test.js tests/browser_parser_test.bundle.js",
     "coverage": "jscoverage lib && JSCOV=1 _mocha --timeout=20000 tests/phantom_parser_test.js -R html-cov > coverage.html",
@@ -52,6 +53,7 @@
   },
   "dependencies": {
     "debug": "^2.2.0",
+    "html-entities": "^1.2.0",
     "jsdom": "^9.4.2",
     "lodash": "^3.10.1",
     "minimist": "^1.2.0",
@@ -59,19 +61,19 @@
     "moment": "^2.10.6",
     "phantom": "^0.8.4",
     "phantomjs-prebuilt": "^2.1.7",
+    "puppeteer": "^0.11.0",
     "vow": "^0.4.10",
-    "vow-node": "^0.3.0",
-    "html-entities": "^1.2.0"
+    "vow-node": "^0.3.0"
   },
   "devDependencies": {
+    "babel-cli": "6.16.0",
     "babel-core": "6.17.0",
     "babel-loader": "6.2.5",
+    "babel-plugin-transform-runtime": "6.15.0",
     "babel-polyfill": "6.16.0",
     "babel-preset-es2015": "6.16.0",
     "babel-preset-stage-0": "6.16.0",
     "babel-runtime": "6.11.6",
-    "babel-cli": "6.16.0",
-    "babel-plugin-transform-runtime": "6.15.0",
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
     "jscoverage": "^0.6.0",
