@@ -1,6 +1,6 @@
 {
   "name": "goose-parser",
-  "version": "0.2.0-alpha.60",
+  "version": "0.3.0-alpha.2",
   "description": "PhantomJS/Browser lib which allows to parse a webpage",
   "author": {
     "name": "Andrew Reddikh",
@@ -59,8 +59,6 @@
     "minimist": "^1.2.0",
     "mkdir-p": "0.0.7",
     "moment": "^2.10.6",
-    "phantom": "^0.8.4",
-    "phantomjs-prebuilt": "^2.1.7",
     "puppeteer": "^0.11.0",
     "vow": "^0.4.10",
     "vow-node": "^0.3.0"

@@ -23,7 +23,6 @@ It offers next features: pre-parse [actions](#actions) and post-parse [transform
 * [Installation](#installation)
 * [Documentation](#documentation)
     * [Environments](#environments)
-        * [PhantomEnvironment](#phantomenvironment)
         * [BrowserEnvironment](#browserenvironment)
     * [Parser](#parser)
         * [#parse method](#parse-method)
@@ -49,8 +48,7 @@ It offers next features: pre-parse [actions](#actions) and post-parse [transform
         * [Replace](#replace)
         * [Custom transforms](#custom-transforms)
 * [Tests](#tests)
-    * [With PhantomEnvironment](#with-phantomenvironment)
-    * [With BrowserEnvironment](#with-phantomenvironment)
+    * [With BrowserEnvironment](#with-browserenvironment)
 * [Debug](#debug)
 * [Docker usage](#docker-usage)
 * [Usage](#usage)
@@ -69,17 +67,6 @@ All css selectors can be set in a [sizzle](https://github.com/jquery/sizzle) for
 
 ### Environments
 This is a special atmosphere where Parser has to be executed. The main purpose of the [environment](https://github.com/redco/goose-parser/blob/master/lib/Environment.js) is to provide a method for evaluating JS on the page.
-
-#### PhantomEnvironment
-That environment is used for running Parser on node.
-```JS
-var env = new PhantomEnvironment({
-    url: 'http://google.com',
-});
-```
-The main and only required parameter is `url`. It contains an url address of the site, where Parser will start.
-
-This environment allows to perform snapshots, use proxy lists, custom proxy rotator, white and black lists for loading resources and more sweet features. Find more info about options in [here](https://github.com/redco/goose-parser/blob/master/lib/PhantomEnvironment.js#L35).
 
 #### BrowserEnvironment
 That environment is used for running Parser in the browser.
@@ -655,12 +642,6 @@ transforms.addTransform('custom-transform', function (options, result) {
 ```
 
 ## Tests
-
-### With PhantomEnvironment
-To run [tests](https://github.com/redco/goose-parser/blob/master/tests/phantom_parser_test.js) use command:
-```bash
-npm test
-```
 
 ### With BrowserEnvironment
 To run [tests](https://github.com/redco/goose-parser/blob/master/tests/browser_parser_test.js) build them with command:
