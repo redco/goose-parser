@@ -1,0 +1,16 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb-base",
+  "env": {
+    "browser": false,
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "max-len": [2, 120],
+    "no-param-reassign": [2, {"props": false}],
+    "prefer-template": [0],
+    "no-underscore-dangle": [2, {"allowAfterThis": true}],
+    "no-mixed-operators": [0]
+  }
+}
