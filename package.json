@@ -1,13 +1,15 @@
 {
   "name": "goose-parser",
-  "version": "0.3.0-alpha.3",
-  "description": "PhantomJS/Browser lib which allows to parse a webpage",
+  "version": "0.3.0-alpha.5",
+  "description": "Multi environment webpage parser",
   "author": {
     "name": "Andrew Reddikh",
     "email": "andrew@reddikh.com"
   },
   "keywords": [
     "phantomjs",
+    "chrome",
+    "chromium",
     "jsdom",
     "browser",
     "parser",
