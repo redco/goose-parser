@@ -32,5 +32,3 @@ parser.bundle.js
 
 # Default snapshot directory
 snapshots
-
-build/
