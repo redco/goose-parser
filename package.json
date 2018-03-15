@@ -1,6 +1,6 @@
 {
   "name": "goose-parser",
-  "version": "0.3.0-alpha.5",
+  "version": "0.5.0-alpha.1",
   "description": "Multi environment webpage parser",
   "author": {
     "name": "Andrew Reddikh",
@@ -55,7 +55,6 @@
   },
   "dependencies": {
     "debug": "^2.2.0",
-    "goose-abstract-environment": "^1.0.8",
     "html-entities": "^1.2.0",
     "lodash.clone": "^4.5.0",
     "lodash.get": "^4.4.2",
@@ -63,8 +62,7 @@
     "lodash.pick": "^4.4.0",
     "lodash.pluck": "^3.1.2",
     "moment": "^2.10.6",
-    "promise-any": "^0.2.0",
-    "puppeteer": "^0.11.0"
+    "promise-any": "^0.2.0"
   },
   "devDependencies": {
     "babel-cli": "6.16.0",
@@ -77,6 +75,7 @@
     "babel-runtime": "6.11.6",
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
+    "goose-abstract-environment": "1.0.10",
     "jscoverage": "^0.6.0",
     "mocha": "^2.3.3",
     "mocha-lcov-reporter": "^1.0.0",
