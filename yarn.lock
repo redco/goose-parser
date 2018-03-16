@@ -1471,6 +1471,14 @@ goose-abstract-environment@1.0.10:
     babel-polyfill "^6.23.0"
     debug "^3.0.1"
 
+goose-paginator@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/goose-paginator/-/goose-paginator-1.0.0.tgz#c29455dc15364d0b49a76824174eebd9732a2a8f"
+  dependencies:
+    babel-polyfill "^6.23.0"
+    debug "^3.0.1"
+    promise-any "^0.2.0"
+
 graceful-fs@^4.1.2, graceful-fs@^4.1.4:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
@@ -2604,7 +2612,7 @@ right-align@^0.1.1:
   dependencies:
     align-text "^0.1.1"
 
-rimraf@2, rimraf@^2.5.1, rimraf@^2.6.1:
+rimraf@2, rimraf@^2.5.1, rimraf@^2.6.1, rimraf@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.2.tgz#2ed8150d24a16ea8651e6d6ef0f47c4158ce7a36"
   dependencies:

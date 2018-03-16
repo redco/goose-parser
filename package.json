@@ -1,6 +1,8 @@
 {
+  "private": true,
   "name": "goose-parser",
   "version": "0.5.0-alpha.1",
+  "main": "lib/Parser.js",
   "description": "Multi environment webpage parser",
   "author": {
     "name": "Andrew Reddikh",
@@ -45,13 +47,10 @@
   "scripts": {
     "test": "mocha --timeout=20000 --recursive --compilers js:babel-register --require babel-polyfill tests/phantom/lib",
     "test-puppeteer": "DEBUG=${DEBUG:-*,-puppeteer:*,-mocha:*,-babel} mocha --timeout=20000 --recursive --compilers js:babel-register --require babel-polyfill tests/puppeteer/lib",
-    "build": "webpack browser.js",
+    "build": "node build.js",
     "build-test": "webpack tests/browser_parser_test.js tests/browser_parser_test.bundle.js",
     "coverage": "jscoverage lib && JSCOV=1 _mocha --timeout=20000 tests/phantom_parser_test.js -R html-cov > coverage.html",
     "coveralls": "jscoverage lib && JSCOV=1 _mocha --timeout=20000 tests/phantom_parser_test.js -R mocha-lcov-reporter | coveralls && rm -rf lib-cov"
-  },
-  "engines": {
-    "node": ">= 4.0.0"
   },
   "dependencies": {
     "debug": "^2.2.0",
@@ -76,9 +75,11 @@
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
     "goose-abstract-environment": "1.0.10",
+    "goose-paginator": "^1.0.0",
     "jscoverage": "^0.6.0",
     "mocha": "^2.3.3",
     "mocha-lcov-reporter": "^1.0.0",
+    "rimraf": "^2.6.2",
     "webpack": "^1.12.2"
   },
   "directories": {}
