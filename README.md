@@ -31,16 +31,16 @@ Now it's easy to start with Goose, just try to use [goose-starter-kit](https://g
 ## Installation
 
 ```bash
-yarn add goose-parser goose-phantom-environment
+yarn add goose-parser goose-chrome-environment
 ```
 
 ## Usage
 
 ```JS
 const Parser = require('goose-parser');
-const PhantomEnvironment = require('goose-phantom-environment');
+const ChromeEnvironment = require('goose-chrome-environment');
 
-const env = new PhantomEnvironment({
+const env = new ChromeEnvironment({
   url: 'https://www.google.com/search?q=goose-parser',
 });
 
@@ -74,7 +74,7 @@ const parser = new Parser({ environment: env });
     });
     console.log(results);
   } catch (e) {
-    console.log('Error occured:');
+    console.log('Error occurred:');
     console.log(e.stack);
   }
 })();
@@ -87,7 +87,7 @@ Goose supports following environments:
 * [Chrome](https://github.com/redco/goose-chrome-environment) (executes in NodeJS)
 * [JSDom](https://github.com/redco/goose-jsdom-environment) (executes in NodeJS)
 * FireFox (coming soon)
-* [Browser](https://github.com/redco/goose-phantom-environment) (executes in Browser)
+* [Browser](https://github.com/redco/goose-browser-environment) (executes in Browser)
 
 ## Docker usage
 
@@ -108,7 +108,7 @@ There are two options to run it:
 ### Process parsing from the user input
 
 ```bash
-docker run -it --rm -e "DEBUG=*,-puppeteer:*" redcode/goose-parser:chrome-1.0.17-parser-0.5.2\
+docker run -it --rm -e "DEBUG=*,-puppeteer:*" redcode/goose-parser:chrome-1.1.3-parser-0.6.0\
     https://www.google.com/search?q=goose-parser\
     '{
       "actions": [
@@ -141,7 +141,7 @@ docker run -it --rm -e "DEBUG=*,-puppeteer:*" redcode/goose-parser:chrome-1.0.17
 Create a file `rules/rules.json` which contains parser rules and run following command:
 
 ```bash
-docker run -it --rm --volume="`pwd`/rules:/app/rules:ro" -e "DEBUG=*,-puppeteer:*" redcode/goose-parser:phantom-latest --rules-file="/app/rules/rules.json" 'https://www.google.com/search?q=goose-parser'
+docker run -it --rm --volume="`pwd`/rules:/app/rules:ro" -e "DEBUG=*,-puppeteer:*" redcode/goose-parser:chrome-1.1.3-parser-0.6.0 --rules-file="/app/rules/rules.json" 'https://www.google.com/search?q=goose-parser'
 ```
 
 ## Documentation
