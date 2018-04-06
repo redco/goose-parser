@@ -1464,9 +1464,9 @@ globals@^9.18.0:
   version "9.18.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.18.0.tgz#aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
 
-goose-abstract-environment@1.0.10:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/goose-abstract-environment/-/goose-abstract-environment-1.0.10.tgz#f77f63e3a60946940ba56eab5445c9ebbeee1be2"
+goose-abstract-environment@1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/goose-abstract-environment/-/goose-abstract-environment-1.0.11.tgz#e18470f6513281c51b65f027a0d10f722c713684"
   dependencies:
     babel-polyfill "^6.23.0"
     debug "^3.0.1"

@@ -34,3 +34,5 @@ parser.bundle.js
 snapshots
 
 build
+
+docker/environment.js
