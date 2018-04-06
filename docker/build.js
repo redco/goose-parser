@@ -10,11 +10,10 @@ const getVersion = async (environmentName) => {
         return;
       }
 
-      resolve(stdout);
+      resolve(stdout.trim());
     });
   });
 };
-
 
 (async function () {
   try {
@@ -22,13 +21,15 @@ const getVersion = async (environmentName) => {
     const environmentVersion = await getVersion(environmentName);
     const pkg = {
       private: true,
-      name: 'goose-parser-dockerized',
+      name: 'goose-parser',
       dependencies: {
         'goose-parser': version,
         [environmentName]: `^${environmentVersion}`,
+        'minimist': '^1.2.0',
       },
     };
     fs.writeFileSync('./package.json', JSON.stringify(pkg, null, '  '), 'utf-8');
+    fs.writeFileSync('./environment.js', `module.exports = require('${environmentName}');`, 'utf-8');
   } catch (e) {
     console.log('Error occurred');
     console.log(e.message, e.stack);
