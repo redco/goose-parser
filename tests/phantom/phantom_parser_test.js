@@ -24,7 +24,7 @@ before(function () {
 
 describe('Parser', function () {
     describe('#parse', function () {
-       
+
 
         it('parse page with scroll pagination', function () {
             var parser = new Parser({

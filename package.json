@@ -49,8 +49,8 @@
     "test-puppeteer": "DEBUG=${DEBUG:-*,-puppeteer:*,-mocha:*,-babel} mocha --timeout=20000 --recursive --compilers js:babel-register --require babel-polyfill tests/puppeteer/lib",
     "build": "node build.js",
     "build-test": "webpack tests/browser_parser_test.js tests/browser_parser_test.bundle.js",
-    "coverage": "jscoverage lib && JSCOV=1 _mocha --timeout=20000 tests/phantom_parser_test.js -R html-cov > coverage.html",
-    "coveralls": "jscoverage lib && JSCOV=1 _mocha --timeout=20000 tests/phantom_parser_test.js -R mocha-lcov-reporter | coveralls && rm -rf lib-cov"
+    "coverage": "jscoverage lib && JSCOV=1 _mocha --timeout=30000 tests/phantom_parser_test.js -R html-cov > coverage.html && rm -rf lib-cov",
+    "coveralls": "jscoverage lib && JSCOV=1 _mocha --timeout=30000 tests/phantom_parser_test.js -R mocha-lcov-reporter | coveralls && rm -rf lib-cov"
   },
   "dependencies": {
     "debug": "^2.2.0",
