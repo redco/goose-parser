@@ -1,9 +1,6 @@
-[![Goose Logo](http://imgh.us/goose-logo-square.svg)](http://goose.show)
+[![mr.Goose](https://i.imgur.com/e0CPF7C.png)](http://goose.show)
 
 # goose-parser [![Latest Stable Version](https://img.shields.io/npm/v/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser) [![Total Downloads](https://img.shields.io/npm/dt/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser)
-
-[![Build Status](https://img.shields.io/travis/redco/goose-parser/master.svg?style=flat)](https://travis-ci.org/redco/goose-parser)
-[![Coverage Status](https://img.shields.io/coveralls/redco/goose-parser/master.svg?style=flat)](https://coveralls.io/github/redco/goose-parser)
 
 This tool moves routine crawling process to the new level. 
 Now it's possible to parse a web page for a few moments. 
@@ -12,7 +9,7 @@ This library allows to parse such data types as grids, collections, and simple o
 Parser supports pagination via infinite scroll and pages.
 It offers next features: pre-parse [actions](#actions) and post-parse [transformations](#transformations).
 
-## Starter kit
+## Goose Starter Kit
 Now it's easy to start with Goose, try to use [goose-starter-kit](https://github.com/redco/goose-starter-kit) for it.
 
 ## Key features
