@@ -32,3 +32,7 @@ parser.bundle.js
 
 # Default snapshot directory
 snapshots
+
+build
+
+docker/environment.js

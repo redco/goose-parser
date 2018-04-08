@@ -1,9 +1,6 @@
-[![Goose Logo](http://imgh.us/goose-logo-square.svg)](http://goose.show)
+[![mr.Goose](https://i.imgur.com/e0CPF7C.png)](http://goose.show)
 
 # goose-parser [![Latest Stable Version](https://img.shields.io/npm/v/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser) [![Total Downloads](https://img.shields.io/npm/dt/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser)
-
-[![Build Status](https://img.shields.io/travis/redco/goose-parser/master.svg?style=flat)](https://travis-ci.org/redco/goose-parser)
-[![Coverage Status](https://img.shields.io/coveralls/redco/goose-parser/master.svg?style=flat)](https://coveralls.io/github/redco/goose-parser)
 
 This tool moves routine crawling process to the new level. 
 Now it's possible to parse a web page for a few moments. 
@@ -12,7 +9,7 @@ This library allows to parse such data types as grids, collections, and simple o
 Parser supports pagination via infinite scroll and pages.
 It offers next features: pre-parse [actions](#actions) and post-parse [transformations](#transformations).
 
-## Starter kit
+## Goose Starter Kit
 Now it's easy to start with Goose, try to use [goose-starter-kit](https://github.com/redco/goose-starter-kit) for it.
 
 ## Key features
@@ -21,18 +18,18 @@ Now it's easy to start with Goose, try to use [goose-starter-kit](https://github
 * Clear and consistent API with promises all the way.
 * Improved Sizzle format of selectors.
 * Ajax and multi-pages parsing modes.
+* Docker support
 * Easy extendable.
 
 ## Table of contents:
 * [Installation](#installation)
 * [Documentation](#documentation)
     * [Environments](#environments)
-        * [PhantomEnvironment](#phantomenvironment)
         * [BrowserEnvironment](#browserenvironment)
     * [Parser](#parser)
         * [#parse method](#parse-method)
         * [#addAction Custom action](#addaction-custom-action)
-        * [#addTransformation Custom transformation](#addtransformation-custom-transformation)
+        * [#addTransform Custom transformation](#addtransformation-custom-transformation)
         * [#addPagination Custom pagination](#addpagination-custom-pagination)
     * [Parse rules](#parse-rules)
         * [Simple rule](#simple-rule)
@@ -48,14 +45,14 @@ Now it's easy to start with Goose, try to use [goose-starter-kit](https://github
         * [Exist](#exist)
         * [ConditionalActions](#conditionalactions)
         * [Custom actions](#custom-actions)
-    * [Transformations](#transformations)
+    * [Transforms](#transforms)
         * [Date](#date)
         * [Replace](#replace)
-        * [Custom transformations](#custom-transformations)
+        * [Custom transforms](#custom-transforms)
 * [Tests](#tests)
-    * [With PhantomEnvironment](#with-phantomenvironment)
-    * [With BrowserEnvironment](#with-phantomenvironment)
+    * [With BrowserEnvironment](#with-browserenvironment)
 * [Debug](#debug)
+* [Docker usage](#docker-usage)
 * [Usage](#usage)
 
 ## Installation
@@ -72,17 +69,6 @@ All css selectors can be set in a [sizzle](https://github.com/jquery/sizzle) for
 
 ### Environments
 This is a special atmosphere where Parser has to be executed. The main purpose of the [environment](https://github.com/redco/goose-parser/blob/master/lib/Environment.js) is to provide a method for evaluating JS on the page.
-
-#### PhantomEnvironment
-That environment is used for running Parser on node.
-```JS
-var env = new PhantomEnvironment({
-    url: 'http://google.com',
-});
-```
-The main and only required parameter is `url`. It contains an url address of the site, where Parser will start.
-
-This environment allows to perform snapshots, use proxy lists, custom proxy rotator, white and black lists for loading resources and more sweet features. Find more info about options in [here](https://github.com/redco/goose-parser/blob/master/lib/PhantomEnvironment.js#L35).
 
 #### BrowserEnvironment
 That environment is used for running Parser in the browser.
@@ -137,12 +123,12 @@ parser.addAction('custom-click', function(options) {
 * *type* - name of the action.
 * *action* - function to execute when action is called.
 
-#### #addTransformation Custom transformation
-Add custom trasformation by using method `addTransformation`.
+#### #addTransform Custom transformation
+Add custom trasformation by using method `addTransform`.
 
 **Example**
 ```JS
-parser.addTransformation('custom-transform', function (options, result) {
+parser.addTransform('custom-transform', function (options, result) {
     return result + options.increment;
 });
 ```
@@ -247,7 +233,7 @@ The purpose of this rule - retrieving simple textual node value(s).
 * *type* [optional]  - (array|string[default]). Allows to specify result data type.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
 * *actions* [optional]  - see [Actions](#actions).
-* *transform* [optional] - see [Transformations](#transformations).
+* *transform* [optional] - see [Transforms](#transforms).
 
 #### Collection rule
 
@@ -314,7 +300,7 @@ The purpose of this rule - retrieving collection of nodes.
 * *collection* - array of any rule types.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
 * *actions* [optional]  - see [Actions](#actions).
-* *transform* [optional] - see [Transformations](#transformations).
+* *transform* [optional] - see [Transforms](#transforms).
 
 #### Grid rule
 
@@ -372,9 +358,8 @@ The purpose of this rule - retrieving collection of collection.
 * *scope* - css selector of the node.
 * *collection* - array of array of any rule types.
 * *parentScope* [optional] - css selector of the parent node, to specify a global scope (outside current).
-* *duplicateChecker* [optional] - is a function with params (_id, parsedRows). It prevents future parsing if result of execution is `true` that means duplicate was detected. See example [below](#examples-with-duplicatechecker).
 * *actions* [optional]  - see [Actions](#actions).
-* *transform* [optional] - see [Transformations](#transformations).
+* *transform* [optional] - see [Transforms](#transforms).
  
 #### Examples with predefined row id
 *Parsing rule with id = function*
@@ -401,30 +386,6 @@ var id = 0;
 ```JS
 {
     scope: 'div.collection-node',
-    collection: [[
-        {
-            id: true,
-            scope: 'simple-reference'
-        },
-        {
-            name: 'node',
-            scope: 'div.simple-node'
-        }
-    ]]
-}
-```
-
-#### Examples with duplicateChecker
-*Parsing rule*
-```JS
-{
-    scope: 'div.collection-node',
-    duplicateChecker: function (_id, rows) {
-       rows = rows || [];
-       return rows.findIndex(function (row) {
-               return row._id === _id;
-           }) !== -1;
-    },
     collection: [[
         {
             id: true,
@@ -647,7 +608,7 @@ actions.addAction('custom-click', function(options) {
 });
 ```
 
-### Transformations
+### Transforms
 
 Allow to transform parsed value to some specific form.
 
@@ -672,23 +633,17 @@ Replace value using Regex.
 }
 ```
 
-#### Custom transformations
-Add custom trasformation by using method `addTransformation`.
+#### Custom transforms
+Add custom transform by using method `addTransform`.
 
 **Example**
 ```JS
-transformations.addTransformation('custom-transform', function (options, result) {
+transforms.addTransform('custom-transform', function (options, result) {
     return result + options.increment;
 });
 ```
 
 ## Tests
-
-### With PhantomEnvironment
-To run [tests](https://github.com/redco/goose-parser/blob/master/tests/phantom_parser_test.js) use command:
-```bash
-npm test
-```
 
 ### With BrowserEnvironment
 To run [tests](https://github.com/redco/goose-parser/blob/master/tests/browser_parser_test.js) build them with command:
@@ -702,6 +657,36 @@ All parser components are covered by [debug](https://github.com/visionmedia/debu
 Set `DEBUG` variable with name of js file to show debug information.
 ```bash
 DEBUG=Parser,Actions app.js
+```
+
+## Docker usage
+
+For now it's available to run goose-parser as a docker service.
+
+**Params:**
+
+* *url* - first param is an url to parser
+* *Parsing rules* [optional] - Rules to parse. It's optional, if *--rules-file* specified.
+
+**Options:**
+
+* -e "DEBUG=*" - to enable debug mode and see all what happens inside the goose-parser. Reed more about debug [here](https://www.npmjs.com/package/debug).
+* *--rules-file* - to specify rules file. Be aware that you need to mount a folder with rules as a volume to the docker container.
+
+There are two options to run it:
+
+### Parsing rules from the input
+
+```bash
+docker run -it --rm -e "DEBUG=*" redcode/goose-parser:0.2-alpha 'https://www.google.ru/#newwindow=1&q=php+vs+nodejs' '{"actions": [{"type": "wait", "scope": ".g"}], "rules": {"scope": ".g", "collection": [[{"scope": ".r>a", "name": "name"}]]}}'
+```
+
+### Parsing rules from the file
+
+Create a file `rules/rules.json` which contains parser rules and run following command:
+
+```bash
+docker run -it --rm --volume="`pwd`/rules:/app/rules:ro" -e "DEBUG=*" redcode/goose-parser:0.2-alpha --rules-file="/app/rules/rules.json" 'https://www.google.ru/#newwindow=1&q=php+vs+nodejs'
 ```
 
 ## Usage
