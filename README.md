@@ -2,27 +2,28 @@
 
 # goose-parser [![Latest Stable Version](https://img.shields.io/npm/v/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser) [![Total Downloads](https://img.shields.io/npm/dt/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser)
 
-This tool moves routine crawling process to the new level. 
-Now it's possible to parse a web page for a few moments. 
+This tool moves routine crawling process to the new level.
+Now it's possible to parse a web page for a moment. 
 All you need is to specify parsing rules based on css selectors. It's so simple as Goose can do it.
-This library allows to parse such data types as grids, collections, and simple objects.
-Parser supports pagination via infinite scroll and pages.
-It offers next features: pre-parse [actions](#actions) and post-parse [transformations](#transformations).
+This library allows to parse such data types as Grid, Collections, and Simple objects.
+Parser has support of pagination by extension [goose-paginator](https://github.com/redco/goose-paginator).
+Also it offers you following features: [actions](#actions) and [transformations](#transformations).
 
 ## Goose Starter Kit
 Now it's easy to start with Goose, try to use [goose-starter-kit](https://github.com/redco/goose-starter-kit) for it.
 
 ## Key features
 * Declarative approach for definition of parsing rules, actions and transformations.
-* Multi environments to run parser on the browser and server sides.
+* Multi environments to run parser on the browser, PhantomJS, Chrome, JsDom and more.
 * Clear and consistent API with promises all the way.
-* Improved Sizzle format of selectors.
+* Improved [Sizzle](https://sizzlejs.com) format of selectors.
 * Ajax and multi-pages parsing modes.
-* Docker support
-* Easy extendable.
+* Docker Support.
+* It's easy extendable.
 
 ## Table of contents:
 * [Installation](#installation)
+* [Usage](#usage)
 * [Documentation](#documentation)
     * [Environments](#environments)
         * [BrowserEnvironment](#browserenvironment)
@@ -53,16 +54,58 @@ Now it's easy to start with Goose, try to use [goose-starter-kit](https://github
     * [With BrowserEnvironment](#with-browserenvironment)
 * [Debug](#debug)
 * [Docker usage](#docker-usage)
-* [Usage](#usage)
 
 ## Installation
 
 ```bash
-npm install goose-parser
+yarn add goose-parser goose-phantom-environment
 ```
 
-This library has dependency on [PhantomJS 2.0](https://github.com/eugene1g/phantomjs/releases). 
-Follow instructions provided by the link or build it [manually](http://phantomjs.org/build.html). 
+## Usage
+
+```JS
+const Parser = require('goose-parser');
+const PhantomEnvironment = require('goose-phantom-environment');
+
+const env = new PhantomEnvironment({
+  url: 'https://www.google.com/search?q=goose-parser',
+});
+
+const parser = new Parser({ environment: env });
+
+(async function () {
+  try {
+    const results = await parser.parse({
+      actions: [
+        {
+          type: 'wait',
+          timeout: 10 * 1000,
+          scope: '.srg>.g',
+          parentScope: 'body'
+        }
+      ],
+      rules: {
+        scope: '.srg>.g',
+        collection: [[
+          {
+            name: 'url',
+            scope: 'h3.r>a',
+            attr: 'href',
+          },
+          {
+            name: 'text',
+            scope: 'h3.r>a',
+          }
+        ]]
+      }
+    });
+    console.log(results);
+  } catch (e) {
+    console.log('Error occured:');
+    console.log(e.stack);
+  }
+})();
+```
 
 ## Documentation
 All css selectors can be set in a [sizzle](https://github.com/jquery/sizzle) format.
@@ -687,84 +730,4 @@ Create a file `rules/rules.json` which contains parser rules and run following c
 
 ```bash
 docker run -it --rm --volume="`pwd`/rules:/app/rules:ro" -e "DEBUG=*" redcode/goose-parser:0.2-alpha --rules-file="/app/rules/rules.json" 'https://www.google.ru/#newwindow=1&q=php+vs+nodejs'
-```
-
-## Usage
-
-```JS
-var env = new PhantomEnvironment({
-    url: uri,
-    screen: {
-        width: 1080,
-        height: 200
-    }
-});
-
-var parser = new Parser({
-    environment: env,
-    pagination: {
-        type: 'scroll',
-        interval: 500
-    }
-});
-
-parser.parse({
-    actions: [
-        {
-            type: 'wait',
-            timeout: 2 * 60 * 1000,
-            scope: '.container',
-            parentScope: 'body'
-        }
-    ],
-    rules: {
-        scope: '.outer-wrap',
-        collection: [[
-            {
-                name: 'node1',
-                scope: '.node1',
-                actions: [
-                    {
-                        type: 'click',
-                        scope: '.prepare-node1'
-                    },
-                    {
-                        type: 'wait',
-                        scope: '.prepare-node1.clicked'
-                    }
-                ],
-                collection: [
-                    {
-                        name: 'subNode',
-                        scope: '.sub-node',
-                        collection: [[
-                            {
-                                name: 'date',
-                                scope: '.date-node',
-                                transform: [
-                                    {
-                                        type: 'date',
-                                        locale: 'ru',
-                                        from: 'HH:mm D MMM YYYY',
-                                        to: 'YYYY-MM-DD'
-                                    }
-                                ]
-                            },
-                            {
-                                name: 'number',
-                                scope: '.number-node'
-                            }
-                        ]]
-                    }
-                ]
-            },
-            {
-                name: 'prices',
-                scope: '.price'
-            }
-        ]]
-    }
-}).done(function (results) {
-    // do whatever with results
-});
 ```
