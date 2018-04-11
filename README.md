@@ -7,7 +7,7 @@ Now it's possible to parse a web page for a moment.
 All you need is to specify parsing rules based on css selectors. It's so simple as Goose can do it.
 This library allows to parse such data types as Grid, Collections, and Simple objects.
 Parser has support of pagination by extension [goose-paginator](https://github.com/redco/goose-paginator).
-Also it offers you following features: [actions](#actions) and [transformations](#transformations).
+Also it offers you following features: *actions* to interact with the page and *transforms* to convert parsed data to friendly format.
 
 ## Goose Starter Kit
 Now it's easy to start with Goose, try to use [goose-starter-kit](https://github.com/redco/goose-starter-kit) for it.
