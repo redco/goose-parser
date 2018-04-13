@@ -10,7 +10,7 @@ Parser has support of pagination by extension [goose-paginator](https://github.c
 Also it offers you following features: *actions* to interact with the page and *transforms* to convert parsed data to friendly format.
 
 ## Goose Starter Kit
-Now it's easy to start with Goose, try to use [goose-starter-kit](https://github.com/redco/goose-starter-kit) for it.
+Now it's easy to start with Goose, just try to use [goose-starter-kit](https://github.com/redco/goose-starter-kit) for it.
 
 ## Key features
 * Declarative approach for definition of parsing rules, actions and transformations.
@@ -73,12 +73,13 @@ const parser = new Parser({ environment: env });
 })();
 ```
 
-## Environments
-This is a special atmosphere where Parser has to be executed. The main purpose of the environment is to provide a method for evaluating JS on the page.
+## Environment
+This is a special atmosphere where Parser has to be executed. The main purpose of an environment is to provide a method for evaluating JS on the page.
 Goose supports following environments:
 * [PhantomJS](https://github.com/redco/goose-phantom-environment) (executes in NodeJS)
 * [Chrome](https://github.com/redco/goose-chrome-environment) (executes in NodeJS)
 * [JSDom](https://github.com/redco/goose-jsdom-environment) (executes in NodeJS)
+* FireFox (coming soon)
 * [Browser](https://github.com/redco/goose-phantom-environment) (executes in Browser)
 
 ## Docker usage
