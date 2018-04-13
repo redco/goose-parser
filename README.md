@@ -111,3 +111,8 @@ Create a file `rules/rules.json` which contains parser rules and run following c
 ```bash
 docker run -it --rm --volume="`pwd`/rules:/app/rules:ro" -e "DEBUG=*" redcode/goose-parser:phantom-latest --rules-file="/app/rules/rules.json" 'https://www.google.com/search?q=goose-parser'
 ```
+
+## Documentation
+Based on the code you can find detailed documentation about [actions](https://github.com/redco/goose-parser/tree/master/lib/actions) and [transformations](https://github.com/redco/goose-parser/tree/master/lib/transforms)
+
+API reference - coming soon
