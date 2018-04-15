@@ -14,7 +14,8 @@ Now it's easy to start with Goose, just try to use [goose-starter-kit](https://g
 
 ## Key features
 * Declarative approach for definition of parsing rules, actions and transformations.
-* Multi environments to run parser on the browser, PhantomJS, Chrome, JsDom and more.
+* Multi environments to run parser on the browser, PhantomJS, Chrome, JsDOM and more.
+* Clear code with the latest features of ES6.
 * Clear and consistent API with promises all the way.
 * Improved [Sizzle](https://sizzlejs.com) format of selectors.
 * Ajax and multi-pages parsing modes.
