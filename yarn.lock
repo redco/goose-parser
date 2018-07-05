@@ -1150,7 +1150,7 @@ debug@^2.1.1, debug@^2.2.0, debug@^2.6.8:
   dependencies:
     ms "2.0.0"
 
-debug@^3.0.1:
+debug@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
   dependencies:
@@ -1464,19 +1464,19 @@ globals@^9.18.0:
   version "9.18.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.18.0.tgz#aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
 
-goose-abstract-environment@1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/goose-abstract-environment/-/goose-abstract-environment-1.0.11.tgz#e18470f6513281c51b65f027a0d10f722c713684"
+goose-abstract-environment@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/goose-abstract-environment/-/goose-abstract-environment-1.0.12.tgz#f1b04581d56438996df69b0a4cb59a8737c81e50"
   dependencies:
     babel-polyfill "^6.23.0"
-    debug "^3.0.1"
+    debug "^3.1.0"
 
-goose-paginator@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/goose-paginator/-/goose-paginator-1.0.0.tgz#c29455dc15364d0b49a76824174eebd9732a2a8f"
+goose-paginator@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/goose-paginator/-/goose-paginator-1.0.2.tgz#0e1ca884dc703d62576da90f69c9befd79dff650"
   dependencies:
     babel-polyfill "^6.23.0"
-    debug "^3.0.1"
+    debug "^3.1.0"
     promise-any "^0.2.0"
 
 graceful-fs@^4.1.2, graceful-fs@^4.1.4:

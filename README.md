@@ -102,7 +102,7 @@ There are two options to run it:
 ### Process parsing from the user input
 
 ```bash
-docker run -it --rm -e "DEBUG=*" redcode/goose-parser:phantom-latest 'https://www.google.com/search?q=goose-parser' '{"actions": [{"type": "wait", "scope": ".g"}], "rules": {"scope": ".g", "collection": [[{"scope": ".r>a", "name": "name"}]]}}'
+docker run -it --rm -e "DEBUG=*,-puppeteer:*" redcode/goose-parser:phantom-latest 'https://www.google.com/search?q=goose-parser' '{"actions": [{"type": "wait", "scope": ".g"}], "rules": {"scope": ".g", "collection": [[{"scope": ".r>a", "name": "name"}]]}}'
 ```
 
 ### Process parsing from the mounted file with parsing rules
@@ -110,7 +110,7 @@ docker run -it --rm -e "DEBUG=*" redcode/goose-parser:phantom-latest 'https://ww
 Create a file `rules/rules.json` which contains parser rules and run following command:
 
 ```bash
-docker run -it --rm --volume="`pwd`/rules:/app/rules:ro" -e "DEBUG=*" redcode/goose-parser:phantom-latest --rules-file="/app/rules/rules.json" 'https://www.google.com/search?q=goose-parser'
+docker run -it --rm --volume="`pwd`/rules:/app/rules:ro" -e "DEBUG=*,-puppeteer:*" redcode/goose-parser:phantom-latest --rules-file="/app/rules/rules.json" 'https://www.google.com/search?q=goose-parser'
 ```
 
 ## Documentation

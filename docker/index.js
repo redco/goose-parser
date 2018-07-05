@@ -88,16 +88,16 @@ function calcFinishStats(stats) {
     const parser = new Parser({
       environment: new Environment(getEnvOptions()),
     });
-    const results = await parser.parse(getRules());
+    const data = await parser.parse(getRules());
     if (verbose) {
       console.log('Work is done');
       console.log('Execution time: ' + ((new Date).getTime() - time));
       console.log('Results:');
-      console.log(util.inspect(results, { showHidden: false, depth: null }));
+      console.log(util.inspect(data, { showHidden: false, depth: null }));
     } else {
       console.log(JSON.stringify({
-        results,
-        stats: calcFinishStats(stats),
+        data,
+        stat: calcFinishStats(stats),
       }, null, '  '));
     }
   } catch (e) {
