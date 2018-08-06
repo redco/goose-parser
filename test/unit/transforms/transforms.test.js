@@ -1,20 +1,32 @@
 /* eslint-env jest */
 
-const TransformTrim = require('../../lib/transforms/TransformTrim');
-const TransformBase64Decode = require('../../lib/transforms/TransformBase64Decode');
-const TransformSplit = require('../../lib/transforms/TransformSplit');
+const TransformTrim = require('../../../lib/transforms/TransformTrim');
+const TransformBase64Decode = require('../../../lib/transforms/TransformBase64Decode');
+const TransformSplit = require('../../../lib/transforms/TransformSplit');
+const TransformCombine = require('../../../lib/transforms/TransformCombine');
+const TransformCompare = require('../../../lib/transforms/TransformCompare');
+const Storage = require('../../../lib/Storage');
+
+jest.mock('../../../lib/Storage');
 
 describe('Transforms', () => {
   let transform;
+  let storage;
+
+  beforeAll(async () => {
+    storage = new Storage({});
+  });
 
   describe('TransformTrim', () => {
-    test('perform', async () => {
+    test('perform with string', async () => {
       transform = new TransformTrim({
         value: '   test   ',
       });
 
       expect(transform.doTransform()).toEqual('test');
+    });
 
+    test('perform with non-string', async () => {
       transform = new TransformTrim({
         value: 12345,
       });
@@ -57,11 +69,11 @@ describe('Transforms', () => {
       transform = new TransformSplit({
         value: '123,345,678',
         options: {
-          index: 1,
+          index: 5,
         }
       });
 
-      expect(transform.doTransform()).toEqual('345');
+      expect(transform.doTransform()).toEqual(null);
     });
 
     test('perform with specified separator', async () => {
@@ -92,6 +104,131 @@ describe('Transforms', () => {
       });
 
       expect(transform.doTransform()).toEqual('');
+    });
+
+    test('perform with specified dataType', async () => {
+      transform = new TransformSplit({
+        value: '123,345,678',
+        options: {
+          dataType: 'array',
+        }
+      });
+
+      expect(transform.doTransform()).toEqual([
+        '123',
+        '345',
+        '678'
+      ]);
+    });
+  });
+
+  describe('TransformCombine', () => {
+    test('perform with default values', async () => {
+      transform = new TransformCombine({});
+
+      expect(transform.doTransform()).toEqual([]);
+    });
+
+    test('perform with data', async () => {
+      const data = {
+        'one': '1',
+        'two': '2',
+      };
+      storage.get.mockClear();
+      storage.get.mockImplementation((key) => data[key]);
+      transform = new TransformCombine({
+        options: {
+          fields: [
+            'one',
+            'two',
+          ],
+        },
+        storage,
+      });
+
+      expect(transform.doTransform()).toEqual(['1', '2']);
+
+      expect(storage.get).toHaveBeenCalledTimes(2);
+      expect(storage.get).toHaveBeenCalledWith('one');
+      expect(storage.get).toHaveBeenCalledWith('two');
+    });
+
+    const checkCombineWithDataType = (dataType, result) => {
+      const data = {
+        'one': '1',
+        'two': '2',
+      };
+      storage.get.mockClear();
+      storage.get.mockImplementation((key) => data[key]);
+      transform = new TransformCombine({
+        options: {
+          fields: [
+            'one',
+            'two',
+          ],
+          dataType,
+        },
+        storage,
+      });
+
+      expect(transform.doTransform()).toEqual(result);
+
+      expect(storage.get).toHaveBeenCalledTimes(2);
+      expect(storage.get).toHaveBeenCalledWith('one');
+      expect(storage.get).toHaveBeenCalledWith('two');
+    };
+
+    test('perform with data and data dataType=int.integer', async () => {
+      checkCombineWithDataType('int', [1, 2]);
+      checkCombineWithDataType('integer', [1, 2]);
+    });
+
+    test('perform with data and data dataType=float,number,double', async () => {
+      checkCombineWithDataType('float', [1.0, 2.0]);
+      checkCombineWithDataType('double', [1.0, 2.0]);
+      checkCombineWithDataType('number', [1.0, 2.0]);
+    });
+  });
+
+  describe('TransformCompare', () => {
+    test('perform with data returning true value', async () => {
+      const data = {
+        'one': '1',
+      };
+      storage.get.mockClear();
+      storage.get.mockImplementation((key) => data[key]);
+      transform = new TransformCompare({
+        options: {
+          field: 'one',
+        },
+        value: '1',
+        storage,
+      });
+
+      expect(transform.doTransform()).toEqual(true);
+
+      expect(storage.get).toHaveBeenCalledTimes(1);
+      expect(storage.get).toHaveBeenCalledWith('one');
+    });
+
+    test('perform with data returning false value', async () => {
+      const data = {
+        'one': '1',
+      };
+      storage.get.mockClear();
+      storage.get.mockImplementation((key) => data[key]);
+      transform = new TransformCompare({
+        options: {
+          field: 'two',
+        },
+        value: '1',
+        storage,
+      });
+
+      expect(transform.doTransform()).toEqual(false);
+
+      expect(storage.get).toHaveBeenCalledTimes(1);
+      expect(storage.get).toHaveBeenCalledWith('two');
     });
   });
 });
