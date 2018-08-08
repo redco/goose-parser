@@ -5,6 +5,7 @@ const TransformBase64Decode = require('../../../lib/transforms/TransformBase64De
 const TransformSplit = require('../../../lib/transforms/TransformSplit');
 const TransformCombine = require('../../../lib/transforms/TransformCombine');
 const TransformCompare = require('../../../lib/transforms/TransformCompare');
+const TransformDecodeHtml = require('../../../lib/transforms/TransformDecodeHtml');
 const Storage = require('../../../lib/Storage');
 
 jest.mock('../../../lib/Storage');
@@ -59,7 +60,7 @@ describe('Transforms', () => {
         value: '123,345,678',
         options: {
           index: 1,
-        }
+        },
       });
 
       expect(transform.doTransform()).toEqual('345');
@@ -70,7 +71,7 @@ describe('Transforms', () => {
         value: '123,345,678',
         options: {
           index: 5,
-        }
+        },
       });
 
       expect(transform.doTransform()).toEqual(null);
@@ -81,7 +82,7 @@ describe('Transforms', () => {
         value: '123:345:678',
         options: {
           separator: ':',
-        }
+        },
       });
 
       expect(transform.doTransform()).toEqual('123');
@@ -92,7 +93,7 @@ describe('Transforms', () => {
         value: '123:345:678',
         options: {
           separator: [':', 'ui'],
-        }
+        },
       });
 
       expect(transform.doTransform()).toEqual('123');
@@ -111,13 +112,13 @@ describe('Transforms', () => {
         value: '123,345,678',
         options: {
           dataType: 'array',
-        }
+        },
       });
 
       expect(transform.doTransform()).toEqual([
         '123',
         '345',
-        '678'
+        '678',
       ]);
     });
   });
@@ -229,6 +230,16 @@ describe('Transforms', () => {
 
       expect(storage.get).toHaveBeenCalledTimes(1);
       expect(storage.get).toHaveBeenCalledWith('two');
+    });
+  });
+
+  describe('TransformDecodeHtml', () => {
+    test('perform', async () => {
+      transform = new TransformDecodeHtml({
+        value: '&lt;&gt;&quot;&amp;&copy;&reg;',
+      });
+
+      expect(transform.doTransform()).toEqual('<>"&©®');
     });
   });
 });
