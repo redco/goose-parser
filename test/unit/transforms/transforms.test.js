@@ -9,6 +9,7 @@ const TransformDecodeHtml = require('../../../lib/transforms/TransformDecodeHtml
 const TransformDecodeUri = require('../../../lib/transforms/TransformDecodeUri');
 const TransformEncodeUri = require('../../../lib/transforms/TransformEncodeUri');
 const TransformEqual = require('../../../lib/transforms/TransformEqual');
+const TransformGet = require('../../../lib/transforms/TransformGet');
 const Storage = require('../../../lib/Storage');
 
 jest.mock('../../../lib/Storage');
@@ -287,6 +288,54 @@ describe('Transforms', () => {
       });
 
       expect(transform.doTransform()).toEqual(false);
+    });
+  });
+
+  describe('TransformGet', () => {
+    test('perform', async () => {
+      transform = new TransformGet({
+        value: {
+          one: {
+            two: 'three',
+          },
+        },
+        options: {
+          path: 'one.two',
+        },
+      });
+
+      expect(transform.doTransform()).toEqual('three');
+    });
+
+    test('perform wrong path without default', async () => {
+      transform = new TransformGet({
+        value: {
+          one: {
+            two: 'three',
+          },
+        },
+        options: {
+          path: 'one.three',
+        },
+      });
+
+      expect(transform.doTransform()).toEqual('');
+    });
+
+    test('perform wrong path with default', async () => {
+      transform = new TransformGet({
+        value: {
+          one: {
+            two: 'three',
+          },
+        },
+        options: {
+          path: 'one.three',
+          default: 'four',
+        },
+      });
+
+      expect(transform.doTransform()).toEqual('four');
     });
   });
 });
