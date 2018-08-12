@@ -10,6 +10,7 @@ const TransformDecodeUri = require('../../../lib/transforms/TransformDecodeUri')
 const TransformEncodeUri = require('../../../lib/transforms/TransformEncodeUri');
 const TransformEqual = require('../../../lib/transforms/TransformEqual');
 const TransformGet = require('../../../lib/transforms/TransformGet');
+const TransformJoin = require('../../../lib/transforms/TransformJoin');
 const Storage = require('../../../lib/Storage');
 
 jest.mock('../../../lib/Storage');
@@ -336,6 +337,35 @@ describe('Transforms', () => {
       });
 
       expect(transform.doTransform()).toEqual('four');
+    });
+  });
+
+  describe('TransformJoin', () => {
+    test('perform without glue', async () => {
+      transform = new TransformJoin({
+        value: ['one', 'two', 'three'],
+      });
+
+      expect(transform.doTransform()).toEqual('one two three');
+    });
+
+    test('perform with glue', async () => {
+      transform = new TransformJoin({
+        value: ['one', 'two', 'three'],
+        options: {
+          glue: ', ',
+        },
+      });
+
+      expect(transform.doTransform()).toEqual('one, two, three');
+    });
+
+    test('perform with wrong value', async () => {
+      transform = new TransformJoin({
+        value: 'one two',
+      });
+
+      expect(transform.doTransform()).toEqual('one two');
     });
   });
 });
