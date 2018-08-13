@@ -11,6 +11,7 @@ const TransformEncodeUri = require('../../../lib/transforms/TransformEncodeUri')
 const TransformEqual = require('../../../lib/transforms/TransformEqual');
 const TransformGet = require('../../../lib/transforms/TransformGet');
 const TransformJoin = require('../../../lib/transforms/TransformJoin');
+const TransformMatch = require('../../../lib/transforms/TransformMatch');
 const Storage = require('../../../lib/Storage');
 
 jest.mock('../../../lib/Storage');
@@ -366,6 +367,127 @@ describe('Transforms', () => {
       });
 
       expect(transform.doTransform()).toEqual('one two');
+    });
+  });
+
+  describe('TransformMatch', () => {
+    test('perform with default value', async () => {
+      transform = new TransformMatch({
+        value: 'one/two/three',
+        options: {
+          re: [
+            '^([^/]+)/([^/]+)/([^/]+)$',
+          ],
+        },
+      });
+
+      expect(transform.doTransform()).toEqual('one/two/three');
+    });
+
+    test('perform with specified index', async () => {
+      transform = new TransformMatch({
+        value: 'one/two/three',
+        options: {
+          re: [
+            '^([^/]+)/([^/]+)/([^/]+)$',
+          ],
+          index: 1,
+        },
+      });
+
+      expect(transform.doTransform()).toEqual('one');
+    });
+
+    test('perform with index=any returning true', async () => {
+      transform = new TransformMatch({
+        value: 'one/two/three',
+        options: {
+          re: [
+            '^([^/]+)/([^/]+)/([^/]+)$',
+          ],
+          index: 'any',
+        },
+      });
+
+      expect(transform.doTransform()).toEqual(true);
+    });
+
+    test('perform with index=any returning false', async () => {
+      transform = new TransformMatch({
+        value: 'one/two/three',
+        options: {
+          re: [
+            '^([^/]+)\\.([^/]+)\\.([^/]+)$',
+          ],
+          index: 'any',
+        },
+      });
+
+      expect(transform.doTransform()).toEqual(false);
+    });
+
+    test('perform with index=all', async () => {
+      transform = new TransformMatch({
+        value: 'one',
+        options: {
+          re: [
+            '(.+)',
+            'g'
+          ],
+          index: 'all',
+        },
+      });
+      expect(transform.doTransform()).toEqual(['one']);
+    });
+
+    test('perform returning no matches', async () => {
+      transform = new TransformMatch({
+        value: 'one',
+        options: {
+          re: [
+            'two',
+          ],
+        },
+      });
+      expect(transform.doTransform()).toEqual(null);
+    });
+
+    test('perform with wrong value', async () => {
+      transform = new TransformMatch({
+        value: ['one'],
+        options: {
+          re: [
+            'one',
+          ],
+        },
+      });
+      expect(transform.doTransform()).toEqual(null);
+    });
+
+    test('perform with wrong index', async () => {
+      transform = new TransformMatch({
+        value: 'one',
+        options: {
+          re: [
+            'one',
+          ],
+          index: 7,
+        },
+      });
+      expect(transform.doTransform()).toEqual(null);
+    });
+
+    test('perform with index as array', async () => {
+      transform = new TransformMatch({
+        value: 'one',
+        options: {
+          re: [
+            'one',
+          ],
+          index: [0, 7],
+        },
+      });
+      expect(transform.doTransform()).toEqual('one');
     });
   });
 });
