@@ -12,6 +12,7 @@ const TransformEqual = require('../../../lib/transforms/TransformEqual');
 const TransformGet = require('../../../lib/transforms/TransformGet');
 const TransformJoin = require('../../../lib/transforms/TransformJoin');
 const TransformMatch = require('../../../lib/transforms/TransformMatch');
+const TransformPick = require('../../../lib/transforms/TransformPick');
 const Storage = require('../../../lib/Storage');
 
 jest.mock('../../../lib/Storage');
@@ -488,6 +489,26 @@ describe('Transforms', () => {
         },
       });
       expect(transform.doTransform()).toEqual('one');
+    });
+  });
+
+  describe('TransformPick', () => {
+    test('perform', async () => {
+      transform = new TransformPick({
+        value: {
+          one: '1',
+          two: '2',
+          three: '3',
+        },
+        options: {
+          prop: ['one', 'three']
+        },
+      });
+
+      expect(transform.doTransform()).toEqual({
+        one: '1',
+        three: '3',
+      });
     });
   });
 });
