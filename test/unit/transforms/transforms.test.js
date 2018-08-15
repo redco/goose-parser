@@ -13,6 +13,7 @@ const TransformGet = require('../../../lib/transforms/TransformGet');
 const TransformJoin = require('../../../lib/transforms/TransformJoin');
 const TransformMatch = require('../../../lib/transforms/TransformMatch');
 const TransformPick = require('../../../lib/transforms/TransformPick');
+const TransformPluck = require('../../../lib/transforms/TransformPluck');
 const Storage = require('../../../lib/Storage');
 
 jest.mock('../../../lib/Storage');
@@ -509,6 +510,22 @@ describe('Transforms', () => {
         one: '1',
         three: '3',
       });
+    });
+  });
+
+  describe('TransformPluck', () => {
+    test('perform', async () => {
+      transform = new TransformPluck({
+        value: [
+          { 'user': 'barney', 'age': 36 },
+          { 'user': 'fred', 'age': 40 },
+        ],
+        options: {
+          path: 'user'
+        },
+      });
+
+      expect(transform.doTransform()).toEqual(['barney', 'fred']);
     });
   });
 });
