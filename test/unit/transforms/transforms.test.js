@@ -14,6 +14,7 @@ const TransformJoin = require('../../../lib/transforms/TransformJoin');
 const TransformMatch = require('../../../lib/transforms/TransformMatch');
 const TransformPick = require('../../../lib/transforms/TransformPick');
 const TransformPluck = require('../../../lib/transforms/TransformPluck');
+const TransformReplace = require('../../../lib/transforms/TransformReplace');
 const Storage = require('../../../lib/Storage');
 
 jest.mock('../../../lib/Storage');
@@ -526,6 +527,48 @@ describe('Transforms', () => {
       });
 
       expect(transform.doTransform()).toEqual(['barney', 'fred']);
+    });
+  });
+
+  describe('TransformReplace', () => {
+    test('perform with correct values', async () => {
+      transform = new TransformReplace({
+        value: 'one/two/three',
+        options: {
+          re: ['^([^/]+)/([^/]+)/([^/]+)$'],
+          to: '$1.four.$3'
+        },
+      });
+
+      expect(transform.doTransform()).toEqual('one.four.three');
+    });
+
+    test('perform with value as non string', async () => {
+      transform = new TransformReplace({
+        value: ['one/two/three'],
+        options: {
+          re: ['^([^/]+)/([^/]+)/([^/]+)$'],
+          to: '$1.four.$3'
+        },
+      });
+
+      expect(transform.doTransform()).toEqual('');
+    });
+
+    test('perform with incorrect `re`', async () => {
+      transform = new TransformReplace({
+        value: 'one/two/three',
+        options: {
+          re: '^([^/]+)/([^/]+)/([^/]+)$',
+          to: '$1.four.$3'
+        },
+      });
+
+      const fn = () => {
+        return transform.doTransform();
+      };
+
+      expect(fn).toThrowError(/^You must pass an array as `re` to `replace` transform$/);
     });
   });
 });
