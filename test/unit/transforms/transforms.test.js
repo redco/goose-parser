@@ -15,6 +15,7 @@ const TransformMatch = require('../../../lib/transforms/TransformMatch');
 const TransformPick = require('../../../lib/transforms/TransformPick');
 const TransformPluck = require('../../../lib/transforms/TransformPluck');
 const TransformReplace = require('../../../lib/transforms/TransformReplace');
+const TransformDate = require('../../../lib/transforms/TransformDate');
 const Storage = require('../../../lib/Storage');
 
 jest.mock('../../../lib/Storage');
@@ -569,6 +570,33 @@ describe('Transforms', () => {
       };
 
       expect(fn).toThrowError(/^You must pass an array as `re` to `replace` transform$/);
+    });
+  });
+
+  describe('TransformDate', () => {
+    test('perform with default locale', async () => {
+      transform = new TransformDate({
+        value: '01.12.2018',
+        options: {
+          from: 'DD.MM.YYYY',
+          to: 'MM-DD-YYYY',
+        },
+      });
+
+      expect(transform.doTransform()).toEqual('12-01-2018');
+    });
+
+    test('perform with locale=en', async () => {
+      transform = new TransformDate({
+        value: '01.12.2018',
+        options: {
+          from: 'DD.MM.YYYY',
+          to: 'MM-DD-YYYY',
+          locale: 'en',
+        },
+      });
+
+      expect(transform.doTransform()).toEqual('12-01-2018');
     });
   });
 });
