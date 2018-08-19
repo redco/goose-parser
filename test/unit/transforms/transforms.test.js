@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+const Storage = require('../../../lib/Storage');
 const TransformTrim = require('../../../lib/transforms/TransformTrim');
 const TransformBase64Decode = require('../../../lib/transforms/TransformBase64Decode');
 const TransformSplit = require('../../../lib/transforms/TransformSplit');
@@ -16,7 +17,6 @@ const TransformPick = require('../../../lib/transforms/TransformPick');
 const TransformPluck = require('../../../lib/transforms/TransformPluck');
 const TransformReplace = require('../../../lib/transforms/TransformReplace');
 const TransformDate = require('../../../lib/transforms/TransformDate');
-const Storage = require('../../../lib/Storage');
 
 jest.mock('../../../lib/Storage');
 
@@ -436,7 +436,7 @@ describe('Transforms', () => {
         options: {
           re: [
             '(.+)',
-            'g'
+            'g',
           ],
           index: 'all',
         },
@@ -504,7 +504,7 @@ describe('Transforms', () => {
           three: '3',
         },
         options: {
-          prop: ['one', 'three']
+          prop: ['one', 'three'],
         },
       });
 
@@ -523,7 +523,7 @@ describe('Transforms', () => {
           { 'user': 'fred', 'age': 40 },
         ],
         options: {
-          path: 'user'
+          path: 'user',
         },
       });
 
@@ -537,7 +537,7 @@ describe('Transforms', () => {
         value: 'one/two/three',
         options: {
           re: ['^([^/]+)/([^/]+)/([^/]+)$'],
-          to: '$1.four.$3'
+          to: '$1.four.$3',
         },
       });
 
@@ -549,7 +549,7 @@ describe('Transforms', () => {
         value: ['one/two/three'],
         options: {
           re: ['^([^/]+)/([^/]+)/([^/]+)$'],
-          to: '$1.four.$3'
+          to: '$1.four.$3',
         },
       });
 
@@ -561,7 +561,7 @@ describe('Transforms', () => {
         value: 'one/two/three',
         options: {
           re: '^([^/]+)/([^/]+)/([^/]+)$',
-          to: '$1.four.$3'
+          to: '$1.four.$3',
         },
       });
 
