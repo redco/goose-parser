@@ -48,7 +48,8 @@
     "test": "jest test --no-cache --runInBand",
     "build": "node build.js",
     "coverage": "jest --coverage",
-    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
+    "codecov": "jest --coverage && codecov"
   },
   "dependencies": {
     "debug": "^3.1.0",
@@ -63,6 +64,7 @@
     "promise-any": "^0.2.0"
   },
   "devDependencies": {
+    "codecov": "^3.1.0",
     "coveralls": "^2.11.4",
     "goose-abstract-environment": "^1.0.12",
     "goose-paginator": "^1.0.2",
