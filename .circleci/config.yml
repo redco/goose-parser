@@ -41,7 +41,7 @@ jobs:
           command: yarn test
        - run:
           name: Run test coverage
-          command: yarn coveralls
+          command: yarn codecov
 
 workflows:
   version: 2
