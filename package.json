@@ -64,7 +64,6 @@
   },
   "devDependencies": {
     "codecov": "^3.1.0",
-    "coveralls": "^2.11.4",
     "goose-abstract-environment": "^1.0.12",
     "goose-paginator": "^1.0.2",
     "rimraf": "^2.6.2",
