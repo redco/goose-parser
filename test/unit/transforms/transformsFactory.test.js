@@ -44,7 +44,6 @@ describe('transformsFactory', () => {
 
   test('createTransform should return CustomTransform', async () => {
     transformsFactory.addTransform('newType', (value) => {
-      console.log('payload', value);
       return (value || '').toUpperCase();
     });
     const transform = transformsFactory.createTransform({
