@@ -1,4 +1,5 @@
 const util = require('util');
+const fs = require('fs');
 const minimist = require('minimist');
 const Parser = require('goose-parser');
 const Environment = require('./environment');
@@ -16,6 +17,21 @@ const defaultEnvOptions = {
   },
   webSecurity: false,
 };
+
+/**
+ * @param {string} result
+ * @return {Promise<*>}
+ */
+async function writeResult(result) {
+  return new Promise((resolve, reject) => {
+    const stream = fs.createWriteStream('/tmp/goose-pipe', { flags: 'w', encoding: 'utf8' });
+    stream.on('open', () => {
+      stream.write(result);
+      resolve();
+    });
+    stream.on('error', (err) => reject(err));
+  });
+}
 
 function getRules() {
   let rules;
@@ -95,7 +111,7 @@ function calcFinishStats(stats) {
       console.log('Results:');
       console.log(util.inspect(data, { showHidden: false, depth: null }));
     } else {
-      console.log(JSON.stringify({
+      await writeResult(JSON.stringify({
         data,
         stat: calcFinishStats(stats),
       }, null, '  '));
@@ -105,13 +121,13 @@ function calcFinishStats(stats) {
       console.log('Error occurred:');
       console.log(e.message, e.stack);
     } else {
-      console.log(JSON.stringify({
+      await writeResult(JSON.stringify({
         error: {
           message: e.message,
           stack: e.stack,
         },
         stats: calcFinishStats(stats),
-      }));
+      }, null, '  '));
     }
   }
 })();
