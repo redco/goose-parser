@@ -8,6 +8,7 @@ MAINTAINER Andrew Reddikh <andrew@reddikh.com>
 
 COPY docker/index.js /usr/src/app
 COPY docker/build.js /usr/src/app
+COPY docker/entrypoint.sh /usr/src/app
 RUN node ./build.js && rm ./build.js
 RUN yarn install --production --no-progress
 
