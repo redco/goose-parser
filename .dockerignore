@@ -4,3 +4,4 @@
 !yarn.lock
 !docker/index.js
 !docker/build.js
+!docker/entrypoint.sh
