@@ -47,8 +47,8 @@
   "scripts": {
     "test": "jest test --no-cache --runInBand",
     "build": "node build.js",
-    "coverage": "jest --coverage",
-    "codecov": "jest --coverage && codecov"
+    "coverage": "jest --coverage && rm -rf ./coverage",
+    "codecov": "jest --coverage && codecov && rm -rf ./coverage"
   },
   "dependencies": {
     "debug": "^3.1.0",
