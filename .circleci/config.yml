@@ -1,56 +1,126 @@
 version: 2
 jobs:
-   checkout:
-     docker:
-       - image: circleci/node:8.11.1
-     steps:
-       - checkout
-       - persist_to_workspace:
-          root: .
-          paths:
-            - .
+  checkout:
+    docker:
+    - image: circleci/node:8.12.0
+    steps:
+    - checkout
+    - persist_to_workspace:
+        root: .
+        paths:
+        - .
 
-   build:
-     docker:
-       - image: circleci/node:8.11.1
-     steps:
-       - attach_workspace:
-          at: .
-       - restore_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
-       - run:
-          name: Install dependencies
-          command: yarn install && yarn build
-       - save_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
-          paths:
-            - ./node_modules
-       - persist_to_workspace:
-          root: .
-          paths:
-            - .
+  build:
+    docker:
+    - image: circleci/node:8.12.0
+    steps:
+    - attach_workspace:
+        at: .
+    - restore_cache:
+        key: dependency-cache-{{ checksum "yarn.lock" }}
+    - run:
+        name: Install dependencies
+        command: yarn install && yarn build
+    - save_cache:
+        key: dependency-cache-{{ checksum "yarn.lock" }}
+        paths:
+        - ./node_modules
+    - persist_to_workspace:
+        root: .
+        paths:
+        - .
 
-   test:
-     docker:
-       - image: circleci/node:8.11.1
-     steps:
-       - attach_workspace:
-          at: .
-       - run:
-          name: Run tests
-          command: yarn test
-       - run:
-          name: Run test coverage
-          command: yarn codecov
+  test:
+    docker:
+    - image: circleci/node:8.12.0
+    steps:
+    - attach_workspace:
+        at: .
+    - run:
+        name: Run tests
+        command: yarn test
+    - run:
+        name: Run test coverage
+        command: yarn codecov
+
+  publish:
+    docker:
+    - image: circleci/node:8.12.0
+    steps:
+    - attach_workspace:
+        at: .
+    - setup_remote_docker:
+        docker_layer_caching: true
+    - run:
+        name: Publish release notes when build from a tag
+        command: |
+          if [[ $CIRCLE_TAG ]]; then
+            yarn global add github-release-notes
+            $(yarn global bin)/gren release
+            $(yarn global bin)/gren changelog
+          fi
+    - run:
+        name: Release to npm
+        command: |
+          TAG_VERSION="$(echo $CIRCLE_TAG | cut -d 'v' -f 2)"
+          NPM_VERSION="$(npm show goose-parser version)"
+          echo "$TAG_VERSION == $NPM_VERSION"
+          if [ $TAG_VERSION == $NPM_VERSION ]; then
+            exit 0
+          fi
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ./.npmrc
+          npm publish ./build
+    - run:
+        name: Waiting for npm version to be ready
+        command: |
+          sleep 3
+          for i in `seq 1 60`;
+          do
+            TAG_VERSION="$(echo $CIRCLE_TAG | cut -d 'v' -f 2)"
+            NPM_VERSION="$(npm show goose-parser version)"
+            if [ $TAG_VERSION == $NPM_VERSION ]; then
+              exit 0
+            fi
+            echo -n .
+            sleep 1
+          done
+            echo "Failed waiting for npm version $TAG_VERSION != $NPM_VERSION" && exit 1
+    - run:
+        name: Build and push docker image
+        command: |
+          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+          ./docker/publish.sh
 
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - checkout
-      - build:
-          requires:
-            - checkout
-      - test:
-          requires:
-            - build
+    - checkout:
+      filters:
+        tags:
+          only:
+          - /v.*/
+    - build:
+        requires:
+        - checkout
+        filters:
+          tags:
+            only:
+            - /v.*/
+    - test:
+        requires:
+        - build
+        filters:
+          tags:
+            only:
+            - /v.*/
+    - publish:
+        requires:
+        - test
+        filters:
+          tags:
+            only:
+            - /v.*/
+          branches:
+            ignore:
+            - /.*/
