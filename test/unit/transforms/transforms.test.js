@@ -8,6 +8,7 @@ const TransformCompare = require('../../../lib/transforms/TransformCompare');
 const TransformDecodeHtml = require('../../../lib/transforms/TransformDecodeHtml');
 const TransformDecodeUri = require('../../../lib/transforms/TransformDecodeUri');
 const TransformEncodeUri = require('../../../lib/transforms/TransformEncodeUri');
+const TransformEqual = require('../../../lib/transforms/TransformEqual');
 const Storage = require('../../../lib/Storage');
 
 jest.mock('../../../lib/Storage');
@@ -262,6 +263,30 @@ describe('Transforms', () => {
       });
 
       expect(transform.doTransform()).toEqual('https://www.google.com/?q=goose-parser%20is%20a%20library%20for%20parsing');
+    });
+  });
+
+  describe('TransformEqual', () => {
+    test('perform with returning true', async () => {
+      transform = new TransformEqual({
+        value: 'one',
+        options: {
+          value: 'one',
+        },
+      });
+
+      expect(transform.doTransform()).toEqual(true);
+    });
+
+    test('perform returning false', async () => {
+      transform = new TransformEqual({
+        value: 'one',
+        options: {
+          value: 'two',
+        },
+      });
+
+      expect(transform.doTransform()).toEqual(false);
     });
   });
 });
