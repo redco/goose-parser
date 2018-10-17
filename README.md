@@ -1,6 +1,11 @@
 [![mr.Goose](https://i.imgur.com/e0CPF7C.png)](http://goose.show)
 
-# goose-parser [![Latest Stable Version](https://img.shields.io/npm/v/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser) [![Total Downloads](https://img.shields.io/npm/dt/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser)
+# goose-parser 
+
+[![CircleCI (all branches)](https://img.shields.io/circleci/project/github/redco/goose-parser.svg)](https://circleci.com/gh/redco/goose-parser)
+[![Codecov](https://img.shields.io/codecov/c/github/redco/goose-parser.svg)](https://codecov.io/gh/redco/goose-parser)
+[![Latest Stable Version](https://img.shields.io/npm/v/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser)
+[![Total Downloads](https://img.shields.io/npm/dt/goose-parser.svg?style=flat)](https://www.npmjs.com/package/goose-parser)
 
 This tool moves routine crawling process to the new level.
 Now it's possible to parse a web page for a moment. 
