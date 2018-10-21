@@ -98,10 +98,10 @@ workflows:
   build_and_test:
     jobs:
     - checkout:
-      filters:
-        tags:
-          only:
-          - /v.*/
+        filters:
+          tags:
+            only:
+            - /v.*/
     - build:
         requires:
         - checkout
