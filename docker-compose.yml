@@ -6,7 +6,6 @@ services:
       args:
         ENVIRONMENT: goose-chrome-environment
         ENVIRONMENT_VERSION: 1.0.17
-    entrypoint: /usr/src/app/entrypoint.sh
     command: https://www.google.com/search?q=goose-parser '{"actions":[{"type":"wait","scope":".g"}],"rules":{"scope":".g","collection":[[{"scope":".r>a h3","name":"name"},{"scope":".r>a:eq(0)","name":"link","attr":"href"}]]}}'
     environment:
       - DEBUG=*,-puppeteer:*
