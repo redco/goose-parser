@@ -12,4 +12,4 @@ COPY docker/entrypoint.sh /usr/src/app
 RUN node ./build.js && rm ./build.js
 RUN yarn install --production --no-progress
 
-ENTRYPOINT ["node", "index.js"]
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
