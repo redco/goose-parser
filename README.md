@@ -107,7 +107,32 @@ There are two options to run it:
 ### Process parsing from the user input
 
 ```bash
-docker run -it --rm -e "DEBUG=*,-puppeteer:*" redcode/goose-parser:phantom-latest 'https://www.google.com/search?q=goose-parser' '{"actions": [{"type": "wait", "scope": ".g"}], "rules": {"scope": ".g", "collection": [[{"scope": ".r>a", "name": "name"}]]}}'
+docker run -it --rm -e "DEBUG=*,-puppeteer:*" redcode/goose-parser:chrome-1.0.17-parser-0.5.2\
+    https://www.google.com/search?q=goose-parser\
+    '{
+      "actions": [
+        {
+          "type": "wait",
+          "scope": ".g"
+        }
+      ],
+      "rules": {
+        "scope": ".g",
+        "collection": [
+          [
+            {
+              "scope": ".r>a h3",
+              "name": "name"
+            },
+            {
+              "scope": ".r>a:eq(0)",
+              "name": "link",
+              "attr": "href"
+            }
+          ]
+        ]
+      }
+    }'
 ```
 
 ### Process parsing from the mounted file with parsing rules
