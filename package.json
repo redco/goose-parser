@@ -45,7 +45,7 @@
     "url": "https://github.com/redco/goose-parser/issues"
   },
   "scripts": {
-    "test": "jest test --no-cache --runInBand",
+    "test": "jest test --no-cache --runInBand --detectOpenHandles",
     "build": "node build.js",
     "coverage": "jest --coverage && rm -rf ./coverage",
     "codecov": "jest --coverage && codecov && rm -rf ./coverage"
