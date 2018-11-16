@@ -47,11 +47,10 @@ async function createTestServer() {
       `);
     });
 
-    server.listen(port, () => resolve());
-
-    return () => {
-      close = async () => new Promise(resolve => server.close(() => resolve()))
+    const finalizer = {
+      close: async () => new Promise(res => server.close(() => res())),
     };
+    server.listen(port, () => resolve(finalizer));
   });
 }
 
