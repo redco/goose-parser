@@ -4,8 +4,7 @@ const { createTestServer, setServerResponse, url } = require('../../tools');
 const Parser = require('../../../lib/Parser');
 const ChromeEnvironment = require('goose-chrome-environment');
 
-jest.mock('../../../lib/Storage');
-
+jest.setTimeout(20000);
 describe('Actions', () => {
   let testServer;
   let parser;
@@ -299,13 +298,14 @@ describe('Actions', () => {
   });
 
   describe('ActionClickWithWaitForVisible', () => {
-    test('perform', async () => {
+    test('wait visible', async () => {
       setServerResponse({
         html: `<a href="#">test</a>`,
         fn: () => {
-          // the phone number appears after some time in the link
           document.querySelector('a').addEventListener('click', ({ target }) => {
-            document.body.insertAdjacentHTML('beforeend', '<div>12345</div>');
+            setTimeout(function () {
+              document.body.insertAdjacentHTML('beforeend', '<div>12345</div>');
+            }, 500);
           });
         }
       });
@@ -317,7 +317,7 @@ describe('Actions', () => {
             scope: 'a',
             waitFor: {
               type: 'visible',
-              visibility: true,
+              scope: 'div',
             },
           },
         ],
@@ -327,6 +327,38 @@ describe('Actions', () => {
       });
 
       expect(result).toEqual('12345');
+    });
+
+    test('wait invisible', async () => {
+      setServerResponse({
+        html: `<a href="#">test</a><div>12345</div>`,
+        fn: () => {
+          document.querySelector('a').addEventListener('click', ({ target }) => {
+            setTimeout(function () {
+              document.querySelector('div').remove();
+            }, 500);
+          });
+        }
+      });
+      const result = await parser.parse({
+        url,
+        actions: [
+          {
+            type: 'click',
+            scope: 'a',
+            waitFor: {
+              type: 'visible',
+              scope: 'div',
+              visibility: false,
+            },
+          },
+        ],
+        rules: {
+          scope: 'div',
+        },
+      });
+
+      expect(result).toEqual('');
     });
   });
 
