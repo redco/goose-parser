@@ -362,6 +362,39 @@ describe('Actions', () => {
     });
   });
 
+  describe('ActionWaitForElement', () => {
+    test('perform', async () => {
+      setServerResponse({
+        html: `<a href="#">test</a>`,
+        fn: () => {
+          document.querySelector('a').addEventListener('click', ({ target }) => {
+            setTimeout(function () {
+              document.body.insertAdjacentHTML('beforeend', '<div>12345</div>');
+            }, 500);
+          });
+        }
+      });
+      const result = await parser.parse({
+        url,
+        actions: [
+          {
+            type: 'click',
+            scope: 'a',
+            waitFor: {
+              type: 'element',
+              scope: 'div',
+            },
+          },
+        ],
+        rules: {
+          scope: 'div',
+        },
+      });
+
+      expect(result).toEqual('12345');
+    });
+  });
+
   describe('ActionClickWithWaitForQuery', () => {
     test('perform', async () => {
       setServerResponse({
