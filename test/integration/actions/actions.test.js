@@ -427,4 +427,74 @@ describe('Actions', () => {
       expect(result).toEqual('12345');
     });
   });
+
+  describe('ActionChangeElement', () => {
+    test('change style, attr', async () => {
+      setServerResponse({
+        html: `<img src="12345" />`,
+      });
+      const result = await parser.parse({
+        url,
+        actions: [
+          {
+            type: 'changeElement',
+            scope: 'img',
+            style: {
+              display: 'none',
+            },
+            attr: {
+              alt: 'test',
+            },
+          },
+        ],
+        rules: {
+          collection: [
+            {
+              name: 'alt',
+              scope: 'img',
+              attr: 'alt',
+            },
+            {
+              name: 'style',
+              scope: 'img',
+              attr: 'style',
+            },
+          ],
+        },
+      });
+
+      expect(result).toEqual({ alt: 'test', style: 'display: none;' });
+    });
+
+    test('change nothing', async () => {
+      setServerResponse({
+        html: `<img src="12345" />`,
+      });
+      const result = await parser.parse({
+        url,
+        actions: [
+          {
+            type: 'changeElement',
+            scope: 'img',
+          },
+        ],
+        rules: {
+          collection: [
+            {
+              name: 'alt',
+              scope: 'img',
+              attr: 'alt',
+            },
+            {
+              name: 'style',
+              scope: 'img',
+              attr: 'style',
+            },
+          ],
+        },
+      });
+
+      expect(result).toEqual({ alt: null, style: null });
+    });
+  });
 });
