@@ -497,4 +497,56 @@ describe('Actions', () => {
       expect(result).toEqual({ alt: null, style: null });
     });
   });
+
+  describe('ActionType', () => {
+    test('typing provided text', async () => {
+      setServerResponse({
+        html: `<input type="text" />`,
+      });
+      const result = await parser.parse({
+        url,
+        actions: [
+          {
+            type: 'type',
+            scope: 'input',
+            text: 'test',
+          },
+        ],
+        rules: {
+          scope: 'input',
+          prop: 'value'
+        },
+      });
+
+      expect(result).toEqual('test');
+    });
+
+    test('typing value from prev action', async () => {
+      setServerResponse({
+        html: `<span>test</span><input type="text" />`,
+      });
+      const result = await parser.parse({
+        url,
+        actions: [
+          {
+            type: 'parse',
+            rules: {
+              scope: 'span',
+            },
+          },
+          {
+            type: 'type',
+            scope: 'input',
+            useActionsResult: true,
+          },
+        ],
+        rules: {
+          scope: 'input',
+          prop: 'value'
+        },
+      });
+
+      expect(result).toEqual('test');
+    });
+  });
 });
