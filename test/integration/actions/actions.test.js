@@ -576,4 +576,31 @@ describe('Actions', () => {
       expect(result).toEqual('');
     });
   });
+
+  describe('ActionUrl', () => {
+    test('typing value from prev action', async () => {
+      setServerResponse({
+        html: `<span>test</span><input type="text" />`,
+      });
+      const result = await parser.parse({
+        url,
+        actions: [
+          {
+            type: 'url',
+          },
+          {
+            type: 'type',
+            scope: 'input',
+            useActionsResult: true,
+          },
+        ],
+        rules: {
+          scope: 'input',
+          prop: 'value'
+        },
+      });
+
+      expect(result).toEqual(url);
+    });
+  });
 });

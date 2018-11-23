@@ -76,5 +76,5 @@ function setServerResponse(response) {
 module.exports = {
   setServerResponse,
   createTestServer,
-  url: `http://localhost:${port}`,
+  url: `http://localhost:${port}/`,
 };
