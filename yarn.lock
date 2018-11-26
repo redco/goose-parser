@@ -1329,9 +1329,9 @@ goose-abstract-environment@^1.0.12:
     babel-polyfill "^6.23.0"
     debug "^3.1.0"
 
-goose-chrome-environment@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/goose-chrome-environment/-/goose-chrome-environment-1.1.1.tgz#115c892002dc0e59afb24421d603c9e64290f5b5"
+goose-chrome-environment@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/goose-chrome-environment/-/goose-chrome-environment-1.1.2.tgz#b06f6aff57a29cea7aa1589670785105a32cf39c"
   dependencies:
     babel-polyfill "^6.23.0"
     debug "^3.1.0"

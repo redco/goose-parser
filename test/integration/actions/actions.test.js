@@ -1,8 +1,8 @@
 /* eslint-env jest */
 
-const { createTestServer, setServerResponse, url } = require('../../tools');
-const Parser = require('../../../lib/Parser');
 const ChromeEnvironment = require('goose-chrome-environment');
+const { fileExists, removeFile, createTestServer, setServerResponse, url } = require('../../tools');
+const Parser = require('../../../lib/Parser');
 
 jest.setTimeout(20000);
 describe('Actions', () => {
@@ -12,7 +12,9 @@ describe('Actions', () => {
   beforeAll(async () => {
     testServer = await createTestServer();
     parser = new Parser({
-      environment: new ChromeEnvironment({}),
+      environment: new ChromeEnvironment({
+        snapshot: true,
+      }),
       mode: 'multiple',
     });
   });
@@ -551,7 +553,7 @@ describe('Actions', () => {
   });
 
   describe('ActionParse', () => {
-    test('typing value from prev action', async () => {
+    test('parse nothing', async () => {
       setServerResponse({
         html: `<span>test</span><input type="text" />`,
       });
@@ -578,7 +580,7 @@ describe('Actions', () => {
   });
 
   describe('ActionUrl', () => {
-    test('typing value from prev action', async () => {
+    test('fetching page url', async () => {
       setServerResponse({
         html: `<span>test</span><input type="text" />`,
       });
@@ -601,6 +603,28 @@ describe('Actions', () => {
       });
 
       expect(result).toEqual(url);
+    });
+  });
+
+  describe('ActionSnapshot', () => {
+    test('making page snapshot', async () => {
+      setServerResponse({
+        html: `<span>test</span><input type="text" />`,
+      });
+      await parser.parse({
+        url,
+        actions: [
+          {
+            type: 'snapshot',
+            name: 'test',
+          },
+        ],
+      });
+
+      const filePath = './snapshots/localhost/test.png';
+      const snapshotExists = await fileExists(filePath);
+      expect(snapshotExists).toEqual(true);
+      await removeFile(filePath);
     });
   });
 });

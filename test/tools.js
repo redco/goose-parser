@@ -1,4 +1,5 @@
 const http = require('http');
+const fs = require('fs');
 
 const port = 60053;
 let responseRoutes = [];
@@ -73,7 +74,34 @@ function setServerResponse(response) {
   }
 }
 
+function fileExists(path) {
+  return new Promise(resolve => {
+    fs.access(path, fs.F_OK, (err) => {
+      if (err) {
+        resolve(false);
+        return;
+      }
+
+      resolve(true);
+    });
+  });
+}
+
+function removeFile(path) {
+  return new Promise((resolve, reject) => {
+    fs.unlink(path, (err) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve();
+    });
+  });
+}
+
 module.exports = {
+  fileExists,
+  removeFile,
   setServerResponse,
   createTestServer,
   url: `http://localhost:${port}/`,
