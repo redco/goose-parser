@@ -4,7 +4,7 @@ const ChromeEnvironment = require('goose-chrome-environment');
 const { fileExists, removeFile, createTestServer, setServerResponse, url } = require('../../tools');
 const Parser = require('../../../lib/Parser');
 
-jest.setTimeout(20000);
+jest.setTimeout(30000);
 describe('Actions', () => {
   let testServer;
   let parser;
@@ -609,7 +609,7 @@ describe('Actions', () => {
   describe('ActionSnapshot', () => {
     test('making page snapshot', async () => {
       setServerResponse({
-        html: `<span>test</span><input type="text" />`,
+        html: `<span>snapshot</span>`,
       });
       await parser.parse({
         url,
