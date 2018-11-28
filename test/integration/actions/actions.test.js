@@ -7,21 +7,13 @@ const Parser = require('../../../lib/Parser');
 jest.setTimeout(30000);
 describe('Actions', () => {
   let testServer;
-  let parser;
 
   beforeAll(async () => {
     testServer = await createTestServer();
-    parser = new Parser({
-      environment: new ChromeEnvironment({
-        snapshot: true,
-      }),
-      mode: 'multiple',
-    });
   });
 
   afterAll(async () => {
     await testServer.close();
-    await parser.finish();
   });
 
   describe('ActionBlur', () => {
@@ -36,8 +28,10 @@ describe('Actions', () => {
           });
         },
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'focus',
@@ -74,8 +68,10 @@ describe('Actions', () => {
           });
         },
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'click',
@@ -108,8 +104,10 @@ describe('Actions', () => {
           });
         },
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'mouseClick',
@@ -142,8 +140,10 @@ describe('Actions', () => {
           });
         },
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'mouseDown',
@@ -151,7 +151,7 @@ describe('Actions', () => {
           },
           {
             type: 'pause',
-            timeout: 50,
+            timeout: 500,
           },
         ],
         rules: {
@@ -176,8 +176,10 @@ describe('Actions', () => {
           });
         },
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'mouseUp',
@@ -210,8 +212,10 @@ describe('Actions', () => {
           });
         },
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'focus',
@@ -244,8 +248,10 @@ describe('Actions', () => {
           html: `<a href="/">1</a>`
         }
       ]);
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'click',
@@ -275,8 +281,10 @@ describe('Actions', () => {
             });
           }
         });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'click',
@@ -311,8 +319,10 @@ describe('Actions', () => {
           });
         }
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'click',
@@ -342,8 +352,10 @@ describe('Actions', () => {
           });
         }
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'click',
@@ -376,8 +388,10 @@ describe('Actions', () => {
           });
         }
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'click',
@@ -408,8 +422,10 @@ describe('Actions', () => {
           });
         }
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'click',
@@ -435,8 +451,10 @@ describe('Actions', () => {
       setServerResponse({
         html: `<img src="12345" />`,
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'changeElement',
@@ -472,8 +490,10 @@ describe('Actions', () => {
       setServerResponse({
         html: `<img src="12345" />`,
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'changeElement',
@@ -505,8 +525,10 @@ describe('Actions', () => {
       setServerResponse({
         html: `<input type="text" />`,
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'type',
@@ -527,8 +549,10 @@ describe('Actions', () => {
       setServerResponse({
         html: `<span>test</span><input type="text" />`,
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'parse',
@@ -557,8 +581,10 @@ describe('Actions', () => {
       setServerResponse({
         html: `<span>test</span><input type="text" />`,
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'parse',
@@ -584,8 +610,10 @@ describe('Actions', () => {
       setServerResponse({
         html: `<span>test</span><input type="text" />`,
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
       const result = await parser.parse({
-        url,
         actions: [
           {
             type: 'url',
@@ -611,8 +639,10 @@ describe('Actions', () => {
       setServerResponse({
         html: `<span>snapshot</span>`,
       });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url, /*snapshot: true*/ }),
+      });
       await parser.parse({
-        url,
         actions: [
           {
             type: 'snapshot',

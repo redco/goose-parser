@@ -45,7 +45,7 @@
     "url": "https://github.com/redco/goose-parser/issues"
   },
   "scripts": {
-    "test": "jest test --no-cache --runInBand --detectOpenHandles",
+    "test": "jest test --no-cache --runInBand --detectOpenHandles --maxConcurrency=1",
     "build": "node build.js",
     "coverage": "jest --coverage && rm -rf ./coverage",
     "codecov": "jest --coverage && codecov && rm -rf ./coverage"
@@ -66,7 +66,7 @@
     "goose-abstract-environment": "^1.0.12",
     "goose-chrome-environment": "^1.1.2",
     "goose-paginator": "^1.0.2",
-    "jest": "^23.6.0",
+    "jest": "^24.1.0",
     "rimraf": "^2.6.2",
     "webpack": "^1.12.2"
   },
