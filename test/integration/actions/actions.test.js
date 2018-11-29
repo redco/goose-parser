@@ -133,8 +133,9 @@ describe('Actions', () => {
       setServerResponse({
         html: `<input type="text" value="0" />`,
         fn: () => {
-          document.querySelector('[type="text"]').addEventListener('mousedown', ({ target }) => {
+          window.addEventListener('mousedown', () => {
             const value = '1';
+            const target = document.querySelector('[type="text"]');
             target.value = value;
             target.setAttribute('value', value);
           });
@@ -169,8 +170,9 @@ describe('Actions', () => {
       setServerResponse({
         html: `<input type="text" value="0" />`,
         fn: () => {
-          document.querySelector('[type="text"]').addEventListener('mouseup', ({ target }) => {
+          window.addEventListener('mousedown', () => {
             const value = '1';
+            const target = document.querySelector('[type="text"]');
             target.value = value;
             target.setAttribute('value', value);
           });
@@ -181,6 +183,10 @@ describe('Actions', () => {
       });
       const result = await parser.parse({
         actions: [
+          {
+            type: 'mouseDown',
+            scope: '[type="text"]',
+          },
           {
             type: 'mouseUp',
             scope: '[type="text"]',
@@ -640,7 +646,7 @@ describe('Actions', () => {
         html: `<span>snapshot</span>`,
       });
       const parser = new Parser({
-        environment: new ChromeEnvironment({ url, /*snapshot: true*/ }),
+        environment: new ChromeEnvironment({ url, snapshot: true }),
       });
       await parser.parse({
         actions: [
