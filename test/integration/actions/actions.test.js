@@ -646,7 +646,7 @@ describe('Actions', () => {
         html: `<span>snapshot</span>`,
       });
       const parser = new Parser({
-        environment: new ChromeEnvironment({ url, snapshot: true }),
+        environment: new ChromeEnvironment({ url, snapshot: true, snapshotDir: '/tmp' }),
       });
       await parser.parse({
         actions: [
@@ -657,7 +657,7 @@ describe('Actions', () => {
         ],
       });
 
-      const filePath = './snapshots/localhost/test.png';
+      const filePath = '/tmp/localhost/test.png';
       const snapshotExists = await fileExists(filePath);
       expect(snapshotExists).toEqual(true);
       await removeFile(filePath);
