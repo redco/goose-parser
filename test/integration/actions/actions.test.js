@@ -640,27 +640,53 @@ describe('Actions', () => {
     });
   });
 
-  describe('ActionSnapshot', () => {
-    test('making page snapshot', async () => {
+  describe('ActionProvideRules', () => {
+    test('perform', async () => {
       setServerResponse({
-        html: `<span>snapshot</span>`,
+        html: `<span>test</span><input type="text" />`,
       });
       const parser = new Parser({
-        environment: new ChromeEnvironment({ url, snapshot: true, snapshotDir: '/tmp' }),
+        environment: new ChromeEnvironment({ url }),
       });
-      await parser.parse({
-        actions: [
-          {
-            type: 'snapshot',
-            name: 'test',
-          },
-        ],
+      const result = await parser.parse({
+        rules: {
+          actions: [
+            {
+              type: 'provideRules',
+              rules: {
+                scope: 'span',
+              }
+            },
+          ],
+          rulesFromActions: true,
+        },
       });
 
-      const filePath = '/tmp/localhost/test.png';
-      const snapshotExists = await fileExists(filePath);
-      expect(snapshotExists).toEqual(true);
-      await removeFile(filePath);
+      expect(result).toEqual('test');
     });
   });
+
+  // describe('ActionSnapshot', () => {
+  //   test('making page snapshot', async () => {
+  //     setServerResponse({
+  //       html: `<span>snapshot</span>`,
+  //     });
+  //     const parser = new Parser({
+  //       environment: new ChromeEnvironment({ url, snapshot: true, snapshotDir: '/tmp' }),
+  //     });
+  //     await parser.parse({
+  //       actions: [
+  //         {
+  //           type: 'snapshot',
+  //           name: 'test',
+  //         },
+  //       ],
+  //     });
+  //
+  //     const filePath = '/tmp/localhost/test.png';
+  //     const snapshotExists = await fileExists(filePath);
+  //     expect(snapshotExists).toEqual(true);
+  //     await removeFile(filePath);
+  //   });
+  // });
 });
