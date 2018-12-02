@@ -666,6 +666,43 @@ describe('Actions', () => {
     });
   });
 
+  describe('ActionExist', () => {
+    test('perform', async () => {
+      setServerResponse({
+        html: `<a href="#">test</a>`
+      });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        rules: {
+          actions: [
+            {
+              type: 'condition',
+              if: [
+                {
+                  type: 'exists',
+                  scope: 'a',
+                }
+              ],
+              then: [
+                {
+                  type: 'provideRules',
+                  rules: {
+                    scope: 'a',
+                  },
+                }
+              ],
+            },
+          ],
+          rulesFromActions: true,
+        },
+      });
+
+      expect(result).toEqual('test');
+    });
+  });
+
   // describe('ActionSnapshot', () => {
   //   test('making page snapshot', async () => {
   //     setServerResponse({
