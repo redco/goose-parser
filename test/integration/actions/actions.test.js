@@ -664,6 +664,27 @@ describe('Actions', () => {
 
       expect(result).toEqual('test');
     });
+
+    test('perform with no rules', async () => {
+      setServerResponse({
+        html: `<span>test</span><input type="text" />`,
+      });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        rules: {
+          actions: [
+            {
+              type: 'provideRules',
+            },
+          ],
+          rulesFromActions: true,
+        },
+      });
+
+      expect(result).toEqual('');
+    });
   });
 
   describe('ActionExist', () => {
@@ -700,6 +721,106 @@ describe('Actions', () => {
       });
 
       expect(result).toEqual('test');
+    });
+
+    test('perform exist child', async () => {
+      setServerResponse({
+        html: `<span>global<a href="#">test</a></span>`
+      });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        rules: {
+          actions: [
+            {
+              type: 'condition',
+              if: [
+                {
+                  type: 'exists',
+                  scope: 'span',
+                  child: 1,
+                }
+              ],
+              then: [
+                {
+                  type: 'provideRules',
+                  rules: {
+                    scope: 'span',
+                    child: 1,
+                  },
+                }
+              ],
+            },
+          ],
+          rulesFromActions: true,
+        },
+      });
+
+      expect(result).toEqual('test');
+    });
+  });
+
+  describe('ActionCondition', () => {
+    test('perform', async () => {
+      setServerResponse({
+        html: `<a href="#">test</a>`
+      });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        rules: {
+          actions: [
+            {
+              type: 'condition',
+              if: [
+                {
+                  type: 'exists',
+                  scope: 'span',
+                }
+              ],
+              then: [
+                {
+                  type: 'provideRules',
+                  rules: {
+                    scope: 'span',
+                  },
+                }
+              ],
+              else: [
+                {
+                  type: 'provideRules',
+                  rules: {
+                    scope: 'a',
+                  },
+                }
+              ],
+            },
+          ],
+          rulesFromActions: true,
+        },
+      });
+
+      expect(result).toEqual('test');
+    });
+
+    test('perform', async () => {
+      setServerResponse({
+        html: `<a href="#">test</a>`
+      });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        actions: [
+          {
+            type: 'condition',
+          },
+        ],
+      });
+
+      expect(result).toEqual('');
     });
   });
 
