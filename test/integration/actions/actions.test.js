@@ -824,6 +824,56 @@ describe('Actions', () => {
     });
   });
 
+  describe('ActionHasRedirect', () => {
+    test('perform', async () => {
+      setServerResponse([
+        {
+          html: ``,
+          headers: [
+            {
+              name: "Location",
+              value: `${url}test`,
+            }
+          ],
+          code: 302,
+          route: '/'
+        },
+        {
+          route: '/test',
+          html: `<span>test</span>`,
+        }
+      ]);
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        rules: {
+          actions: [
+            {
+              type: 'condition',
+              if: [
+                {
+                  type: "hasRedirect"
+                }
+              ],
+              then: [
+                {
+                  type: 'provideRules',
+                  rules: {
+                    scope: 'span',
+                  },
+                }
+              ],
+            },
+          ],
+          rulesFromActions: true,
+        },
+      });
+
+      expect(result).toEqual('test');
+    });
+  });
+
   // describe('ActionSnapshot', () => {
   //   test('making page snapshot', async () => {
   //     setServerResponse({
