@@ -824,6 +824,138 @@ describe('Actions', () => {
     });
   });
 
+  describe('ActionOr', () => {
+    test('perform', async () => {
+      setServerResponse({
+        html: `<a href="#">test</a>`
+      });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        rules: {
+          actions: [
+            {
+              type: 'condition',
+              if: [
+                {
+                  type: 'or',
+                  actions: [
+                    {
+                      type: 'exists',
+                      scope: 'span',
+                    },
+                    {
+                      type: 'exists',
+                      scope: 'a',
+                    }
+                  ]
+                }
+              ],
+              then: [
+                {
+                  type: 'provideRules',
+                  rules: {
+                    scope: 'a',
+                  },
+                }
+              ],
+            },
+          ],
+          rulesFromActions: true,
+        },
+      });
+
+      expect(result).toEqual('test');
+    });
+
+    test('perform', async () => {
+      setServerResponse({
+        html: `<a href="#">test</a>`
+      });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        rules: {
+          actions: [
+            {
+              type: 'condition',
+              if: [
+                {
+                  type: 'or',
+                  actions: [
+                    {
+                      type: 'exists',
+                      scope: 'a',
+                    },
+                    {
+                      type: 'exists',
+                      scope: 'span',
+                    },
+                  ]
+                }
+              ],
+              then: [
+                {
+                  type: 'provideRules',
+                  rules: {
+                    scope: 'a',
+                  },
+                }
+              ],
+            },
+          ],
+          rulesFromActions: true,
+        },
+      });
+
+      expect(result).toEqual('test');
+    });
+
+    test('perform without or values', async () => {
+      setServerResponse({
+        html: `<a href="#">test</a>`
+      });
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        rules: {
+          actions: [
+            {
+              type: 'condition',
+              if: [
+                {
+                  type: 'or',
+                }
+              ],
+              then: [
+                {
+                  type: 'provideRules',
+                  rules: {
+                    scope: 'span',
+                  },
+                }
+              ],
+              else: [
+                {
+                  type: 'provideRules',
+                  rules: {
+                    scope: 'a',
+                  },
+                }
+              ],
+            },
+          ],
+          rulesFromActions: true,
+        },
+      });
+
+      expect(result).toEqual('test');
+    });
+  });
+
   describe('ActionHasRedirect', () => {
     test('perform', async () => {
       setServerResponse([
