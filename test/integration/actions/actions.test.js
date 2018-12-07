@@ -1082,6 +1082,41 @@ describe('Actions', () => {
     });
   });
 
+  describe('ActionBack', () => {
+    test('perform', async () => {
+      setServerResponse([
+        {
+          route: '/',
+          html: `<a href="/test">test</a>`
+        },
+        {
+          route: '/test',
+          html: `<a href="#">nothing</a>`,
+        }
+      ]);
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        actions: [
+          {
+            type: 'click',
+            scope: 'a',
+            waitFor: 'page',
+          },
+          {
+            type: 'back',
+          },
+        ],
+        rules: {
+          scope: 'a'
+        },
+      });
+
+      expect(result).toEqual('test');
+    });
+  });
+
   // describe('ActionSnapshot', () => {
   //   test('making page snapshot', async () => {
   //     setServerResponse({
