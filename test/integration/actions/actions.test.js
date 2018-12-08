@@ -1117,6 +1117,37 @@ describe('Actions', () => {
     });
   });
 
+  describe('ActionOpen', () => {
+    test('perform', async () => {
+      setServerResponse([
+        {
+          route: '/',
+          html: `<a href="/test">test</a>`
+        },
+        {
+          route: '/test',
+          html: `<a href="#">nothing</a>`,
+        }
+      ]);
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        actions: [
+          {
+            type: 'open',
+            url: `${url}test`,
+          },
+        ],
+        rules: {
+          scope: 'a'
+        },
+      });
+
+      expect(result).toEqual('nothing');
+    });
+  });
+
   // describe('ActionSnapshot', () => {
   //   test('making page snapshot', async () => {
   //     setServerResponse({
