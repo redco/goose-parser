@@ -6,9 +6,10 @@ services:
       args:
         ENVIRONMENT: goose-chrome-environment
         ENVIRONMENT_VERSION: 1.0.17
-    command: https://www.google.com/search?q=goose-parser '{"actions":[{"type":"wait","scope":".g"}],"rules":{"scope":".g","collection":[[{"scope":".r>a h3","name":"name"},{"scope":".r>a:eq(0)","name":"link","attr":"href"}]]}}'
-    environment:
-      - DEBUG=*,-puppeteer:*
+    command: https://www.google.com/search?q=goose-parser '{"actions":[{"type":"wait","scope":".gsdfdsf"}],"rules":{"scope":".g","collection":[[{"scope":".r>a h3","name":"name"},{"scope":".r>a:eq(0)","name":"link","attr":"href"}]]}}'
+#    environment:
+#      - DEBUG=*,-puppeteer:*
     volumes:
       - ${PWD}/docker/entrypoint.sh:/usr/src/app/entrypoint.sh
       - ${PWD}/docker/index.js:/usr/src/app/index.js
+      - ${PWD}/lib:/usr/src/app/node_modules/goose-parser/lib

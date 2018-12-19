@@ -419,15 +419,22 @@ describe('Actions', () => {
 
   describe('ActionClickWithWaitForQuery', () => {
     test('perform', async () => {
-      setServerResponse({
-        html: `<a href="#">test</a>`,
-        fn: () => {
-          // the phone number appears after some time in the link
-          document.querySelector('a').addEventListener('click', ({ target }) => {
-            document.body.insertAdjacentHTML('beforeend', '<img src="12345" />');
-          });
-        }
-      });
+      setServerResponse([
+        {
+          route: '/',
+          html: `<a href="#">test</a>`,
+          fn: () => {
+            // the phone number appears after some time in the link
+            document.querySelector('a').addEventListener('click', ({ target }) => {
+              document.body.insertAdjacentHTML('beforeend', '<img src="12345" />');
+            });
+          }
+        },
+        {
+          route: '/12345',
+          html: '',
+        },
+      ]);
       const parser = new Parser({
         environment: new ChromeEnvironment({ url }),
       });
@@ -1145,6 +1152,349 @@ describe('Actions', () => {
       });
 
       expect(result).toEqual('nothing');
+    });
+  });
+
+  describe('ActionCases', () => {
+    test('perform', async () => {
+      setServerResponse([
+        {
+          route: '/',
+          html: `<a id="1" href="#">test</a>`,
+          fn: () => {
+            document.querySelector('a').addEventListener('click', () => {
+              setTimeout(() => {
+                window.location = '/test';
+              }, 2000);
+            });
+          },
+        },
+        {
+          route: '/test',
+          html: `<a id="2" href="#">nothing</a>`,
+        }
+      ]);
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        rules: {
+          rulesFromActions: true,
+          actions: [
+            {
+              type: 'click',
+              scope: 'a',
+              cases: [
+                [
+                  {
+                    type: 'waitForQuery',
+                    timeout: 5000,
+                    uri: 'tel:',
+                  },
+                  {
+                    type: 'provideRules',
+                    trueCase: true,
+                    rules: {
+                      scope: 'a'
+                    }
+                  }
+                ],
+                [
+                  {
+                    type: 'waitForPage',
+                    timeout: 5000,
+                  },
+                  {
+                    type: 'provideRules',
+                    trueCase: true,
+                    rules: {
+                      scope: 'a'
+                    }
+                  }
+                ],
+              ],
+            }
+          ],
+        },
+      });
+
+      expect(result).toEqual('nothing');
+    });
+
+    test('perform', async () => {
+      setServerResponse([
+        {
+          route: '/',
+          html: `<a id="1" href="tel:+123456890123">test</a>`
+        },
+        {
+          route: '/test',
+          html: `<a id="2" href="#">nothing</a>`,
+        }
+      ]);
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        rules: {
+          rulesFromActions: true,
+          actions: [
+            {
+              type: 'click',
+              scope: 'a',
+              cases: [
+                [
+                  {
+                    type: 'waitForPage',
+                    timeout: 5000,
+                  },
+                  {
+                    type: 'provideRules',
+                    trueCase: true,
+                    rules: {
+                      scope: 'a'
+                    }
+                  }
+                ],
+                [
+                  {
+                    type: 'waitForPattern',
+                    timeout: 5000,
+                    pattern: '^tel:',
+                    scope: 'a',
+                    attr: 'href',
+                  },
+                  {
+                    type: 'provideRules',
+                    trueCase: true,
+                    rules: {
+                      scope: 'a'
+                    }
+                  }
+                ],
+              ],
+            }
+          ],
+        },
+      });
+
+      expect(result).toEqual('test');
+    });
+
+    test('perform', async () => {
+      setServerResponse([
+        {
+          route: '/',
+          html: `<a id="1" href="tel:+123456890123">test</a>`
+        },
+        {
+          route: '/test',
+          html: `<a id="2" href="#">nothing</a>`,
+        }
+      ]);
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        rules: {
+          actions: [
+            {
+              type: 'click',
+              scope: 'a',
+              cases: [
+                [
+                  {
+                    type: 'waitForPage',
+                    timeout: 5000,
+                  },
+                ],
+                [
+                  {
+                    type: 'waitForPattern',
+                    timeout: 5000,
+                    pattern: '^tel:',
+                    scope: 'a',
+                    attr: 'href',
+                  },
+                ],
+              ],
+            }
+          ],
+        },
+      });
+
+      expect(result).toEqual('');
+    });
+
+    test('perform with error', async () => {
+      setServerResponse([
+        {
+          route: '/',
+          html: `<a id="1" href="tel:+123456890123">test</a>`
+        },
+        {
+          route: '/test',
+          html: `<a id="2" href="#">nothing</a>`,
+        }
+      ]);
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      try {
+        await parser.parse({
+          rules: {
+            actions: [
+              {
+                type: 'click',
+                scope: 'a',
+                cases: [
+                  [
+                    {
+                      type: 'waitForPage',
+                      timeout: 500,
+                    },
+                  ],
+                  [
+                    {
+                      type: 'waitForPattern',
+                      timeout: 500,
+                      pattern: '^http:',
+                      scope: 'a',
+                      attr: 'href',
+                    },
+                  ],
+                ],
+              }
+            ],
+          },
+        });
+      } catch (err) {
+        expect(Array.isArray(err)).toEqual(true);
+        expect(err.length).toEqual(2);
+        err.forEach(errItem => {
+          expect(errItem).toBeInstanceOf(Error);
+        });
+      }
+    });
+
+    test('perform', async () => {
+      setServerResponse([
+        {
+          route: '/',
+          html: `<a id="1" href="#">test</a>`,
+          fn: () => {
+            document.querySelector('a').addEventListener('click', () => {
+              setTimeout(() => {
+                window.location = '/test';
+              }, 1000);
+            });
+          },
+        },
+        {
+          route: '/test',
+          html: `<a id="2" href="#">nothing</a>`,
+        }
+      ]);
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      const result = await parser.parse({
+        rules: {
+          rulesFromActions: true,
+          actions: [
+            {
+              type: 'click',
+              scope: 'a',
+              cases: [
+                [
+                  {
+                    type: 'waitForQuery',
+                    timeout: 2000,
+                    uri: 'tel:',
+                  },
+                  {
+                    type: 'provideRules',
+                    rules: {
+                      scope: 'a'
+                    }
+                  }
+                ],
+                [
+                  {
+                    type: 'waitForPage',
+                    timeout: 2000,
+                  },
+                  {
+                    type: 'provideRules',
+                    rules: {
+                      scope: 'a'
+                    }
+                  }
+                ],
+              ],
+            }
+          ],
+        },
+      });
+
+      expect(result).toEqual('nothing');
+    });
+
+    test('perform with error', async () => {
+      setServerResponse([
+        {
+          route: '/',
+          html: `<a id="1" href="#">test</a>`,
+          fn: () => {
+            setTimeout(function () {
+              document.body.insertAdjacentHTML('beforeend', '<div>12345</div>');
+            }, 500);
+          },
+        },
+        {
+          route: '/test',
+          html: `<a id="2" href="#">nothing</a>`,
+        },
+      ]);
+      const parser = new Parser({
+        environment: new ChromeEnvironment({ url }),
+      });
+      try {
+        await parser.parse({
+          rules: {
+            actions: [
+              {
+                type: 'click',
+                scope: 'a',
+                cases: [
+                  [
+                    {
+                      type: 'waitForVisible',
+                      scope: 'div',
+                      timeout: 2000,
+                    },
+                  ],
+                  [
+                    {
+                      type: 'waitForPattern',
+                      timeout: 2000,
+                      pattern: '^http:',
+                      scope: 'a',
+                      attr: 'href',
+                    },
+                  ],
+                ],
+              },
+            ],
+          },
+        });
+      } catch (err) {
+        expect(Array.isArray(err)).toEqual(true);
+        expect(err.length).toEqual(2);
+        err.forEach(errItem => {
+          expect(errItem).toBeInstanceOf(Error);
+        });
+      }
     });
   });
 
