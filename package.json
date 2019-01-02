@@ -47,8 +47,8 @@
   "scripts": {
     "test": "jest test --no-cache --runInBand --detectOpenHandles --maxConcurrency=1",
     "build": "node build.js",
-    "coverage": "jest --coverage && rm -rf ./coverage",
-    "codecov": "jest --coverage && codecov && rm -rf ./coverage"
+    "coverage": "jest --no-cache --runInBand --maxConcurrency=1 --coverage && rm -rf ./coverage",
+    "codecov": "jest --no-cache --runInBand --maxConcurrency=1 --coverage && codecov && rm -rf ./coverage"
   },
   "dependencies": {
     "debug": "^3.1.0",
