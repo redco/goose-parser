@@ -1309,9 +1309,9 @@ goose-abstract-environment@^1.1.0:
   dependencies:
     debug "^3.1.0"
 
-goose-chrome-environment@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/goose-chrome-environment/-/goose-chrome-environment-1.1.3.tgz#2bf306f0397088a46a878caa03a4eb683a354af3"
+goose-chrome-environment@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/goose-chrome-environment/-/goose-chrome-environment-1.1.4.tgz#c7163d27a2285e1cf093f77f4249d32f30acb83d"
   dependencies:
     debug "^3.1.0"
     goose-abstract-environment "^1.1.0"
@@ -1319,7 +1319,7 @@ goose-chrome-environment@^1.1.3:
     lodash.defaults "^4.2.0"
     lodash.sample "^4.2.1"
     mkdirp "^0.5.1"
-    puppeteer "^1.9.0"
+    puppeteer "^1.14.0"
 
 goose-paginator@^1.0.2:
   version "1.0.2"
@@ -3051,9 +3051,9 @@ punycode@^2.1.0, punycode@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
 
-puppeteer@^1.9.0:
-  version "1.12.2"
-  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-1.12.2.tgz#dbc36afc3ba2d7182b1a37523c0081a0e8507c9a"
+puppeteer@^1.14.0:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-1.14.0.tgz#828c1926b307200d5fc8289b99df4e13e962d339"
   dependencies:
     debug "^4.1.0"
     extract-zip "^1.6.6"
